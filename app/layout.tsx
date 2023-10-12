@@ -18,16 +18,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+
     <html lang="en" suppressHydrationWarning>
       <body className={cn(`dark:bg-dark`, inter.className)}>
         <ConvexClientProvider>
 
+
           <ThemeProvider defaultTheme='system' enableSystem disableTransitionOnChange storageKey='notion-theme' attribute='class'>
             {children}
           </ThemeProvider>
+
         </ConvexClientProvider>
 
       </body>
     </html>
+
   )
 }
