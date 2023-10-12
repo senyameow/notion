@@ -1,3 +1,4 @@
+import { ThemeProvider } from '@/providers/ThemeProvider'
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -16,7 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <ThemeProvider defaultTheme='system' enableSystem disableTransitionOnChange storageKey='notion-theme' attribute='class'>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

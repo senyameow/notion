@@ -14,7 +14,7 @@ const Heading = () => {
             </h3>
             <Button className='font-semibold gap-2'>
                 Get Notion Free
-                <ArrowRight className='text-white font-bold w-4 h-4' />
+                <ArrowRight className='text-white dark:text-black font-bold w-4 h-4' />
             </Button>
         </div>
     )
