@@ -11,6 +11,7 @@ import { useConvexAuth } from "convex/react";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { Loader2 } from 'lucide-react'
 import { Authenticated, Unauthenticated, AuthLoading } from "convex/react";
+import Link from 'next/link'
 
 
 const Navbar = () => {
@@ -21,7 +22,7 @@ const Navbar = () => {
             <div className={cn(`h-full w-full flex items-center justify-between transition duration-500 border-b-black/0`, isScrolled && 'border-b-2 border-b-black/60')}>
                 <Logo />
                 <div className='flex items-center gap-2 h-fit'>
-                    <Button className='h-fit py-1' variant={'ghost'}>Request a demo</Button>
+                    {!isAuthenticated && <Button className='h-fit py-1' variant={'ghost'}>Request a demo</Button>}
                     <Separator orientation='vertical' className='w-[1px] h-[20px]' />
                     {isLoading && (
                         <Loader2 className='animate-spin' />
@@ -32,7 +33,17 @@ const Navbar = () => {
                         </>
                     )}
                     <ModeToggle />
-                    {isAuthenticated && <UserButton afterSignOutUrl='/' />}
+
+                    {isAuthenticated && (
+                        <div className='flex items-center gap-1'>
+                            <Link href={'/docs'}>
+                                <Button variant={'ghost'}>
+                                    Enter Notion
+                                </Button>
+                            </Link>
+                            <UserButton afterSignOutUrl='/' />
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>
