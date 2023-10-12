@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 
 const Footer = () => {
     return (
-        <div className='z-50 flex flex-row items-center w-full p-6 bg-background justify-between'>
+        <div className='z-50 flex flex-row items-center w-full p-6 bg-background justify-between dark:bg-dark'>
             <Logo />
             <div className='ml-auto flex items-center gap-2 '>
                 <Button variant={'ghost'}>Privacy Policy</Button>

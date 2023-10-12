@@ -10,7 +10,7 @@ import { ModeToggle } from '@/components/ui/ModToggle'
 const Navbar = () => {
     const isScrolled = useScrollTop()
     return (
-        <nav className={cn(`px-4 flex bg-white dark:bg-black w-full pr-6 `)}>
+        <nav className={cn(`px-4 flex bg-white dark:bg-dark w-full pr-6 `)}>
             <div className={cn(`h-full w-full flex items-center justify-between transition duration-500 border-b-black/0`, isScrolled && 'border-b-2 border-b-black/60')}>
                 <Logo />
                 <div className='flex items-center gap-2 h-fit'>
