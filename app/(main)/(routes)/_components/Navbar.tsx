@@ -29,7 +29,6 @@ const Navbar = () => {
 
             if (sidebarRef.current && navbarRef.current) {
                 sidebarRef.current.style.width = `${newWidth}px`
-                console.log(navbarRef.current.style.width)
                 navbarRef.current.style.setProperty('width', `calc(100% - ${newWidth}px)`)
                 navbarRef.current.style.setProperty('left', `${newWidth}px`)
             }
@@ -44,9 +43,15 @@ const Navbar = () => {
         document.addEventListener('mousemove', handleMouseMove)
         document.addEventListener('mouseup', handleMouseUp)
 
+    }
 
+    const resetWidth = () => {
 
-
+        if (sidebarRef.current && navbarRef.current) {
+            sidebarRef.current.style.width = isMobile ? '100%' : '240px' // на мобилке хотим на фулскрин открыть, а так просто 240px (начальная ширина)
+            navbarRef.current.style.setProperty('width', isMobile ? `0` : 'calc(100% - 240px)')
+            navbarRef.current.style.setProperty('left', isMobile ? '0' : '240px')
+        }
 
     }
 
@@ -62,7 +67,7 @@ const Navbar = () => {
                 <div>
                     <p>docs</p>
                 </div>
-                <div onMouseDown={handleMouseDown} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
+                <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
             <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
                 {isCollapsed && (
