@@ -1,9 +1,12 @@
 import React from 'react'
+import Empty from './_components/Empty'
 
-const page = () => {
+const EmptyPage = () => {
     return (
-        <div>page</div>
+        <div className='h-full w-full flex items-center justify-center'>
+            <Empty />
+        </div>
     )
 }
 
-export default page
+export default EmptyPage
