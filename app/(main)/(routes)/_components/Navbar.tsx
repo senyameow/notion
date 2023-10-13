@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu } from 'lucide-react'
-import React, { ElementRef, useRef, useState } from 'react'
+import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 
 const Navbar = () => {
@@ -14,6 +14,18 @@ const Navbar = () => {
     const navbarRef = useRef<ElementRef<'div'>>(null)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
+
+    useEffect(() => {
+        if (isMobile) {
+            collapse()
+        } else {
+            resetWidth()
+        }
+    }, [isMobile])
+
+    useEffect(() => {
+
+    }, [])
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault()
