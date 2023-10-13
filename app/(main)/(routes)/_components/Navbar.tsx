@@ -12,7 +12,7 @@ const Navbar = () => {
     const isResizingRef = useRef(false)
     const sidebarRef = useRef<ElementRef<'aside'>>(null)
     const navbarRef = useRef<ElementRef<'div'>>(null)
-    const [isCollapsed, setIsCollapsed] = useState(true)
+    const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -55,6 +55,7 @@ const Navbar = () => {
         setTimeout(() => {
             setIsResetting(false)
         }, 300);
+        setIsCollapsed(false)
     }
     const collapse = () => {
         setIsCollapsed(true)
@@ -67,7 +68,10 @@ const Navbar = () => {
         setTimeout(() => {
             setIsResetting(false)
         }, 300);
+        setIsCollapsed(true)
     }
+
+    console.log(isCollapsed)
 
     return (
         <>
@@ -84,13 +88,11 @@ const Navbar = () => {
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
             <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
-                {isCollapsed && (
-                    <nav className=' px-3 py-2 w-full'>
-                        <Button variant={'ghost'} className='w-fit h-fit p-1'>
-                            <Menu className='w-6 h-6' />
-                        </Button>
-                    </nav>
-                )}
+                <nav className=' px-3 py-4 w-full'>
+                    <button onClick={resetWidth} className={cn(`w-fit h-fit p-2 hover:bg-transparent`)}>
+                        <Menu className={cn(`w-6 h-6 text-black opacity-0`, isCollapsed && 'opacity-100')} />
+                    </button>
+                </nav>
             </div>
         </>
     )
