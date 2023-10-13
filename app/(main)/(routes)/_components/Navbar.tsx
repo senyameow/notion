@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronsLeft, LucideChevronLeft } from 'lucide-react'
+import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu } from 'lucide-react'
 import React, { ElementRef, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 
@@ -12,9 +12,43 @@ const Navbar = () => {
     const isResizingRef = useRef(false)
     const sidebarRef = useRef<ElementRef<'aside'>>(null)
     const navbarRef = useRef<ElementRef<'div'>>(null)
-    const [isCollapsed, setIsCollapsed] = useState(false)
+    const [isCollapsed, setIsCollapsed] = useState(true)
     const [isResetting, setIsResetting] = useState(false)
 
+    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault()
+        e.stopPropagation()
+
+        isResizingRef.current = true // пока хз зачем реф, а не стейт, посмотрим, что будет
+
+        const handleMouseMove = (e: MouseEvent) => {
+            if (!isResizingRef.current) return
+            let newWidth = e.clientX
+            if (newWidth < 240) newWidth = 240
+            if (newWidth > 480) newWidth = 480
+
+            if (sidebarRef.current && navbarRef.current) {
+                sidebarRef.current.style.width = `${newWidth}px`
+                console.log(navbarRef.current.style.width)
+                navbarRef.current.style.setProperty('width', `calc(100% - ${newWidth}px)`)
+                navbarRef.current.style.setProperty('left', `${newWidth}px`)
+            }
+        }
+
+        const handleMouseUp = () => {
+            isResizingRef.current = false
+            document.removeEventListener('mousemove', handleMouseMove)
+            document.removeEventListener('mouseup', handleMouseUp)
+        }
+
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
+
+
+
+
+
+    }
 
     return (
         <>
@@ -28,10 +62,16 @@ const Navbar = () => {
                 <div>
                     <p>docs</p>
                 </div>
-                <div className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
+                <div onMouseDown={handleMouseDown} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
-            <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999]`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
-
+            <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
+                {isCollapsed && (
+                    <nav className=' px-3 py-2 w-full'>
+                        <Button variant={'ghost'} className='w-fit h-fit p-1'>
+                            <Menu className='w-6 h-6' />
+                        </Button>
+                    </nav>
+                )}
             </div>
         </>
     )
