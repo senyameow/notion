@@ -46,25 +46,33 @@ const Navbar = () => {
     }
 
     const resetWidth = () => {
-
         setIsResetting(true)
-
         if (sidebarRef.current && navbarRef.current) {
             sidebarRef.current.style.width = isMobile ? '100%' : '240px' // на мобилке хотим на фулскрин открыть, а так просто 240px (начальная ширина)
             navbarRef.current.style.setProperty('width', isMobile ? `0` : 'calc(100% - 240px)')
             navbarRef.current.style.setProperty('left', isMobile ? '0' : '240px')
         }
-
         setTimeout(() => {
             setIsResetting(false)
         }, 300);
-
+    }
+    const collapse = () => {
+        setIsCollapsed(true)
+        setIsResetting(true)
+        if (sidebarRef.current && navbarRef.current) {
+            sidebarRef.current.style.width = '0px'
+            navbarRef.current.style.setProperty('width', isMobile ? `0` : '100%')
+            navbarRef.current.style.setProperty('left', '0')
+        }
+        setTimeout(() => {
+            setIsResetting(false)
+        }, 300);
     }
 
     return (
         <>
             <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto flex flex-col z-[99999] group/sidebar relative h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
-                <div className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
+                <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
                     <ChevronsLeft className='w-5 h-5' />
                 </div>
                 <div>
