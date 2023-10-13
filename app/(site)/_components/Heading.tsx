@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import React from 'react'
 import Link from 'next/link'
-import { useConvexAuth } from "convex/react";
 
+import { useConvexAuth } from "convex/react";
 import { SignInButton } from "@clerk/clerk-react";
 
 
