@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu } from 'lucide-react'
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
+import UserAction from './UserAction'
 
 const Navbar = () => {
 
@@ -91,8 +92,8 @@ const Navbar = () => {
                 <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
                     <ChevronsLeft className='w-5 h-5' />
                 </div>
-                <div>
-                    <p>actions</p>
+                <div className='pt-2 pl-2'>
+                    <UserAction />
                 </div>
                 <div>
                     <p>docs</p>
