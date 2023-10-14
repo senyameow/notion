@@ -11,7 +11,7 @@ import {
     CommandInput,
     CommandItem,
 } from "@/components/ui/command"
-import { useUser } from '@clerk/clerk-react'
+import { SignOutButton, useUser } from '@clerk/clerk-react'
 import {
     Popover,
     PopoverContent,
@@ -22,6 +22,7 @@ import Image from "next/image"
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuRadioGroup,
@@ -29,6 +30,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarImage } from "@/components/ui/avatar"
 
 
 const UserAction = () => {
@@ -42,19 +44,31 @@ const UserAction = () => {
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="w-[95%] flex items-start justify-start bg-transparent hover:bg-dark focus-visible:ring-0 focus-visible:ring-offset-0 truncate">
                     <div className="w-[80%] flex items-center justify-between">
-                        <div className="truncate">
+                        <div className="truncate flex gap-2 items-center">
+                            <Avatar className="h-6 w-6">
+                                <AvatarImage src={user?.imageUrl} />
+                            </Avatar>
                             {user?.fullName}
                         </div>
-                        <ArrowUpDown className="w-5 h-5 text-neutral-500" />
+                        <ChevronsUpDown className="w-5 h-5 text-neutral-500" />
                     </div>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-80">
                 <DropdownMenuLabel>{String(user?.primaryEmailAddress)}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                    { }
-                </DropdownMenuRadioGroup>
+                <DropdownMenuGroup className="flex items-center p-1 flex-col">
+                    <DropdownMenuItem className="cursor-pointer hover:opacity-90 w-full">
+                        <p>{user?.firstName}&apos; notion</p>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="w-full" />
+
+                    <DropdownMenuItem className="w-full cursor-pointer ">
+                        <SignOutButton>
+                            Log out
+                        </SignOutButton>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
     )
