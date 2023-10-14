@@ -19,83 +19,44 @@ import {
 } from "@/components/ui/popover"
 import Image from "next/image"
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
-const frameworks = [
-    {
-        value: "next.js",
-        label: "Next.js",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
 
 const UserAction = () => {
 
     const { user } = useUser()
 
-    const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("")
+    const [position, setPosition] = React.useState('bottom')
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-[180px] justify-between truncate bg-transparent hover:bg-black/70"
-                >
-                    <div className="flex items-center gap-2">
-                        <Image src={user?.imageUrl!} alt="user image" className="rounded-full" width={20} height={20} />
-                        <span className="text-md font-semibold">
-                            {value
-                                ? frameworks.find((framework) => framework.value === value)?.label
-                                : `${user?.fullName}`}
-                        </span>
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-[95%] flex items-start justify-start bg-transparent hover:bg-dark focus-visible:ring-0 focus-visible:ring-offset-0 truncate">
+                    <div className="w-[80%] flex items-center justify-between">
+                        <div className="truncate">
+                            {user?.fullName}
+                        </div>
+                        <ArrowUpDown className="w-5 h-5 text-neutral-500" />
                     </div>
-                    <ArrowUpDown className="w-4 h-4 opacity-50" />
                 </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[200px] p-0 relative z-[99999]">
-                <Command>
-                    <CommandInput placeholder="search account..." className="h-9" />
-                    <CommandEmpty>No account found</CommandEmpty>
-                    <CommandGroup>
-                        {frameworks.map((framework) => (
-                            <CommandItem
-                                key={framework.value}
-                                onSelect={(currentValue) => {
-                                    setValue(currentValue === value ? "" : currentValue)
-                                    setOpen(false)
-                                }}
-                            >
-                                {framework.label}
-                                <CheckIcon
-                                    className={cn(
-                                        "ml-auto h-4 w-4",
-                                        value === framework.value ? "opacity-100" : "opacity-0"
-                                    )}
-                                />
-                            </CommandItem>
-                        ))}
-                    </CommandGroup>
-                </Command>
-            </PopoverContent>
-        </Popover>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>{String(user?.primaryEmailAddress)}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
+                    { }
+                </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
     )
 }
 
