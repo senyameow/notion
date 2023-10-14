@@ -16,9 +16,8 @@ const Action = ({ icon, label, onClick }: ActionProps) => {
         <button onClick={onClick} className='dark:hover:bg-dark/70 hover:bg-gray-100 px-2 py-1 w-full flex flex-row items-center gap-2 text-neutral-400 transition justify-between '>
             <div className='flex items-center gap-2'>
                 <Icon className='w-4 h-4' />
-                {label}
+                <span className='text-sm'>{label}</span>
             </div>
-
         </button>
     )
 }
