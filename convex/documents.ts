@@ -32,7 +32,7 @@ export const getDocs = query({
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unaithenticated')
-        const docs = ctx.db.query('documents')
+        const docs = ctx.db.query('documents').collect()
 
         return docs
     }

@@ -5,6 +5,8 @@ import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu } from 'lucide-react
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import UserAction from './UserAction'
+import { useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 const Navbar = () => {
 
@@ -15,6 +17,8 @@ const Navbar = () => {
     const navbarRef = useRef<ElementRef<'div'>>(null)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
+
+    const documents = useQuery(api.documents.getDocs)
 
     useEffect(() => {
         if (isMobile) {
@@ -84,8 +88,6 @@ const Navbar = () => {
         setIsCollapsed(true)
     }
 
-    console.log(isCollapsed)
-
     return (
         <>
             <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto flex flex-col z-[99999] group/sidebar relative h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
@@ -96,7 +98,13 @@ const Navbar = () => {
                     <UserAction />
                 </div>
                 <div>
-                    <p>docs</p>
+                    <p>
+                        {documents?.map(doc => (
+                            <div>
+                                {doc.title}
+                            </div>
+                        ))}
+                    </p>
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
