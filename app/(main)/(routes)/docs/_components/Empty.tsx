@@ -6,15 +6,21 @@ import { PlusCircle } from 'lucide-react'
 import { useUser } from '@clerk/clerk-react'
 import { toast } from 'sonner'
 
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api"
+
+
 const Empty = () => {
 
-    const onCreate = async () => {
-        try {
-            //...
-            toast.success(`you've created a new document`)
-        } catch (error) {
+    const createNote = useMutation(api.documents.create)
 
-        }
+    const onCreate = () => {
+        const note = createNote({ title: 'Untitled' })
+        toast.promise(note, {
+            loading: 'Creating a new note..',
+            success: 'New note Created',
+            error: 'Something went wrong'
+        })
     }
 
     const { user } = useUser()
