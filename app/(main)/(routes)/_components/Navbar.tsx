@@ -8,6 +8,7 @@ import UserAction from './UserAction'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import UserActions from './UserActions'
+import Doc from './Doc'
 
 const Navbar = () => {
 
@@ -101,14 +102,10 @@ const Navbar = () => {
                 <div className='w-full'>
                     <UserActions />
                 </div>
-                <div>
-                    <p>
-                        {documents?.map(doc => (
-                            <div key={doc._id}>
-                                {doc.title}
-                            </div>
-                        ))}
-                    </p>
+                <div className='pt-2'>
+                    {documents?.map(doc => (
+                        <Doc key={doc._id} id={doc._id} icon={doc.icon} isExpanded={!!doc.parentDoc} level={0} onExpand={() => { }} title={doc.title} />
+                    ))}
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>

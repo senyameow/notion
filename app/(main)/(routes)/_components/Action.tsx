@@ -6,9 +6,10 @@ interface ActionProps {
     icon: LucideIcon;
     label: string;
     onClick: () => void;
+    isSearch?: boolean
 }
 
-const Action = ({ icon, label, onClick }: ActionProps) => {
+const Action = ({ icon, label, onClick, isSearch = false }: ActionProps) => {
 
     const Icon = icon
 
@@ -18,6 +19,11 @@ const Action = ({ icon, label, onClick }: ActionProps) => {
                 <Icon className='w-4 h-4' />
                 <span className='text-sm'>{label}</span>
             </div>
+            {isSearch && (
+                <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                    <span className='text-xs'>ctrl+k</span>
+                </kbd>
+            )}
         </button>
     )
 }

@@ -24,7 +24,7 @@ const UserActions = () => {
 
     return (
         <div className='w-full flex flex-col items-start '>
-            <Action label='Search' onClick={() => { }} icon={Search} />
+            <Action isSearch label='Search' onClick={() => { }} icon={Search} />
             <Action label='Settings' onClick={() => { }} icon={Settings} />
             <Action label='New page' onClick={onCreate} icon={PlusCircle} />
         </div>
