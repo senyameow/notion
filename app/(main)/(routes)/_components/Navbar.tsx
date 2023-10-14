@@ -7,6 +7,7 @@ import { useMediaQuery } from 'usehooks-ts'
 import UserAction from './UserAction'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import UserActions from './UserActions'
 
 const Navbar = () => {
 
@@ -97,10 +98,13 @@ const Navbar = () => {
                 <div className='pt-2 pl-2'>
                     <UserAction />
                 </div>
+                <div className='w-full'>
+                    <UserActions />
+                </div>
                 <div>
                     <p>
                         {documents?.map(doc => (
-                            <div>
+                            <div key={doc._id}>
                                 {doc.title}
                             </div>
                         ))}
