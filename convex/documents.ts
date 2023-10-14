@@ -13,4 +13,27 @@ export const create = mutation({
 
         return newDoc;
     }
-}) 
+})
+
+export const getNote = query({
+    args: {
+        id: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+        const docs = ctx.db.get(args.id)
+
+        return docs
+    }
+}) // get single doc
+
+export const getDocs = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+        const docs = ctx.db.query('documents')
+
+        return docs
+    }
+}) // get single doc
