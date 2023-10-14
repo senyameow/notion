@@ -4,8 +4,19 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { useUser } from '@clerk/clerk-react'
+import { toast } from 'sonner'
 
 const Empty = () => {
+
+    const onCreate = async () => {
+        try {
+            //...
+            toast.success(`you've created a new document`)
+        } catch (error) {
+
+        }
+    }
+
     const { user } = useUser()
     return (
         <div className='max-w-3xl mx-auto'>
@@ -16,7 +27,7 @@ const Empty = () => {
                 </div>
                 <div className='flex flex-col items-center space-y-5'>
                     <h2 className='font-bold text-xl sm:text-2xl'>Welcome To {user?.firstName}'s Notion</h2>
-                    <Button>
+                    <Button onClick={onCreate}>
                         <PlusCircle className='w-5 h-5 mr-2' />
                         Create a note
                     </Button>

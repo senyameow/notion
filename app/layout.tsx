@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { ConvexClientProvider } from '@/providers/ConvexClientProvider'
+import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,8 +23,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn(`dark:bg-dark`, inter.className)}>
         <ConvexClientProvider>
-
-
+          <Toaster />
           <ThemeProvider defaultTheme='system' enableSystem disableTransitionOnChange storageKey='notion-theme' attribute='class'>
             {children}
           </ThemeProvider>
