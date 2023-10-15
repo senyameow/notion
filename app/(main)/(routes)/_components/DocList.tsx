@@ -39,6 +39,8 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
     // тут будем юзать нашу квери, правда пока хз откуда мы получаем parentDoc
 
     const docs = useQuery(api.documents.getDocs, { parentDoc: parentId })
+    // console.log(parentId)
+    // console.log(docs)
 
     // в конвексе, для лоадинга используется undefined стейт
     // т.е. если мы грузим доки, то они undefined, иначе они null(если какая=то ошибка, или не найдены)
@@ -46,8 +48,9 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
     // для лоадинга мы приготовили динамический скелетон в doc
 
     if (docs === undefined) {
+        console.log('FETCHING')
         return (
-            <>
+            <div className='w-full flex flex-col gap-2 items-center'>
                 <Doc.Skeleton level={level} />
                 {level === 0 && (
                     <>
@@ -55,9 +58,10 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
                         <Doc.Skeleton level={level} />
                     </>
                 )}
-            </>
+            </div>
         )
     }
+    console.log(level)
 
     return (
         <>
@@ -68,7 +72,7 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
                 <div key={doc._id}>
                     <Doc title={doc.title} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={FileIcon} isExpanded={isExpanded[doc._id]} />
                     {isExpanded[doc._id] && (
-                        <DocList parentId={doc._id} level={level + 1} data={data} />
+                        <DocList parentId={doc._id} level={level + 1} />
                     )}
                 </div>
             ))}

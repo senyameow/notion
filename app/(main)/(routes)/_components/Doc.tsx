@@ -2,7 +2,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Id } from '@/convex/_generated/dataModel'
 import { cn } from '@/lib/utils';
-import { ChevronDown, ChevronRight, LucideIcon } from 'lucide-react';
+import { ChevronDown, ChevronRight, LucideIcon, Plus, Trash } from 'lucide-react';
 import { redirect, useRouter } from 'next/navigation';
 import React from 'react'
 
@@ -24,10 +24,10 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
 
     const router = useRouter()
 
-    const handleExpand = (e: any) => {
+    const handleExpand = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
         e.preventDefault()
-
+        onExpand?.()
     }
 
     const onRedirect = () => {
@@ -35,7 +35,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
     }
 
     return (
-        <button onClick={onRedirect} className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
+        <button onClick={onRedirect} className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
             <div className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
                 <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`)} onClick={handleExpand}>
                     <Icon className='w-4 h-4' />
@@ -46,6 +46,14 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                     </div>
                 )}
                 <span className='text-sm'>{title}</span>
+                <div className='flex items-center ml-auto w-full justify-end mr-2 gap-2'>
+                    <button onClick={() => { }} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
+                        <Plus className='w-4 h-4 text-neutral-500' />
+                    </button>
+                    <button onClick={() => { }} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
+                        <Trash className='w-4 h-4 text-neutral-500' />
+                    </button>
+                </div>
             </div>
         </button >
     )
@@ -53,9 +61,9 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
 
 Doc.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
     return (
-        <div className='flex gap-2 items-center' style={{ paddingLeft: level ? `${(level * 12) + 25}px` : '12px' }}>
-            <Skeleton className='h-4 w-4 text-white' />
-            <Skeleton className='h-4 w-[30%] text-white' />
+        <div className='flex gap-2 items-center' style={{ paddingLeft: level ? `${(level * 12)}px` : '12px' }}>
+            <Skeleton className='h-[20px] w-[100px] text-neutral-500 bg-neutral-500 ' />
+            <Skeleton className='h-4 w-[30%] text-neutral-500 bg-neutral-500 ' />
         </div>
     )
 }
