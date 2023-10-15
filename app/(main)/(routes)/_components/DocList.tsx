@@ -1,21 +1,24 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/convex/_generated/api';
-import { Doc, Id } from '@/convex/_generated/dataModel'
+import { Doc as DocType, Id } from '@/convex/_generated/dataModel'
 import { useQuery } from 'convex/react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import Doc from './Doc';
+import { cn } from '@/lib/utils';
+import { FileIcon } from 'lucide-react';
 
 interface DocListProps {
-    data: Doc<'documents'>[];
-    id: Id<'documents'>;
+    data?: DocType<'documents'>[];
+    parentId?: Id<'documents'>;
     level?: number;
 }
 
-const DocList = ({ data, id, level }: DocListProps) => {
+const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
 
     const pathname = usePathname()
-    const router = useRouter()
+    const params = useParams()
     const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({})
     // id: true/false,
     // id1: true/false
@@ -35,22 +38,41 @@ const DocList = ({ data, id, level }: DocListProps) => {
 
     // тут будем юзать нашу квери, правда пока хз откуда мы получаем parentDoc
 
-    const docs = useQuery(api.documents.getDocs, { parentDoc: id })
+    const docs = useQuery(api.documents.getDocs, { parentDoc: parentId })
 
     // в конвексе, для лоадинга используется undefined стейт
     // т.е. если мы грузим доки, то они undefined, иначе они null(если какая=то ошибка, или не найдены)
 
+    // для лоадинга мы приготовили динамический скелетон в doc
+
     if (docs === undefined) {
         return (
-            <div>
-            </div>
+            <>
+                <Doc.Skeleton level={level} />
+                {level === 0 && (
+                    <>
+                        <Doc.Skeleton level={level} />
+                        <Doc.Skeleton level={level} />
+                    </>
+                )}
+            </>
         )
     }
 
     return (
-        <div>
-
-        </div>
+        <>
+            <p className={cn(`hidden text-sm font-medium text-neutral-500`, level === 0 && 'hidden', isExpanded && 'last:block')} style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}>
+                No pages inside
+            </p>
+            {docs.map(doc => (
+                <div key={doc._id}>
+                    <Doc title={doc.title} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={FileIcon} isExpanded={isExpanded[doc._id]} />
+                    {isExpanded[doc._id] && (
+                        <DocList parentId={doc._id} level={level + 1} data={data} />
+                    )}
+                </div>
+            ))}
+        </>
     )
 }
 

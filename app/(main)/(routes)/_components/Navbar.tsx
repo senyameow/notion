@@ -21,8 +21,6 @@ const Navbar = () => {
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
 
-    const documents = useQuery(api.documents.getDocs, {})
-
     useEffect(() => {
         if (isMobile) {
             collapse()
