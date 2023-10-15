@@ -1,4 +1,5 @@
 'use client'
+import { Skeleton } from '@/components/ui/skeleton';
 import { Id } from '@/convex/_generated/dataModel'
 import { cn } from '@/lib/utils';
 import { ChevronDown, ChevronRight, LucideIcon } from 'lucide-react';
@@ -36,6 +37,15 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                 <span className='text-sm'>{title}</span>
             </div>
         </button >
+    )
+}
+
+Doc.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
+    return (
+        <div className='flex gap-2 items-center' style={{ paddingLeft: level ? `${(level * 12) + 25}px` : '12px' }}>
+            <Skeleton className='h-4 w-4' />
+            <Skeleton className='h-4 w-[30%]' />
+        </div>
     )
 }
 
