@@ -30,9 +30,6 @@ const Navbar = () => {
         }
     }, [isMobile])
 
-    useEffect(() => {
-
-    }, [])
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault()
@@ -109,10 +106,10 @@ const Navbar = () => {
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
-            <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
+            <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] dark:bg-secondary bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
                 <nav className=' px-3 py-4 w-full'>
                     <button onClick={resetWidth} className={cn(`w-fit h-fit p-2 hover:bg-transparent`)}>
-                        <Menu className={cn(`w-6 h-6 text-black opacity-0`, isCollapsed && 'opacity-100')} />
+                        <Menu className={cn(`w-6 h-6 dark:text-neutral-500 text-black opacity-0`, isCollapsed && 'opacity-100')} />
                     </button>
                 </nav>
             </div>

@@ -28,12 +28,21 @@ export const getNote = query({
     }
 }) // get single doc
 
+
+
 export const getDocs = query({
-    handler: async (ctx) => {
+    args: {
+        parentDoc: v.optional(v.id('documents'))
+    },
+    handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unaithenticated')
-        const docs = ctx.db.query('documents').collect()
+        const docs = ctx.db.query('documents').withIndex('by_user_parent', q =>
+            q.eq('userId', identity.subject).eq('parentDoc', args?.parentDoc)
+        ).filter(q => q.eq(q.field('isAcrchieved'), false)).order('asc').collect() // и хотим показать только те, которые не удалены (типо)
 
         return docs
     }
-}) // get single doc
+})
+// по факту бесполезный квери, т.к. нам нужны только доки определенного юзера, используем индексы!
+
