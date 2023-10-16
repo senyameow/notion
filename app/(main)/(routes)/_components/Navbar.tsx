@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu, Plus, Trash } from 'lucide-react'
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import UserAction from './UserAction'
@@ -12,6 +12,14 @@ import Doc from './Doc'
 import DocList from './DocList'
 import Action from './Action'
 import { toast } from 'sonner'
+
+import { Label } from "@/components/ui/label"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { Input } from '@/components/ui/input'
 
 const Navbar = () => {
 
@@ -111,6 +119,14 @@ const Navbar = () => {
                     <DocList />
                     <Action label='add new doc' icon={Plus} onClick={onCreate} />
                 </div>
+                <Popover>
+                    <PopoverTrigger className='w-full p-1 pt-4'>
+                        <Action label='Помойка' icon={Trash} />
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
+                        помойка
+                    </PopoverContent>
+                </Popover>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
             <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] dark:bg-secondary bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>

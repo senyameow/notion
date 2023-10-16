@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 interface ActionProps {
     icon: LucideIcon;
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     isSearch?: boolean
 }
 
