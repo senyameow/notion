@@ -1,15 +1,17 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu } from 'lucide-react'
+import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu, Plus } from 'lucide-react'
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import UserAction from './UserAction'
-import { useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import UserActions from './UserActions'
 import Doc from './Doc'
 import DocList from './DocList'
+import Action from './Action'
+import { toast } from 'sonner'
 
 const Navbar = () => {
 
@@ -20,6 +22,13 @@ const Navbar = () => {
     const navbarRef = useRef<ElementRef<'div'>>(null)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
+
+    const create = useMutation(api.documents.create)
+
+    const onCreate = async () => {
+        await create({ title: 'Untitled' })
+        toast.success(`you've created new doc`)
+    }
 
     useEffect(() => {
         if (isMobile) {
@@ -100,6 +109,7 @@ const Navbar = () => {
                 </div>
                 <div className='pt-2'>
                     <DocList />
+                    <Action label='add new doc' icon={Plus} onClick={onCreate} />
                 </div>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
