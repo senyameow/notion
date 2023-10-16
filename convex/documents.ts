@@ -1,5 +1,6 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
+import { Id } from './_generated/dataModel'
 
 export const create = mutation({
     args: {
@@ -35,9 +36,36 @@ export const archiveDoc = mutation({
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unaithenticated')
-        const archievedDoc = await ctx.db.patch(args.docId, { isAcrchieved: true })
+        const doc = await ctx.db.get(args.docId)
+        if (!doc) {
+            throw new Error('Not found')
+        }
+        if (doc.userId !== identity.subject) {
+            throw new Error('Unauthorized')
+        }
 
-        return archievedDoc
+        const arcieveChild = async (id: Id<'documents'>) => {
+            const children = await ctx.db.query('documents')
+                .withIndex('by_user_parent', q =>
+                    q.eq('userId', identity.subject).eq('parentDoc', id)
+                )
+                .collect()
+            for (const child of children) {
+                await ctx.db.patch(child._id, { isAcrchieved: true })
+                await arcieveChild(child._id)
+            }
+        }
+        arcieveChild(args.docId)
+
+        const newDoc = await ctx.db.patch(args.docId, { isAcrchieved: true }) // если бы мы хотели удалить только 1 документ по его айдишнику, то было бы круто
+        // но тут встает вопрос, как нам удалить и всех его чилдренов?
+        // 1ый чайлд это дока будет иметь отличный parentId от 2ого и т.д.
+        // а у нас может быть хоть миллион вложенных доков
+        // следовательно надо писать рекурсию, которая будет фетчить чайлда по айдишнику и удалять его и так далее
+
+
+
+        return newDoc
     }
 })
 

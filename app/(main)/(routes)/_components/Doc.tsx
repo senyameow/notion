@@ -48,7 +48,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
             onExpand?.()
         }
         toast.success(`you've created new note!`)
-        // router.push(`/docs/${doc}`)
+        router.push(`/docs/${doc}`)
 
     }
 
