@@ -48,7 +48,6 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
     // для лоадинга мы приготовили динамический скелетон в doc
 
     if (docs === undefined) {
-        console.log('FETCHING')
         return (
             <div className='w-full flex flex-col gap-2 items-center'>
                 <Doc.Skeleton level={level} />
@@ -61,7 +60,6 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
             </div>
         )
     }
-    console.log(level)
 
     return (
         <>
@@ -70,7 +68,7 @@ const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
             </p>
             {docs.map(doc => (
                 <div key={doc._id}>
-                    <Doc title={doc.title} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={FileIcon} isExpanded={isExpanded[doc._id]} />
+                    <Doc title={doc.title} level={level} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={FileIcon} isExpanded={isExpanded[doc._id]} />
                     {isExpanded[doc._id] && (
                         <DocList parentId={doc._id} level={level + 1} />
                     )}

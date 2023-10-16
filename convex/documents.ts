@@ -28,6 +28,18 @@ export const getNote = query({
     }
 }) // get single doc
 
+export const archiveDoc = mutation({
+    args: {
+        docId: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+        const archievedDoc = await ctx.db.patch(args.docId, { isAcrchieved: true })
+
+        return archievedDoc
+    }
+})
 
 
 export const getDocs = query({

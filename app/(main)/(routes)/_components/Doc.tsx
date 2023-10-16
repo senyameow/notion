@@ -1,10 +1,13 @@
 'use client'
 import { Skeleton } from '@/components/ui/skeleton';
+import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel'
 import { cn } from '@/lib/utils';
+import { useMutation } from 'convex/react';
 import { ChevronDown, ChevronRight, LucideIcon, Plus, Trash } from 'lucide-react';
 import { redirect, useRouter } from 'next/navigation';
 import React from 'react'
+import { toast } from 'sonner';
 
 interface DocProps {
     id: Id<'documents'>;
@@ -31,7 +34,28 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
     }
 
     const onRedirect = () => {
-        router.push(`/documents/${id}`)
+        router.push(`/docs/${id}`)
+    }
+
+    const createChild = useMutation(api.documents.create)
+
+    const onCreateChild = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        if (!id) return
+        const doc = await createChild({ parentDoc: id, title: 'Untitled' })
+        if (!isExpanded) {
+            onExpand?.()
+        }
+        toast.success(`you've created new note!`)
+        // router.push(`/docs/${doc}`)
+
+    }
+
+    const archieve = useMutation(api.documents.archiveDoc)
+
+    const onArchieve = () => {
+
     }
 
     return (
@@ -47,7 +71,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                 )}
                 <span className='text-sm'>{title}</span>
                 <div className='flex items-center ml-auto w-full justify-end mr-2 gap-2'>
-                    <button onClick={() => { }} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
+                    <button onClick={onCreateChild} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
                         <Plus className='w-4 h-4 text-neutral-500' />
                     </button>
                     <button onClick={() => { }} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
