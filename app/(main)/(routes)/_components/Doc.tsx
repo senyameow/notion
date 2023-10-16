@@ -1,13 +1,18 @@
 'use client'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel'
 import { cn } from '@/lib/utils';
-import { useMutation } from 'convex/react';
-import { ChevronDown, ChevronRight, LucideIcon, Plus, Trash } from 'lucide-react';
+import { useUser } from '@clerk/clerk-react';
+import { useMutation, useQuery } from 'convex/react';
+import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from 'lucide-react';
 import { redirect, useRouter } from 'next/navigation';
-import React from 'react'
+import React, { use } from 'react'
 import { toast } from 'sonner';
+
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+
 
 interface DocProps {
     id: Id<'documents'>;
@@ -53,10 +58,15 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
     }
 
     const archieve = useMutation(api.documents.archiveDoc)
-
-    const onArchieve = () => {
-
+    const doc = useQuery(api.documents.getNote, { id })
+    const onArchieve = (e: React.MouseEvent<any, MouseEvent>) => {
+        e.stopPropagation()
+        e.preventDefault()
+        archieve({ docId: id })
     }
+
+
+    const { user } = useUser()
 
     return (
         <button onClick={onRedirect} className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
@@ -74,9 +84,21 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                     <button onClick={onCreateChild} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
                         <Plus className='w-4 h-4 text-neutral-500' />
                     </button>
-                    <button onClick={() => { }} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
-                        <Trash className='w-4 h-4 text-neutral-500' />
-                    </button>
+                    <DropdownMenu >
+                        <DropdownMenuTrigger className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
+                            <MoreHorizontal onClick={e => { e.stopPropagation() }} className='w-4 h-4 text-neutral-500' />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className='w-56 p-1' align='start'>
+                            <DropdownMenuItem className='w-full cursor-pointer gap-3 hover:bg-neutral-100 dark:hover:bg-dark/80 flex items-center'>
+                                <Trash onClick={onArchieve} className='w-5 h-5 text-neutral-300' />
+                                <span className='text-[16px] text-neutral-300'>Delete</span>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <div className='text-xs text-neutral-300 p-1'>
+                                Created at: {format(doc?._creationTime!, 'MM.dd.yyyy p')}
+                            </div>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
         </button >
