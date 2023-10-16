@@ -62,15 +62,20 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
     const onArchieve = (e: React.MouseEvent<any, MouseEvent>) => {
         e.stopPropagation()
         e.preventDefault()
-        archieve({ docId: id })
+        const promise = archieve({ docId: id })
+        toast.promise(promise, {
+            loading: 'Deleting notes..',
+            success: 'Notes deleted',
+            error: 'Something went wrong'
+        })
     }
 
 
     const { user } = useUser()
 
     return (
-        <button onClick={onRedirect} className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
-            <div className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
+        <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
+            <div onClick={onRedirect} className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
                 <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`)} onClick={handleExpand}>
                     <Icon className='w-4 h-4' />
                 </button>
@@ -89,14 +94,14 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                             <MoreHorizontal onClick={e => { e.stopPropagation() }} className='w-4 h-4 text-neutral-500' />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className='w-56 p-1' align='start'>
-                            <DropdownMenuItem className='w-full cursor-pointer gap-3 hover:bg-neutral-100 dark:hover:bg-dark/80 flex items-center'>
-                                <Trash onClick={onArchieve} className='w-5 h-5 text-neutral-300' />
+                            <DropdownMenuItem onClick={onArchieve} className='w-full cursor-pointer gap-3 hover:bg-neutral-100 dark:hover:bg-dark/80 flex items-center'>
+                                <Trash className='w-5 h-5 text-neutral-300' />
                                 <span className='text-[16px] text-neutral-300'>Delete</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <div className='text-xs text-neutral-300 p-1'>
+                            {doc?._creationTime ? <div onClick={(e) => { e.stopPropagation() }} className='text-xs text-neutral-300 p-1'>
                                 Created at: {format(doc?._creationTime!, 'MM.dd.yyyy p')}
-                            </div>
+                            </div> : null}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>
