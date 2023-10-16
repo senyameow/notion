@@ -133,14 +133,15 @@ export const restore = mutation({
             const parent = await ctx.db.get(doc.parentDoc)
             if (parent?.isAcrchieved) {
                 // parent.isAcrchieved = undefined // мы не можем сказать, что isArchieved = undefined, т.к. isAcrhieved is required is schema
-                options.isAcrchieved = undefined; // ... 
+                options.parentDoc = undefined; // ... 
             }
         }
-        await ctx.db.patch(args.id, options)
+        const newDoc = await ctx.db.patch(args.id, options)
+        // await ctx.db.patch(args.id, { isAcrchieved: false })
 
         reccursiveRestore(args.id)
 
-        return doc
+        return newDoc
     }
 })
 

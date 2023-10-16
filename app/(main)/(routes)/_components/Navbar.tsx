@@ -20,6 +20,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Input } from '@/components/ui/input'
+import TrashBox from './TrashBox'
 
 const Navbar = () => {
 
@@ -103,6 +104,8 @@ const Navbar = () => {
         setIsCollapsed(true)
     }
 
+    const trash = useQuery(api.documents.getTrash)
+
     return (
         <>
             <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto flex flex-col z-[99999] group/sidebar relative h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
@@ -124,7 +127,7 @@ const Navbar = () => {
                         <Action label='Помойка' icon={Trash} />
                     </PopoverTrigger>
                     <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
-                        помойка
+                        <TrashBox docs={trash} />
                     </PopoverContent>
                 </Popover>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
