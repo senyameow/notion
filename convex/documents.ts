@@ -1,6 +1,6 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
-import { Id } from './_generated/dataModel'
+import { Doc, Id } from './_generated/dataModel'
 
 export const create = mutation({
     args: {
@@ -95,4 +95,51 @@ export const getTrash = query({
         return trashDocs
     }
 
+})
+
+export const restore = mutation({
+    args: {
+        id: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+
+        const doc = await ctx.db.get(args.id)
+        if (!doc) throw new Error('Not found')
+
+        if (doc.userId !== identity.subject) throw new Error('Unauthorized')
+
+        // const restoredDoc = await ctx.db.patch(args.id, { isAcrchieved: false }) // но мы хотим сделать так, что если родитель удален, то чайлда восстановить не получится, надо будет восстановить родителя сначала
+
+        const reccursiveRestore = async (id: Id<'documents'>) => {
+            const children = await ctx.db.query('documents').withIndex('by_user_parent', q =>
+                q
+                    .eq('userId', identity.subject)
+                    .eq('parentDoc', id)
+            ).collect()
+
+            for (let child of children) {
+                await ctx.db.patch(child._id, { isAcrchieved: false })
+                await reccursiveRestore(child._id)
+            }
+        }
+
+        const options: Partial<Doc<'documents'>> = {
+            isAcrchieved: false
+        }
+
+        if (doc.parentDoc) {
+            const parent = await ctx.db.get(doc.parentDoc)
+            if (parent?.isAcrchieved) {
+                // parent.isAcrchieved = undefined // мы не можем сказать, что isArchieved = undefined, т.к. isAcrhieved is required is schema
+                options.isAcrchieved = undefined; // ... 
+            }
+        }
+        await ctx.db.patch(args.id, options)
+
+        reccursiveRestore(args.id)
+
+        return doc
+    }
 })
