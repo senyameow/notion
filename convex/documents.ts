@@ -69,7 +69,6 @@ export const archiveDoc = mutation({
     }
 })
 
-
 export const getDocs = query({
     args: {
         parentDoc: v.optional(v.id('documents'))
@@ -84,5 +83,16 @@ export const getDocs = query({
         return docs
     }
 })
-// по факту бесполезный квери, т.к. нам нужны только доки определенного юзера, используем индексы!
 
+export const getTrash = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+        const trashDocs = await ctx.db.query('documents').withIndex('by_user', q =>
+            q.eq('userId', identity.subject)
+        ).filter(q => q.eq(q.field('isAcrchieved'), true)).order('desc').collect()
+
+        return trashDocs
+    }
+
+})
