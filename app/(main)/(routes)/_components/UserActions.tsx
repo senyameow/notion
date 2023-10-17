@@ -5,6 +5,8 @@ import Action from './Action'
 import { toast } from 'sonner';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { modalSlice } from '@/store/reducers/ModalSlice';
 
 
 const UserActions = () => {
@@ -22,9 +24,14 @@ const UserActions = () => {
         })
     }
 
+    const { isOpen } = useAppSelector(state => state.modal)
+    const { onOpen } = modalSlice.actions
+    const dispatch = useAppDispatch()
+
+
     return (
         <div className='w-full flex flex-col items-start '>
-            <Action isSearch label='Search' onClick={() => { }} icon={Search} />
+            <Action isSearch label='Search' onClick={() => dispatch(onOpen())} icon={Search} />
             <Action label='Settings' onClick={() => { }} icon={Settings} />
             <Action label='New page' onClick={onCreate} icon={PlusCircle} />
         </div>

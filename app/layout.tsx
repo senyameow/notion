@@ -6,6 +6,10 @@ import { cn } from '@/lib/utils'
 import { ConvexClientProvider } from '@/providers/ConvexClientProvider'
 import { Toaster } from 'sonner';
 
+import { Provider } from 'react-redux'
+import { setupStore, store } from '@/store/store'
+import StoreProvider from '@/providers/StoreProvider'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -18,18 +22,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
 
     <html lang="en" suppressHydrationWarning>
       <body className={cn(`dark:bg-dark`, inter.className)}>
-        <ConvexClientProvider>
-          <Toaster />
-          <ThemeProvider defaultTheme='system' enableSystem disableTransitionOnChange storageKey='notion-theme' attribute='class'>
-            {children}
-          </ThemeProvider>
+        <StoreProvider>
+          <ConvexClientProvider>
+            <Toaster />
+            <ThemeProvider defaultTheme='system' enableSystem disableTransitionOnChange storageKey='notion-theme' attribute='class'>
+              {children}
+            </ThemeProvider>
 
-        </ConvexClientProvider>
-
+          </ConvexClientProvider>
+        </StoreProvider>
       </body>
     </html>
 

@@ -6,10 +6,10 @@ interface ActionProps {
     icon: LucideIcon;
     label: string;
     onClick?: () => void;
-    isSearch?: boolean
+    isSearch?: boolean;
 }
 
-const Action = ({ icon, label, onClick, isSearch = false }: ActionProps) => {
+const Action = ({ icon, label, onClick, isSearch = false, }: ActionProps) => {
 
     const Icon = icon
 
