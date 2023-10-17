@@ -5,6 +5,7 @@ import { useConvexAuth } from 'convex/react'
 import { Loader2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import Navbar from './_components/Navbar'
+import SearchCommand from './_components/SearchCommand'
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 
@@ -24,6 +25,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <div className='h-full dark:bg-dark flex'>
             <Navbar />
             <main className='h-full flex-1 overflow-hidden'>
+                <SearchCommand />
                 {children}
             </main>
         </div>
