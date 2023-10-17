@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import {
     Command,
@@ -11,18 +11,40 @@ import {
     CommandSeparator,
     CommandShortcut,
 } from "@/components/ui/command"
+import { getAllDocs } from '@/convex/documents'
+import { useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { modalSlice } from '@/store/reducers/ModalSlice'
+import { useAppSelector } from '@/hooks/redux'
+import { useUser } from '@clerk/clerk-react'
 
 const SearchCommand = () => {
 
+    const docs = useQuery(api.documents.getAllDocs)
+
+    const { onToggle, onClose } = modalSlice.actions
+    const { isOpen } = useAppSelector(state => state.modal)
+
+    const [isMounted, setIsMounted] = useState(false)
+    const { user } = useUser()
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    if (!isMounted) return null
+
     return (
         <Command>
-            <CommandInput placeholder="Type a command or search..." />
+            <CommandInput placeholder={`search ${user?.fullName}'s Notion..`} />
             <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="Suggestions">
-                    <CommandItem>Calendar</CommandItem>
-                    <CommandItem>Search Emoji</CommandItem>
-                    <CommandItem>Calculator</CommandItem>
+                <CommandGroup heading="Documents">
+                    {docs?.map(doc => (
+                        <CommandItem key={doc._id} value={`${doc._id}-${doc.title}`} title={doc.title} onSelect={() => { }} className=''>
+                            {doc.title}
+                        </CommandItem>
+                    ))}
                 </CommandGroup>
                 <CommandSeparator />
                 <CommandGroup heading="Settings">
