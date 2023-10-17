@@ -21,6 +21,8 @@ import {
 } from "@/components/ui/popover"
 import { Input } from '@/components/ui/input'
 import TrashBox from './TrashBox'
+import { useParams } from 'next/navigation'
+import DocNavbar from './DocNavbar'
 
 const Navbar = () => {
 
@@ -31,6 +33,8 @@ const Navbar = () => {
     const navbarRef = useRef<ElementRef<'div'>>(null)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
+
+    const params = useParams() // убиватель квадратных скобочек
 
     const create = useMutation(api.documents.create)
 
@@ -132,12 +136,14 @@ const Navbar = () => {
                 </Popover>
                 <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
-            <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999] dark:bg-secondary bg-white`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
-                <nav className=' px-3 py-4 w-full'>
-                    <button onClick={resetWidth} className={cn(`w-fit h-fit p-2 hover:bg-transparent`)}>
+            <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999]`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
+                {!!params.docId ? (
+                    <DocNavbar />
+                ) : <nav className=' px-3 py-4 w-full bg-transparent'>
+                    <button disabled={!isCollapsed} onClick={resetWidth} className={cn(`w-fit h-fit p-2 hover:bg-transparent cursor-default`, isCollapsed && 'cursor-pointer')}>
                         <Menu className={cn(`w-6 h-6 dark:text-neutral-500 text-black opacity-0`, isCollapsed && 'opacity-100')} />
                     </button>
-                </nav>
+                </nav>}
             </div>
         </>
     )
