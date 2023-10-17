@@ -19,6 +19,8 @@ import { modalSlice } from '@/store/reducers/ModalSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useUser } from '@clerk/clerk-react'
 import { useRouter } from 'next/navigation'
+import Doc from './Doc'
+import { File } from 'lucide-react'
 
 const SearchCommand = () => {
 
@@ -65,8 +67,11 @@ const SearchCommand = () => {
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup heading="Documents">
                     {docs?.map(doc => (
-                        <CommandItem key={doc._id} value={`${doc._id}-${doc.title}`} title={doc.title} onSelect={onSelect} className=''>
-                            {doc.title}
+                        <CommandItem key={doc._id} value={`${doc._id}-${doc.title}`} title={doc.title} onSelect={onSelect} className='cursor-pointer'>
+                            <div className='w-full flex items-center gap-2'>
+                                <File className='w-5- h-5' />
+                                {doc.title}
+                            </div>
                         </CommandItem>
                     ))}
                 </CommandGroup>
