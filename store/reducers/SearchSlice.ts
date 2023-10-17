@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-interface ModalState {
+interface searchState {
     isOpen: boolean;
 }
 
-const initialState: ModalState = {
+const initialState: searchState = {
     isOpen: false,
 }
 
-export const modalSlice = createSlice({
-    name: 'modal',
+export const searchSlice = createSlice({
+    name: 'search',
     initialState,
     reducers: {
         onOpen(state) {
@@ -24,4 +24,4 @@ export const modalSlice = createSlice({
     }
 })
 
-export default modalSlice.reducer
+export default searchSlice.reducer

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { modalSlice } from '@/store/reducers/ModalSlice';
+import { searchSlice } from '@/store/reducers/SearchSlice';
 
 
 const UserActions = () => {
@@ -24,8 +24,8 @@ const UserActions = () => {
         })
     }
 
-    const { isOpen } = useAppSelector(state => state.modal)
-    const { onOpen } = modalSlice.actions
+    const { isOpen } = useAppSelector(state => state.search)
+    const { onOpen } = searchSlice.actions
     const dispatch = useAppDispatch()
 
 

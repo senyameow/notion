@@ -1,8 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import modalSlice from './reducers/ModalSlice';
+import searchModal from './reducers/SearchSlice';
 
 const rootReducer = combineReducers({
-    modal: modalSlice
+    search: searchModal
 })
 
 export const setupStore = () => {

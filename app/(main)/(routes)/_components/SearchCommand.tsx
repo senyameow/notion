@@ -12,22 +12,20 @@ import {
     CommandSeparator,
     CommandShortcut,
 } from "@/components/ui/command"
-import { getAllDocs } from '@/convex/documents'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { modalSlice } from '@/store/reducers/ModalSlice'
+import { searchSlice } from '@/store/reducers/SearchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useUser } from '@clerk/clerk-react'
 import { useRouter } from 'next/navigation'
-import Doc from './Doc'
 import { File } from 'lucide-react'
 
 const SearchCommand = () => {
 
     const docs = useQuery(api.documents.getAllDocs)
 
-    const { onToggle, onClose, onOpen } = modalSlice.actions
-    const { isOpen } = useAppSelector(state => state.modal)
+    const { onToggle, onClose, onOpen } = searchSlice.actions
+    const { isOpen } = useAppSelector(state => state.search)
     const dispatch = useAppDispatch()
 
     const { user } = useUser()
