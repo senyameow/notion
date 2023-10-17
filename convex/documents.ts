@@ -161,3 +161,18 @@ export const removeDoc = mutation({
         return deletedDoc
     }
 })
+
+export const getAllDocs = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+
+        const docs = await ctx.db.query('documents').withIndex('by_user')
+            .filter(q =>
+                q.eq(q.field('userId'), identity.subject)
+            ).order('desc')
+            .collect()
+
+        return docs
+    }
+})
