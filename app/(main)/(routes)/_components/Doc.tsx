@@ -111,8 +111,8 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
 Doc.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
     return (
         <div className='flex gap-2 items-center' style={{ paddingLeft: level ? `${(level * 12)}px` : '12px' }}>
-            <Skeleton className='h-[20px] w-[100px] text-neutral-500 bg-neutral-500 ' />
-            <Skeleton className='h-4 w-[30%] text-neutral-500 bg-neutral-500 ' />
+            <Skeleton className='h-[20px] w-[100px] ' />
+            <Skeleton className='h-4 w-[30%] ' />
         </div>
     )
 }
