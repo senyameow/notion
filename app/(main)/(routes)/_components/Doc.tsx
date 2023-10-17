@@ -53,7 +53,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
             onExpand?.()
         }
         toast.success(`you've created new note!`)
-        router.push(`/docs/${doc}`)
+        // router.push(`/docs/${doc}`)
 
     }
 
@@ -70,8 +70,6 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
         })
     }
 
-
-    const { user } = useUser()
 
     return (
         <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
