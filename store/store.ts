@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import searchModal from './reducers/SearchSlice';
+import searchModal from './reducers/SearchSlice'
 import settingsSlice from './reducers/SettingsSlice';
 
 const rootReducer = combineReducers({

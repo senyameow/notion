@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation'
 import Navbar from './_components/Navbar'
 import SearchCommand from './_components/SearchCommand'
 import SettingsCommand from './_components/SettingsCommand'
+import ModalProvider from '@/providers/ModalProvider'
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 
@@ -26,8 +27,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
         <div className='h-full dark:bg-dark flex'>
             <Navbar />
             <main className='h-full flex-1 overflow-hidden'>
-                <SearchCommand />
-                <SettingsCommand />
+                <ModalProvider />
                 {children}
             </main>
         </div>
