@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import Navbar from './_components/Navbar'
 import SearchCommand from './_components/SearchCommand'
+import SettingsCommand from './_components/SettingsCommand'
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 
@@ -26,6 +27,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
             <Navbar />
             <main className='h-full flex-1 overflow-hidden'>
                 <SearchCommand />
+                <SettingsCommand />
                 {children}
             </main>
         </div>

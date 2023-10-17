@@ -7,6 +7,7 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { searchSlice } from '@/store/reducers/SearchSlice';
+import { settingsSlice } from '@/store/reducers/SettingsSlice';
 
 
 const UserActions = () => {
@@ -24,15 +25,15 @@ const UserActions = () => {
         })
     }
 
-    const { isOpen } = useAppSelector(state => state.search)
-    const { onOpen } = searchSlice.actions
+    const { onOpen: onOpenSearch } = searchSlice.actions
+    const { onOpen: onOpenSettings } = settingsSlice.actions
     const dispatch = useAppDispatch()
 
 
     return (
         <div className='w-full flex flex-col items-start '>
-            <Action isSearch label='Search' onClick={() => dispatch(onOpen())} icon={Search} />
-            <Action label='Settings' onClick={() => { }} icon={Settings} />
+            <Action isSearch label='Search' onClick={() => dispatch(onOpenSearch())} icon={Search} />
+            <Action label='Settings' onClick={() => dispatch(onOpenSettings())} icon={Settings} />
             <Action label='New page' onClick={onCreate} icon={PlusCircle} />
         </div>
     )
