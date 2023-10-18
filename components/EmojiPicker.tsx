@@ -34,7 +34,12 @@ export const EmojiPicker = ({
 
     return (
         <Popover>
-
+            <PopoverTrigger asChild={asChild}>
+                {children}
+            </PopoverTrigger>
+            <PopoverContent className='w-full'>
+                <Picker height={350} theme={theme} onEmojiClick={data => onChange(data.emoji)} />
+            </PopoverContent>
         </Popover>
     )
 }
