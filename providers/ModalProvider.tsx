@@ -1,6 +1,7 @@
 'use client'
 import SearchCommand from '@/app/(main)/(routes)/_components/SearchCommand'
 import SettingsCommand from '@/app/(main)/(routes)/_components/SettingsCommand'
+import ImageUploadModal from '@/components/modals/ImageUploadModal'
 import React, { useEffect, useState } from 'react'
 
 const ModalProvider = () => {
@@ -17,6 +18,7 @@ const ModalProvider = () => {
         <>
             <SearchCommand />
             <SettingsCommand />
+            <ImageUploadModal />
         </>
     )
 }

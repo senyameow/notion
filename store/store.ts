@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import searchModal from './reducers/SearchSlice'
 import settingsSlice from './reducers/SettingsSlice';
+import imageSlice from './reducers/ImageUploadSlice';
 
 const rootReducer = combineReducers({
     search: searchModal,
     settings: settingsSlice,
+    cover: imageSlice,
 })
 
 export const setupStore = () => {

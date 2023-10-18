@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { api } from '@/convex/_generated/api';
 import { Doc } from '@/convex/_generated/dataModel'
+import { useAppDispatch } from '@/hooks/redux';
+import { imageSlice } from '@/store/reducers/ImageUploadSlice';
 import { useMutation } from 'convex/react';
 import { Image, Loader2, Smile, X } from 'lucide-react'
 import React, { useRef, useState } from 'react'
@@ -26,6 +28,7 @@ const Toolbar = ({
     const inputRef = useRef<HTMLTextAreaElement>(null)
     const [title, setTitle] = useState(initialDoc?.title || 'Untitled')
     const [editing, setEditing] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
 
     const onChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (preview) return
@@ -58,7 +61,6 @@ const Toolbar = ({
         })
     }
 
-    const [isDeleting, setIsDeleting] = useState(false)
 
     const onRemoveIcon = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         try {
@@ -84,6 +86,9 @@ const Toolbar = ({
         }, 0);
     }
 
+    const dispatch = useAppDispatch()
+    const { onOpen } = imageSlice.actions
+
     return (
         <div className='flex flex-col gap-3 items-start group'>
             {!preview && <div className='flex flex-row items-center gap-2 group/icons pt-6 opacity-0 group-hover:opacity-100 transition'>
@@ -94,7 +99,7 @@ const Toolbar = ({
                     </Button>}
                 </EmojiPicker>}
                 {!initialDoc.cover_image && (
-                    <Button className='border-[0.7px] border-neutral-100' variant={'ghost'}>
+                    <Button onClick={() => dispatch(onOpen())} className='border-[0.7px] border-neutral-100' variant={'ghost'}>
                         <Image className='w-4 h-4 mr-2' />
                         Add cover
                     </Button>
