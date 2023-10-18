@@ -45,7 +45,7 @@ const Title = ({ initialDoc }: TitleProps) => {
 
     return (
         <>
-            {editing ? <Input onKeyDown={onSave} className='h-7 bg-transparent py-0 border border-neutral-500 focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={onChangeTitle} value={title || 'Untitled'} /> : <Button variant={'ghost'} onClick={enableInput} className='w-fit px-2 py-0.5 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition rounded-xl'>
+            {editing ? <Input ref={inputRef} onBlur={() => setEditing(false)} onKeyDown={onSave} className='h-7 bg-transparent py-0 border border-neutral-500 focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={onChangeTitle} value={title || 'Untitled'} /> : <Button variant={'ghost'} onClick={enableInput} className='w-fit px-2 py-0.5 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition rounded-xl'>
                 {initialDoc.title}
             </Button>}
 
