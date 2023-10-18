@@ -17,7 +17,6 @@ interface DocListProps {
 
 const DocList = ({ data, parentId, level = 0 }: DocListProps) => {
 
-    const pathname = usePathname()
     const params = useParams()
     const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({})
     // id: true/false,
