@@ -21,8 +21,8 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     if (doc === undefined) {
         return (
-            <div>
-                <Skeleton className='w-[40px] h-[10px] ' />
+            <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>
+                <Skeleton className='w-[140px] h-[15px] mt-5 ' />
             </div>
         )
     }

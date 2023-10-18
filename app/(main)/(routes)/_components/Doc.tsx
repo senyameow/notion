@@ -82,7 +82,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                         <DocIcon className='w-5 h-5' />
                     </div>
                 )}
-                <span className='text-sm'>{title}</span>
+                <span className='text-sm truncate w-full mr-auto text-left'>{title}</span>
                 <div className='flex items-center ml-auto w-full justify-end mr-2 gap-2'>
                     <button onClick={onCreateChild} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
                         <Plus className='w-4 h-4 text-neutral-500' />
