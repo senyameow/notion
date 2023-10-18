@@ -18,6 +18,7 @@ import { toast } from 'sonner'
 import { useEdgeStore } from '@/lib/edgestore'
 import { SingleImageDropzone } from '../SingleImageDropzone'
 import { Button } from '../ui/button'
+import { Loader2 } from 'lucide-react'
 
 const ImageUploadModal = () => {
 
@@ -41,18 +42,19 @@ const ImageUploadModal = () => {
 
     const onAddCover = async (file: File) => {
         try {
+            setIsSubmitting(true)
             if (file) {
                 const res = await edgestore.publicFiles.upload({
                     file,
                     onProgressChange: (progress) => {
-                        // you can use this to show a progress bar
-                        console.log(progress);
+
                     },
                 });
                 await update({
                     id,
                     cover_image: res.url
                 })
+                console.log(res.url)
                 dispatch(onStore(res.url)) // и в редакс кинули
                 toast.success(`cover image added`)
             }
@@ -61,6 +63,7 @@ const ImageUploadModal = () => {
             console.log(error)
         } finally {
             dispatch(onClose())
+            setIsSubmitting(false)
         }
     }
 
@@ -80,7 +83,13 @@ const ImageUploadModal = () => {
                             }}
                         />
                         <Button onClick={() => { onAddCover(file!) }}>
-                            Upload
+                            {isSubmitting ? (
+                                <Loader2 className='w-4 h-4 animate-spin' />
+                            ) : (
+                                <div>
+                                    Upload
+                                </div>
+                            )}
                         </Button>
                     </DialogDescription>
                 </DialogHeader>
