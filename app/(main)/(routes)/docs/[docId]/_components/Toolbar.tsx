@@ -1,11 +1,15 @@
 'use client'
 import { EmojiPicker } from '@/components/EmojiPicker';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { api } from '@/convex/_generated/api';
 import { Doc } from '@/convex/_generated/dataModel'
 import { useMutation } from 'convex/react';
 import { Image, Loader2, Smile, X } from 'lucide-react'
-import React from 'react'
+import React, { useRef, useState } from 'react'
+
+import TextArea from 'react-textarea-autosize'
+import { toast } from 'sonner';
 
 interface ToolbarProps {
     initialDoc: Doc<'documents'>;
@@ -18,6 +22,25 @@ const Toolbar = ({
 }: ToolbarProps) => {
 
     const update = useMutation(api.documents.updateDoc)
+
+    const inputRef = useRef<HTMLTextAreaElement>(null)
+    const [title, setTitle] = useState(initialDoc?.title || 'Untitled')
+    const [editing, setEditing] = useState(false)
+
+    const onChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (preview) return
+        update({
+            title: e.target.value || 'Untitled',
+            id: initialDoc._id
+        })
+        setTitle(e.target.value)
+    }
+
+    const onSave = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === 'Enter') {
+            setEditing(false)
+        }
+    }
 
     if (initialDoc === undefined) {
         return (
@@ -34,12 +57,31 @@ const Toolbar = ({
             icon: emoji
         })
     }
-    const onRemoveIcon = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        e.stopPropagation()
-        update({
-            id: initialDoc._id,
-            icon: ''
-        })
+
+    const [isDeleting, setIsDeleting] = useState(false)
+
+    const onRemoveIcon = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        try {
+            setIsDeleting(true)
+            e.stopPropagation()
+            await update({
+                id: initialDoc._id,
+                icon: ''
+            })
+            toast.success(`you've deleted icon`)
+        } catch (error) {
+            toast.error('something went wrong')
+        } finally {
+            setIsDeleting(false)
+        }
+    }
+
+    const enableInput = () => {
+        setTitle(initialDoc.title)
+        setEditing(true)
+        setTimeout(() => {
+            inputRef.current?.focus()
+        }, 0);
     }
 
     return (
@@ -60,18 +102,24 @@ const Toolbar = ({
             </div>}
             {!!initialDoc.icon && !preview && (
                 <EmojiPicker onChange={onChangeIcon}>
-                    <div className='text-6xl py-6 relative'>
-                        {initialDoc.icon}
-                        <Button onClick={onRemoveIcon} variant={'destructive'} className='rounded-full h-fit p-1 hover:opacity-90 absolute top-5 right-3'>
+                    <div className='text-6xl py-6 relative group/icon'>
+                        {isDeleting ? <Loader2 className='animate-spin w-12 h-12' /> : initialDoc.icon}
+                        <Button onClick={onRemoveIcon} variant={'destructive'} className='opacity-0 group-hover/icon:opacity-100 transition rounded-full h-fit p-1 hover:opacity-90 absolute top-5 right-3'>
                             <X className='w-4 h-4' />
                         </Button>
                     </div>
                 </EmojiPicker>
             )}
 
-            <div>
-                {initialDoc.title}
-            </div>
+            <>
+                {editing ? (
+                    <TextArea onBlur={() => setEditing(false)} value={title || 'Untitled'} onKeyDown={onSave} onChange={onChangeTitle} ref={inputRef} className='resize-none text-6xl font-bold bg-transparent py-0 border-none focus-visible:border-none h-fit w-fit focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                ) : (
+                    <div className='text-6xl font-bold' onClick={enableInput}>
+                        {title || 'Untitled'}
+                    </div>
+                )}
+            </>
         </div>
     )
 }
