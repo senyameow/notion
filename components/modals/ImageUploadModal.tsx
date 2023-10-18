@@ -23,7 +23,7 @@ const ImageUploadModal = () => {
 
     const { isOpen, id } = useAppSelector(state => state.cover)
     const dispatch = useAppDispatch()
-    const { onClose, onOpen, onToggle } = imageSlice.actions
+    const { onClose, onStore } = imageSlice.actions
     const [file, setFile] = useState<File>()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -53,6 +53,7 @@ const ImageUploadModal = () => {
                     id,
                     cover_image: res.url
                 })
+                dispatch(onStore(res.url)) // и в редакс кинули
                 toast.success(`cover image added`)
             }
         } catch (error) {

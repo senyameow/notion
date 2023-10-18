@@ -5,11 +5,13 @@ import { PayloadAction } from '@reduxjs/toolkit'
 interface ImageUploadState {
     isOpen: boolean;
     id: Id<'documents'> | undefined;
+    cover_image: string | undefined;
 }
 
 const initialState: ImageUploadState = {
     isOpen: false,
     id: undefined,
+    cover_image: undefined,
 }
 
 export const imageSlice = createSlice({
@@ -28,6 +30,9 @@ export const imageSlice = createSlice({
             state.isOpen = !state.isOpen
             state.id = action.payload
         },
+        onStore(state, action: PayloadAction<string>) {
+            state.cover_image = action.payload
+        }
     }
 })
 
