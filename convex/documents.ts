@@ -183,7 +183,7 @@ export const updateDoc = mutation({
         title: v.optional(v.string()),
         icon: v.optional(v.string()),
         content: v.optional(v.string()),
-        cover_img: v.optional(v.string()),
+        cover_image: v.optional(v.string()),
         isPublished: v.optional(v.boolean())
     },
     handler: async (ctx, args) => {

@@ -9,6 +9,7 @@ import { Toaster } from 'sonner';
 import { Provider } from 'react-redux'
 import { setupStore, store } from '@/store/store'
 import StoreProvider from '@/providers/StoreProvider'
+import { EdgeStoreProvider } from '@/lib/edgestore'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -31,7 +32,9 @@ export default function RootLayout({
           <ConvexClientProvider>
             <Toaster />
             <ThemeProvider defaultTheme='system' enableSystem disableTransitionOnChange storageKey='notion-theme' attribute='class'>
-              {children}
+              <EdgeStoreProvider>
+                {children}
+              </EdgeStoreProvider>
             </ThemeProvider>
 
           </ConvexClientProvider>
