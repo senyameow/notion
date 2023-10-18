@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 
 interface BannerProps {
@@ -18,6 +19,7 @@ const Banner = ({
 
     const restore = useMutation(api.documents.restore)
     const remove = useMutation(api.documents.removeDoc)
+    const router = useRouter()
 
     const onRemove = () => {
         const promise = remove({ id: docId })
@@ -26,13 +28,13 @@ const Banner = ({
             success: 'Note deleted',
             error: 'Something went wrong'
         })
-
+        router.push(`/docs`)
     }
     const onRestore = () => {
         const promise = restore({ id: docId })
         toast.promise(promise, {
             loading: 'Restoring note..',
-            success: 'Note deleted',
+            success: 'Note restored',
             error: 'Something went wrong'
         })
 
