@@ -34,6 +34,8 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
     const [isDeleting, setIsDeleting] = useState(false)
 
     const doc = useQuery(api.documents.getNote, { id: params.docId as Id<"documents"> })
+    const archieve = useMutation(api.documents.archiveDoc)
+    const restore = useMutation(api.documents.restore)
 
     if (doc === undefined) {
         return (
@@ -45,7 +47,6 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     if (doc === null) return null
 
-    const archieve = useMutation(api.documents.archiveDoc)
     const onArchieve = async (e: Event) => {
         try {
             e.stopPropagation()
@@ -60,7 +61,6 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
         }
     }
 
-    const restore = useMutation(api.documents.restore)
 
     const onRestore = () => {
         const promise = restore({ id: doc._id })
