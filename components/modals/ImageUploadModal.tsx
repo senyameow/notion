@@ -82,7 +82,7 @@ const ImageUploadModal = () => {
                                 setFile(file);
                             }}
                         />
-                        <Button onClick={() => { onAddCover(file!) }}>
+                        <Button disabled={isSubmitting} onClick={() => { onAddCover(file!) }}>
                             {isSubmitting ? (
                                 <Loader2 className='w-4 h-4 animate-spin' />
                             ) : (
