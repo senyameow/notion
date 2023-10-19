@@ -4,6 +4,7 @@ import { api } from '@/convex/_generated/api'
 import { Doc } from '@/convex/_generated/dataModel'
 import { updateDoc } from '@/convex/documents'
 import { useAppDispatch } from '@/hooks/redux'
+import { useEdgeStore } from '@/lib/edgestore'
 import { imageSlice } from '@/store/reducers/ImageUploadSlice'
 import { useMutation } from 'convex/react'
 import { Loader2, X } from 'lucide-react'
@@ -24,6 +25,8 @@ const Cover = ({ doc, preview }: CoverProps) => {
 
     const [isLoading, setIsLoading] = useState(false)
 
+    const { edgestore } = useEdgeStore()
+
     if (doc === undefined) {
         return (
             <div className='w-full h-[300px] flex items-center justify-center'>
@@ -40,6 +43,11 @@ const Cover = ({ doc, preview }: CoverProps) => {
 
     const onRemoveImage = async () => {
         try {
+            if (!doc.cover_image) return
+            setIsLoading(true)
+            await edgestore.publicFiles.delete({
+                url: doc.cover_image,
+            });
             await update({
                 id: doc._id,
                 cover_image: ''
@@ -47,7 +55,7 @@ const Cover = ({ doc, preview }: CoverProps) => {
         } catch (error) {
             toast.error('something went wrong')
         } finally {
-
+            setIsLoading(false)
         }
     }
 
