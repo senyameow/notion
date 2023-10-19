@@ -38,6 +38,7 @@ export const imageSlice = createSlice({
             state.isOpen = false
             state.id = undefined
             state.type = 'add'
+            state.image_url = undefined
         },
         onToggle(state, action: PayloadAction<Id<'documents'>>) {
             state.isOpen = !state.isOpen

@@ -1,5 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/convex/_generated/api'
 import { Doc } from '@/convex/_generated/dataModel'
 import { updateDoc } from '@/convex/documents'
@@ -29,8 +30,11 @@ const Cover = ({ doc, preview }: CoverProps) => {
 
     if (doc === undefined) {
         return (
-            <div className='w-full h-[300px] flex items-center justify-center'>
-                <Loader2 className='animate-spin w-12 h-12' />
+            <div className='w-full h-[300px] flex flex-col gap-4'>
+                <Skeleton className='w-[90%] h-[30px] rounded-md' />
+                <Skeleton className='w-[70%] h-[40px] rounded-md' />
+                <Skeleton className='w-[80%] h-[50px] rounded-md' />
+                <Skeleton className='w-[30%] h-[100px] mx-auto rounded-md' />
             </div>
         )
     }
