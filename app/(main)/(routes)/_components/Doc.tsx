@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { useUser } from '@clerk/clerk-react';
 import { useMutation, useQuery } from 'convex/react';
 import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from 'lucide-react';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect, useParams, useRouter } from 'next/navigation';
 import React, { use } from 'react'
 import { toast } from 'sonner';
 
@@ -31,6 +31,8 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
     const DocIcon = icon!
 
     const router = useRouter()
+
+    const params = useParams()
 
     const handleExpand = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
@@ -72,7 +74,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
 
 
     return (
-        <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`)}>
+        <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`, params.docId === id && 'dark:bg-black/60 bg-neutral-100')}>
             <div onClick={onRedirect} className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
                 <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`)} onClick={handleExpand}>
                     <Icon className='w-4 h-4' />

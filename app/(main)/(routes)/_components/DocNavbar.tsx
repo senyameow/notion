@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { ArchiveRestore, Info, Loader2, Menu, MessageCircle, MoreHorizontal, Trash } from 'lucide-react'
+import { ArchiveRestore, Info, Loader2, Menu, MessageCircle, MoreHorizontal, Share, Trash } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 import Title from './Title'
@@ -32,10 +32,12 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
     const params = useParams()
 
     const [isDeleting, setIsDeleting] = useState(false)
+    const [isPublishing, setIsPublishing] = useState(false)
 
     const doc = useQuery(api.documents.getNote, { id: params.docId as Id<"documents"> })
     const archieve = useMutation(api.documents.archiveDoc)
     const restore = useMutation(api.documents.restore)
+    const update = useMutation(api.documents.updateDoc)
 
     if (doc === undefined) {
         return (
@@ -72,6 +74,21 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     }
 
+    const onPublish = async () => {
+        try {
+            setIsPublishing(true)
+            await update({
+                id: doc._id,
+                isPublished: true
+            })
+            toast.success(`anybody can visit this page and check Your note now`)
+        } catch (error) {
+            toast.error('Something went wrong')
+        } finally {
+            setIsPublishing(false)
+        }
+    }
+
     return (
         <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>
             {isCollapsed ? (
@@ -82,7 +99,10 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                         <Title initialDoc={doc} />
                     </div>
                     <div className='flex items-center gap-2'>
-                        <Button className='' variant={'ghost'}>Publish</Button>
+                        <Button disabled={isPublishing} onClick={onPublish} className='' variant={'ghost'}>
+                            {isPublishing ? <Loader2 className='2-4 h-4 mr-2 animate-spin' /> : <Share className='w-4 h-4 mr-2' />}
+                            Publish
+                        </Button>
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <MoreHorizontal role='button' className='w-8 h-8 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 rounded-lg' />
