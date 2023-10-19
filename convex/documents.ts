@@ -11,7 +11,6 @@ export const create = mutation({
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unaithenticated')
         const newDoc = await ctx.db.insert('documents', { title: args.title, userId: identity.subject, isAcrchieved: false, isPublished: false, parentDoc: args.parentDoc })
-
         return newDoc;
     }
 })

@@ -8,11 +8,14 @@ import { api } from '@/convex/_generated/api';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { searchSlice } from '@/store/reducers/SearchSlice';
 import { settingsSlice } from '@/store/reducers/SettingsSlice';
+import { useRouter } from 'next/navigation';
 
 
 const UserActions = () => {
 
     const createNote = useMutation(api.documents.create)
+
+    const router = useRouter()
 
     const onCreate = () => {
         const promise = createNote({
@@ -22,6 +25,9 @@ const UserActions = () => {
             loading: 'Creating a new note..',
             success: 'New note Created',
             error: 'Something went wrong'
+        })
+        promise.then(doc => {
+            router.push(`/docs/${doc}`)
         })
     }
 
