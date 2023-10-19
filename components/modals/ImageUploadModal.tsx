@@ -1,6 +1,6 @@
 'use client'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
-import { imageSlice } from '@/store/reducers/ImageUploadSlice'
+import { ImageUploadPayload, imageSlice } from '@/store/reducers/ImageUploadSlice'
 import React, { useState } from 'react'
 
 import {
@@ -22,7 +22,7 @@ import { Loader2 } from 'lucide-react'
 
 const ImageUploadModal = () => {
 
-    const { isOpen, id } = useAppSelector(state => state.cover)
+    const { isOpen, id, type, image_url } = useAppSelector(state => state.cover)
     const dispatch = useAppDispatch()
     const { onClose, onStore } = imageSlice.actions
     const [file, setFile] = useState<File>()
@@ -40,23 +40,35 @@ const ImageUploadModal = () => {
         dispatch(onClose())
     }
 
-    const onAddCover = async (file: File) => {
+    console.log(image_url)
+
+    const onCover = async (file: File, type: 'change' | 'add') => {
         try {
             setIsSubmitting(true)
-            if (file) {
+            if (file && type === 'add') {
                 const res = await edgestore.publicFiles.upload({
                     file,
-                    onProgressChange: (progress) => {
-
-                    },
                 });
                 await update({
                     id,
                     cover_image: res.url
                 })
-                console.log(res.url)
                 dispatch(onStore(res.url)) // и в редакс кинули
                 toast.success(`cover image added`)
+            }
+            if (file && type === 'change' && image_url) {
+                const res = await edgestore.publicFiles.upload({
+                    file,
+                    options: {
+                        replaceTargetUrl: image_url!
+                    }
+                });
+                await update({
+                    id,
+                    cover_image: res.url
+                })
+                // dispatch(onStore(res.url)) // и в редакс кинули
+                toast.success(`cover image changes`)
             }
         } catch (error) {
             toast.error('something went wrong')
@@ -82,7 +94,7 @@ const ImageUploadModal = () => {
                                 setFile(file);
                             }}
                         />
-                        <Button disabled={isSubmitting} onClick={() => { onAddCover(file!) }}>
+                        {type === 'add' && <Button disabled={isSubmitting} onClick={() => { onCover(file!, type) }}>
                             {isSubmitting ? (
                                 <Loader2 className='w-4 h-4 animate-spin' />
                             ) : (
@@ -90,7 +102,16 @@ const ImageUploadModal = () => {
                                     Upload
                                 </div>
                             )}
-                        </Button>
+                        </Button>}
+                        {type === 'change' && <Button disabled={isSubmitting} onClick={() => { onCover(file!, type) }}>
+                            {isSubmitting ? (
+                                <Loader2 className='w-4 h-4 animate-spin' />
+                            ) : (
+                                <div>
+                                    Change
+                                </div>
+                            )}
+                        </Button>}
                     </DialogDescription>
                 </DialogHeader>
             </DialogContent>

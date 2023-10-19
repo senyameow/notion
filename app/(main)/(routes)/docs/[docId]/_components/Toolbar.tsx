@@ -99,7 +99,7 @@ const Toolbar = ({
                     </Button>}
                 </EmojiPicker>}
                 {!initialDoc.cover_image && (
-                    <Button onClick={() => dispatch(onOpen(initialDoc._id))} className='border-[0.7px] border-neutral-100' variant={'ghost'}>
+                    <Button onClick={() => dispatch(onOpen({ id: initialDoc._id, type: 'add' }))} className='border-[0.7px] border-neutral-100' variant={'ghost'}>
                         <Image className='w-4 h-4 mr-2' />
                         Add cover
                     </Button>

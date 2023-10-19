@@ -64,7 +64,7 @@ const Cover = ({ doc, preview }: CoverProps) => {
             {doc?.cover_image && (
                 <div className='w-full h-[300px] relative group'>
                     <Image src={doc.cover_image} alt='cover' className='object-cover' fill />
-                    {!preview && <Button onClick={() => dispatch(onOpen(doc._id))} className='absolute bottom-2 opacity-0 right-32 group-hover:opacity-100 transition'>
+                    {!preview && <Button onClick={() => dispatch(onOpen({ id: doc._id, type: 'change', url: doc.cover_image }))} className='absolute bottom-2 opacity-0 right-32 group-hover:opacity-100 transition'>
                         Change Cover
                     </Button>}
                     {!preview && doc.cover_image && <Button disabled={isLoading} onClick={onRemoveImage} className='absolute bottom-2 opacity-0 right-2 group-hover:opacity-100 transition'>
