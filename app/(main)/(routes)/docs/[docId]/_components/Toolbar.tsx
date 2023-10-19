@@ -79,6 +79,7 @@ const Toolbar = ({
     }
 
     const enableInput = () => {
+        if (preview) return
         setTitle(initialDoc.title)
         setEditing(true)
         setTimeout(() => {
@@ -90,7 +91,7 @@ const Toolbar = ({
     const { onOpen } = imageSlice.actions
 
     return (
-        <div className='flex flex-col gap-3 items-start group'>
+        <div className='flex flex-col gap-3 items-start group pb-4'>
             {!preview && <div className='flex flex-row items-center gap-2 group/icons pt-6 opacity-0 group-hover:opacity-100 transition'>
                 {!initialDoc.icon && <EmojiPicker onChange={onChangeIcon}>
                     {<Button variant={'ghost'} className='border-[0.7px] border-neutral-100'>
@@ -120,7 +121,7 @@ const Toolbar = ({
                 {editing ? (
                     <TextArea onBlur={() => setEditing(false)} value={title || 'Untitled'} onKeyDown={onSave} onChange={onChangeTitle} ref={inputRef} className='resize-none text-6xl font-bold bg-transparent py-0 border-none focus-visible:border-none h-fit w-fit focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
                 ) : (
-                    <div className='text-6xl font-bold' onClick={enableInput}>
+                    <div className='text-6xl font-bold pl-12' onClick={enableInput}>
                         {title || 'Untitled'}
                     </div>
                 )}

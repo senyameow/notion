@@ -20,8 +20,6 @@ export const getNote = query({
         id: v.id('documents')
     },
     handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity()
-        if (!identity) throw new Error('Unaithenticated')
         const docs = ctx.db.get(args.id)
 
         return docs
