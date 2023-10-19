@@ -2,7 +2,7 @@
 import Banner from '@/components/Banner'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
-import { useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import React from 'react'
 import Toolbar from './_components/Toolbar'
 import { useUser } from '@clerk/clerk-react'
@@ -11,18 +11,31 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { imageSlice } from '@/store/reducers/ImageUploadSlice'
 import Cover from './_components/Cover'
+import dynamic from "next/dynamic";
+
+const Editor = dynamic(() => import('./_components/Editor'), { ssr: false });
+
 
 const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const doc = useQuery(api.documents.getNote, { id: params.docId })
 
+    const update = useMutation(api.documents.updateDoc)
+
+    const onUpdateContent = (content: string) => {
+        update({
+            id: params.docId,
+            content
+        })
+    }
 
     return (
-        <div className='pt-20'>
+        <div className='pt-20 overflow-y-auto h-full'>
             {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
             <Cover doc={doc!} />
-            <div className='max-w-3xl md:max-w-4xl mx-auto'>
+            <div className='max-w-3xl md:max-w-4xl mx-auto h-full'>
                 <Toolbar initialDoc={doc!} />
+                <Editor onChange={onUpdateContent} initialContent={doc?.content} />
             </div>
         </div>
     )
