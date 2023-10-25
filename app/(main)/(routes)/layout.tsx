@@ -5,8 +5,6 @@ import { useConvexAuth } from 'convex/react'
 import { Loader2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import Navbar from './_components/Navbar'
-import SearchCommand from './_components/SearchCommand'
-import SettingsCommand from './_components/SettingsCommand'
 import ModalProvider from '@/providers/ModalProvider'
 
 const layout = ({ children }: { children: React.ReactNode }) => {

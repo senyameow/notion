@@ -38,7 +38,7 @@ const Title = ({ initialDoc }: TitleProps) => {
         setEditing(true)
         setTimeout(() => {
             inputRef.current?.focus()
-        }, 1000);
+        }, 300);
     }
 
     return (

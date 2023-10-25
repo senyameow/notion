@@ -23,6 +23,7 @@ import {
 import { useUser } from '@clerk/clerk-react'
 import { toast } from 'sonner'
 import PublishButton from './PublishButton'
+import { InfoSheet } from './Info'
 interface DocNavbarProps {
     isCollapsed: boolean;
     onResetWidth: () => void;
@@ -94,10 +95,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                                 <DropdownMenuLabel>{String(doc.title)}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                    <DropdownMenuItem className="cursor-pointer hover:opacity-90 w-full">
-                                        <Info className='w-4 h-4 mr-2' />
-                                        Info
-                                    </DropdownMenuItem>
+                                    <InfoSheet />
                                     {doc.isAcrchieved ? (
                                         <DropdownMenuItem className="cursor-pointer hover:opacity-90 w-full" onSelect={onRestore}>
                                             <ArchiveRestore className='w-4 h-4 mr-2' />
