@@ -17,10 +17,12 @@ export default defineSchema({
         .index('by_user_parent', ['userId', 'parentDoc']),
 
     users: defineTable({
+        userId: v.string(),
         tokenIdentifier: v.string(),
         name: v.string(),
         image_url: v.string(),
-        email: v.string()
+        email: v.string(),
+        documents: v.optional(v.array(v.id('documents')))
     }).index('by_token', ['tokenIdentifier'])
 });
 

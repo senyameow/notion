@@ -16,7 +16,7 @@ import { mutation } from "./_generated/server";
 export const store = mutation({
     args: {
         image_url: v.string(),
-        email: v.string()
+        email: v.string(),
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
@@ -45,7 +45,8 @@ export const store = mutation({
             name: identity.name!,
             tokenIdentifier: identity.tokenIdentifier,
             image_url: args.image_url,
-            email: args.email
+            email: args.email,
+            userId: identity.subject
         });
     },
 });
