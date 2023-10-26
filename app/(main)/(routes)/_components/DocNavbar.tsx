@@ -95,7 +95,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                                 <DropdownMenuLabel>{String(doc.title)}</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                    <InfoSheet />
+                                    <InfoSheet doc={doc} />
                                     {doc.isAcrchieved ? (
                                         <DropdownMenuItem className="cursor-pointer hover:opacity-90 w-full" onSelect={onRestore}>
                                             <ArchiveRestore className='w-4 h-4 mr-2' />

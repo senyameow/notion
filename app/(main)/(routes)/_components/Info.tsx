@@ -13,9 +13,17 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { Doc } from "@/convex/_generated/dataModel"
 import { MessageCircle } from "lucide-react"
 
-export function InfoSheet() {
+interface InfoSheetProps {
+    doc: Doc<'documents'>
+}
+
+export function InfoSheet({ doc }: InfoSheetProps) {
+
+
+
     return (
         <Sheet>
             <SheetTrigger className="flex items-center w-full px-2">
@@ -24,9 +32,9 @@ export function InfoSheet() {
             </SheetTrigger>
             <SheetContent className="z-[99999]">
                 <SheetHeader>
-                    <SheetTitle>Edit profile</SheetTitle>
+                    <SheetTitle>{doc.title}</SheetTitle>
                     <SheetDescription>
-                        Make changes to your profile here. Click save when you're done.
+                        You can track info of your note
                     </SheetDescription>
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
