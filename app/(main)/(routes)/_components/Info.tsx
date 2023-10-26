@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
     Sheet,
     SheetClose,
@@ -22,8 +23,6 @@ interface InfoSheetProps {
 
 export function InfoSheet({ doc }: InfoSheetProps) {
 
-
-
     return (
         <Sheet>
             <SheetTrigger className="flex items-center w-full px-2">
@@ -37,23 +36,25 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                         You can track info of your note
                     </SheetDescription>
                 </SheetHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                            Name
-                        </Label>
-                        <Input id="name" value="Pedro Duarte" className="col-span-3" />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="username" className="text-right">
-                            Username
-                        </Label>
-                        <Input id="username" value="@peduarte" className="col-span-3" />
-                    </div>
+                <div className="flex items-start gap-4 flex-col py-8">
+                    <Label>People visited your page:</Label>
+                    <ScrollArea className="h-[300px] w-full">
+                        <div className="flex flex-col gap-2">
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                            <span>qwe</span>
+                        </div>
+                    </ScrollArea>
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>
-                        <Button type="submit">Save changes</Button>
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
