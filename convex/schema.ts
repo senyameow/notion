@@ -11,6 +11,7 @@ export default defineSchema({
         icon: v.optional(v.string()),
         cover_image: v.optional(v.string()),
         isPublished: v.boolean(),
+        visitedPeople: v.optional(v.array(v.string()))
     })
         .index('by_user', ['userId'])
         .index('by_user_parent', ['userId', 'parentDoc'])

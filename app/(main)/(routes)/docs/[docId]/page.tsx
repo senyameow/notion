@@ -3,7 +3,7 @@ import Banner from '@/components/Banner'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Toolbar from './_components/Toolbar'
 import { useUser } from '@clerk/clerk-react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
@@ -21,6 +21,12 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     const doc = useQuery(api.documents.getNote, { id: params.docId })
 
     const update = useMutation(api.documents.updateDoc)
+
+    const { user } = useUser()
+
+    useEffect(() => {
+
+    }, [])
 
     const onUpdateContent = (content: string) => {
         update({

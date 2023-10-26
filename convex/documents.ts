@@ -181,7 +181,8 @@ export const updateDoc = mutation({
         icon: v.optional(v.string()),
         content: v.optional(v.string()),
         cover_image: v.optional(v.string()),
-        isPublished: v.optional(v.boolean())
+        isPublished: v.optional(v.boolean()),
+        newVisiter: v.optional(v.string())
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
@@ -190,11 +191,17 @@ export const updateDoc = mutation({
         const doc = await ctx.db.get(args.id)
         if (!doc) throw new Error('Not found')
         if (doc.userId !== identity.subject) throw new Error('Unauthorized')
+        const visited = doc.visitedPeople!
 
-        const { id, ...rest } = args
+        let { id, newVisiter, ...rest } = args
+
+        if (doc.visitedPeople?.includes(newVisiter!)) {
+            newVisiter = undefined
+        }
 
         const newDoc = await ctx.db.patch(args.id, {
-            ...rest
+            ...rest,
+            visitedPeople: [...visited, newVisiter!]
         })
 
         return newDoc
