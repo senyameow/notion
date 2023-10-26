@@ -28,9 +28,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     if (user === undefined) {
         return (
-            <div className='flex h-full w-full items-center justify-center'>
-                <Loader2 className='w-12 h-12 animate-spin' />
-            </div>
+            <></>
         )
     }
 

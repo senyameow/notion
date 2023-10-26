@@ -42,16 +42,7 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                     <Label>People visited your page:</Label>
                     <ScrollArea className="h-[300px] w-full">
                         <div className="flex flex-col gap-2">
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
-                            <span>qwe</span>
+                            {doc.visitedPeople}
                         </div>
                     </ScrollArea>
                 </div>

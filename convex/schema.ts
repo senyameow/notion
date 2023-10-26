@@ -14,8 +14,16 @@ export default defineSchema({
         visitedPeople: v.optional(v.array(v.string()))
     })
         .index('by_user', ['userId'])
-        .index('by_user_parent', ['userId', 'parentDoc'])
+        .index('by_user_parent', ['userId', 'parentDoc']),
+
+    users: defineTable({
+        tokenIdentifier: v.string(),
+        name: v.string(),
+        image_url: v.string(),
+        email: v.string()
+    }).index('by_token', ['tokenIdentifier'])
 });
+
 
 // допустим, нам понадобилось найти все доки для определенного юзера (для нас)
 // как мы это обычно сделаем без индексов?
