@@ -14,8 +14,11 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import { api } from "@/convex/_generated/api"
 import { Doc } from "@/convex/_generated/dataModel"
+import { useQuery } from "convex/react"
 import { MessageCircle } from "lucide-react"
+import UserCard from "./UserCard"
 
 interface InfoSheetProps {
     doc: Doc<'documents'>
@@ -23,7 +26,7 @@ interface InfoSheetProps {
 
 export function InfoSheet({ doc }: InfoSheetProps) {
 
-    console.log(doc.visitedPeople)
+    const people = useQuery(api.documents.getAllPeople, { ids: doc.visitedPeople })
 
     return (
         <Sheet>
@@ -42,7 +45,9 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                     <Label>People visited your page:</Label>
                     <ScrollArea className="h-[300px] w-full">
                         <div className="flex flex-col gap-2">
-                            {doc.visitedPeople}
+                            {people?.map(user => (
+                                <UserCard key={user._id} user={user} />
+                            ))}
                         </div>
                     </ScrollArea>
                 </div>

@@ -210,3 +210,12 @@ export const updateDoc = mutation({
 // делаем это с помощью того, что указываем поля как опциональные.
 // т.е. если мы их не передаем, они undefined => в патч приходит undefined => поле не меняется
 // теперь у нас есть мутация, которая позволит в рилтайме изменять наши доки (все, что нам угодно)
+
+export const getAllPeople = query({
+    args: {
+        ids: v.optional(v.array(v.string()))
+    },
+    handler: async (ctx, args) => {
+        return (await ctx.db.query('users').collect()).filter(user => args.ids?.includes(user.userId))
+    }
+})
