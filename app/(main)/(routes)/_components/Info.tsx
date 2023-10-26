@@ -23,6 +23,8 @@ interface InfoSheetProps {
 
 export function InfoSheet({ doc }: InfoSheetProps) {
 
+    console.log(doc.visitedPeople)
+
     return (
         <Sheet>
             <SheetTrigger className="flex items-center w-full px-2">

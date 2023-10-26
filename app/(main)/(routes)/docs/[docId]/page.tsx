@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button'
 import { imageSlice } from '@/store/reducers/ImageUploadSlice'
 import Cover from './_components/Cover'
 import dynamic from "next/dynamic";
+import { Loader2 } from 'lucide-react'
+import { redirect } from 'next/navigation'
 
 const Editor = dynamic(() => import('./_components/Editor'), { ssr: false });
 
@@ -24,8 +26,21 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const { user } = useUser()
 
-    useEffect(() => {
+    if (user === undefined) {
+        return (
+            <div className='flex h-full w-full items-center justify-center'>
+                <Loader2 className='w-12 h-12 animate-spin' />
+            </div>
+        )
+    }
 
+    if (user === null) return redirect('/')
+
+    useEffect(() => {
+        update({
+            id: params.docId,
+            newVisiter: user.id
+        })
     }, [])
 
     const onUpdateContent = (content: string) => {
