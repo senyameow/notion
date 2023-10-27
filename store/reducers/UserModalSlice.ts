@@ -1,25 +1,29 @@
 import { Doc } from "@/convex/_generated/dataModel";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface settingsState {
-    user: Doc<'users'> | undefined
+interface userModalState {
+    user: Doc<'users'> | undefined;
+    isOpen: boolean
 }
 
-const initialState: settingsState = {
+const initialState: userModalState = {
     user: undefined,
+    isOpen: false
 }
 
-export const settingsSlice = createSlice({
+export const userModalSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
         onOpen(state, action: PayloadAction<Doc<'users'>>) {
-            state.user = action.payload
+            state.user = action.payload;
+            state.isOpen = true
         },
         onClose(state) {
-            state.user = undefined
+            state.user = undefined;
+            state.isOpen = false
         }
     }
 })
 
-export default settingsSlice.reducer
+export default userModalSlice.reducer

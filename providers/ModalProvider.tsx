@@ -2,6 +2,7 @@
 import SearchCommand from '@/app/(main)/(routes)/_components/SearchCommand'
 import SettingsCommand from '@/app/(main)/(routes)/_components/SettingsCommand'
 import ImageUploadModal from '@/components/modals/ImageUploadModal'
+import UserInfoModal from '@/components/modals/UserInfo'
 import React, { useEffect, useState } from 'react'
 
 const ModalProvider = () => {
@@ -19,6 +20,7 @@ const ModalProvider = () => {
             <SearchCommand />
             <SettingsCommand />
             <ImageUploadModal />
+            <UserInfoModal />
         </>
     )
 }

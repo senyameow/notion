@@ -20,6 +20,8 @@ import { useQuery } from "convex/react"
 import { MessageCircle } from "lucide-react"
 import UserCard from "./UserCard"
 import { format } from "date-fns"
+import { useAppDispatch } from "@/hooks/redux"
+import { userModalSlice } from "@/store/reducers/UserModalSlice"
 
 interface InfoSheetProps {
     doc: Doc<'documents'>
@@ -30,6 +32,8 @@ export function InfoSheet({ doc }: InfoSheetProps) {
     const people = useQuery(api.documents.getAllPeople, { ids: doc.visitedPeople })?.filter(visiter => visiter.userId !== doc.userId)
 
     const creator = useQuery(api.documents.getUser, { id: doc.userId })
+
+
 
     return (
         <Sheet>
