@@ -24,6 +24,8 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const { user, isLoaded } = useUser()
 
+
+
     if (user === null) return redirect('/')
 
     useEffect(() => {

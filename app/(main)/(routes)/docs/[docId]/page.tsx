@@ -24,6 +24,18 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const update = useMutation(api.documents.updateDoc)
 
+    if (doc === undefined) {
+        return (
+            <div className=''>
+                <Loader2 className='w-12 h-12 animate-spin' />
+            </div>
+        )
+    }
+
+    const { user, isLoaded } = useUser()
+
+    if (isLoaded && (user?.id !== doc?.userId)) return redirect('/')
+
     const onUpdateContent = (content: string) => {
         update({
             id: params.docId,
