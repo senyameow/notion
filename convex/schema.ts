@@ -23,7 +23,7 @@ export default defineSchema({
         image_url: v.string(),
         email: v.string(),
         documents: v.optional(v.array(v.id('documents')))
-    }).index('by_token', ['tokenIdentifier'])
+    }).index('by_token', ['tokenIdentifier']).index('by_userId', ['userId'])
 });
 
 

@@ -186,7 +186,7 @@ export const updateDoc = mutation({
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
-        if (!identity) throw new Error('Unaithenticated')
+        if (identity === null) throw new Error('Unaithenticated')
 
         const doc = await ctx.db.get(args.id)
         if (!doc) throw new Error('Not found')
@@ -219,5 +219,18 @@ export const getAllPeople = query({
     },
     handler: async (ctx, args) => {
         return (await ctx.db.query('users').collect()).filter(user => args.ids?.includes(user.userId))
+    }
+})
+
+export const getUser = query({
+    args: {
+        id: v.string()
+    },
+    handler: async (ctx, args) => {
+        const user = await ctx.db.query('users').withIndex('by_userId').filter(q =>
+            q.eq(q.field('userId'), args.id)
+        ).first()
+        if (user === null) throw new Error('Not found')
+        return user
     }
 })
