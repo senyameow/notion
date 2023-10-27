@@ -3,12 +3,13 @@ import Banner from '@/components/Banner'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import dynamic from "next/dynamic";
 import Toolbar from '@/app/(main)/(routes)/docs/[docId]/_components/Toolbar'
 import Cover from '@/app/(main)/(routes)/docs/[docId]/_components/Cover'
-import { usePathname } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useUser } from '@clerk/clerk-react'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -19,9 +20,20 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     const pathname = usePathname()
     const isPreview = pathname.includes('preview')
 
-    console.log(doc)
-
     const update = useMutation(api.documents.updateDoc)
+
+    const { user, isLoaded } = useUser()
+
+    if (user === null) return redirect('/')
+
+    useEffect(() => {
+        if (isLoaded) {
+            update({
+                id: params.docId,
+                newVisiter: user.id
+            })
+        }
+    }, [isLoaded])
 
     const onUpdateContent = (content: string) => {
         update({

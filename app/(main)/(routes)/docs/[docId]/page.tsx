@@ -24,20 +24,6 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const update = useMutation(api.documents.updateDoc)
 
-    const { user, isLoaded } = useUser()
-
-    if (user === null) return redirect('/')
-
-    useEffect(() => {
-        if (isLoaded) {
-            console.log(user.id)
-            update({
-                id: params.docId,
-                newVisiter: user.id
-            })
-        }
-    }, [isLoaded])
-
     const onUpdateContent = (content: string) => {
         update({
             id: params.docId,
