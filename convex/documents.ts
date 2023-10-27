@@ -196,7 +196,9 @@ export const updateDoc = mutation({
         let { id, newVisiter, ...rest } = args
 
         if (doc.visitedPeople?.includes(newVisiter!)) {
-            newVisiter = undefined
+            return await ctx.db.patch(args.id, {
+                ...rest
+            })
         }
 
         const newDoc = await ctx.db.patch(args.id, {

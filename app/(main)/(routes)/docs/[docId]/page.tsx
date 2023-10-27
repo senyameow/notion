@@ -3,7 +3,7 @@ import Banner from '@/components/Banner'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Toolbar from './_components/Toolbar'
 import { useUser } from '@clerk/clerk-react'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
@@ -24,22 +24,19 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const update = useMutation(api.documents.updateDoc)
 
-    const { user } = useUser()
-
-    if (user === undefined) {
-        return (
-            <></>
-        )
-    }
+    const { user, isLoaded } = useUser()
 
     if (user === null) return redirect('/')
 
     useEffect(() => {
-        update({
-            id: params.docId,
-            newVisiter: user.id
-        })
-    }, [])
+        if (isLoaded) {
+            console.log(user.id)
+            update({
+                id: params.docId,
+                newVisiter: user.id
+            })
+        }
+    }, [isLoaded])
 
     const onUpdateContent = (content: string) => {
         update({
