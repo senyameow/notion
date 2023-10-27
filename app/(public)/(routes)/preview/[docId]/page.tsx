@@ -10,6 +10,7 @@ import Cover from '@/app/(main)/(routes)/docs/[docId]/_components/Cover'
 import { redirect, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useUser } from '@clerk/clerk-react'
+import useStoreUserEffect from '@/hooks/use-store-user'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -20,6 +21,8 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     const pathname = usePathname()
     const isPreview = pathname.includes('preview')
 
+    useStoreUserEffect()
+    const updateVisiters = useMutation(api.documents.newVisiterUpdate)
     const update = useMutation(api.documents.updateDoc)
 
     const { user, isLoaded } = useUser()
@@ -28,9 +31,9 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     useEffect(() => {
         if (isLoaded) {
-            update({
-                id: params.docId,
-                newVisiter: user.id
+            updateVisiters({
+                docId: params.docId,
+                id: user.id
             })
         }
     }, [isLoaded])

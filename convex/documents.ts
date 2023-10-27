@@ -187,24 +187,20 @@ export const updateDoc = mutation({
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
-        if (identity === null) throw new Error('Unaithenticated')
+        if (!identity?.subject) throw new Error('Unauthenticated')
 
         const doc = await ctx.db.get(args.id)
         if (!doc) throw new Error('Not found')
-        if (doc.userId !== identity.subject) throw new Error('Unauthorized')
-        const visited = doc.visitedPeople || []
+        if (doc.userId !== identity?.subject) throw new Error('Unauthorized')
+
 
         let { id, newVisiter, ...rest } = args
 
-        if (doc.visitedPeople?.includes(newVisiter!)) {
-            return await ctx.db.patch(args.id, {
-                ...rest
-            })
-        }
+
 
         const newDoc = await ctx.db.patch(args.id, {
             ...rest,
-            visitedPeople: [...visited, newVisiter!]
+
         })
 
         return newDoc
@@ -213,7 +209,22 @@ export const updateDoc = mutation({
 // делаем это с помощью того, что указываем поля как опциональные.
 // т.е. если мы их не передаем, они undefined => в патч приходит undefined => поле не меняется
 // теперь у нас есть мутация, которая позволит в рилтайме изменять наши доки (все, что нам угодно)
-
+export const newVisiterUpdate = mutation({
+    args: {
+        id: v.string(),
+        docId: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        if (!args.id) throw new Error('Unauthorized')
+        const doc = await ctx.db.get(args.docId)
+        if (doc === null) throw new Error('Not found')
+        const visited = doc.visitedPeople || []
+        if (doc.visitedPeople?.includes(args.id)) return
+        await ctx.db.patch(args.docId, {
+            visitedPeople: [...visited, args.id!]
+        })
+    }
+})
 export const getAllPeople = query({
     args: {
         ids: v.optional(v.array(v.string()))
