@@ -1,6 +1,7 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 import { Doc, Id } from './_generated/dataModel'
+import { paginationOptsValidator } from 'convex/server'
 
 export const create = mutation({
     args: {
@@ -232,5 +233,15 @@ export const getUser = query({
         ).first()
         if (user === null) throw new Error('Not found')
         return user
+    }
+})
+
+export const UsersDoc = query({
+    args: {
+        paginationOpts: paginationOptsValidator,
+        userId: v.optional(v.string())
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query('documents').withIndex('by_user').paginate(args.paginationOpts)
     }
 })
