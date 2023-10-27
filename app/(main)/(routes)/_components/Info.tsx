@@ -49,7 +49,7 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                     <div className="flex flex-col gap-2 w-full">
                         <Label className="py-3">Created: </Label>
                         <div className="flex flex-row items-center gap-5">
-                            <Label className="text-neutral-500">at: </Label>
+                            <Label className="text-neutral-500 text-xs">at: </Label>
                             <h3>{format(doc._creationTime, 'dd MMMM yyyy')}</h3>
 
                         </div>
