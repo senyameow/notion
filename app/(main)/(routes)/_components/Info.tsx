@@ -26,7 +26,7 @@ interface InfoSheetProps {
 
 export function InfoSheet({ doc }: InfoSheetProps) {
 
-    const people = useQuery(api.documents.getAllPeople, { ids: doc.visitedPeople })
+    const people = useQuery(api.documents.getAllPeople, { ids: doc.visitedPeople })?.filter(visiter => visiter.userId !== doc.userId)
 
     return (
         <Sheet>
