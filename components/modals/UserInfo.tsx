@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { userModalSlice } from '@/store/reducers/UserModalSlice'
@@ -10,6 +10,10 @@ import { api } from '@/convex/_generated/api'
 import { Loader2 } from 'lucide-react'
 import DocCard from '@/app/(main)/(routes)/_components/DocCard'
 import { Skeleton } from '../ui/skeleton'
+import { ScrollArea } from '../ui/scroll-area'
+import { useIntersection } from '@mantine/hooks';
+import { Doc } from '@/convex/_generated/dataModel'
+
 
 const UserInfoModal = () => {
 
@@ -22,6 +26,19 @@ const UserInfoModal = () => {
         { userId: user?.userId! },
         { initialNumItems: 4 }
     );
+
+    const lastRowRef = useRef<HTMLElement>(null)
+
+    const { ref, entry } = useIntersection({
+        root: lastRowRef.current,
+        threshold: 1
+    })
+
+    useEffect(() => {
+        if (entry?.isIntersecting) {
+            loadMore(4)
+        }
+    }, [entry])
 
     return (
         <Dialog open={isOpen} onOpenChange={() => dispatch(onClose())}>
@@ -40,15 +57,31 @@ const UserInfoModal = () => {
                         </div>
                     </DialogTitle>
                     <h2 className='text-sm'>{user?.name}'s <span className='underline'>notes</span>: </h2>
-                    {!isLoading ? <div className='w-full grid grid-cols-2'>
-                        {results.map(doc => (
-                            <DocCard key={doc._id} doc={doc} />
-                        ))}
-                    </div> : (
-                        <div className='w-full h-full'>
-                            <Skeleton className='w-[100px] h-[50px]' />
-                        </div>
-                    )}
+                    <ScrollArea className='h-[250px] w-full py-4'>
+                        {!isLoading ? <div onClick={() => dispatch(onClose())} className='w-full grid grid-cols-2 gap-4'>
+                            {results.map((doc, ind) => {
+                                if (ind === results.length - 1) {
+                                    return (
+                                        <div className='w-[200px] h-[50px]' ref={ref} key={doc._id}>
+                                            <DocCard doc={doc} />
+                                        </div>
+                                    )
+                                } else {
+                                    return (
+                                        <DocCard key={doc._id} doc={doc} />
+                                    )
+                                }
+
+                            })}
+                        </div> : (
+                            <div className='w-full h-full grid grid-cols-2 gap-4'>
+                                <Skeleton className='w-[100px] h-[40px] ' />
+                                <Skeleton className='w-[100px] h-[40px] ' />
+                                <Skeleton className='w-[100px] h-[40px] ' />
+                                <Skeleton className='w-[100px] h-[40px] ' />
+                            </div>
+                        )}
+                    </ScrollArea>
                 </DialogHeader>
             </DialogContent>
         </Dialog >
