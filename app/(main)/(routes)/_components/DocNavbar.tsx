@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react'
-import { ArchiveRestore, Info, Loader2, Menu, MessageCircle, MoreHorizontal, Share, Trash } from 'lucide-react'
+import { ArchiveRestore, Bell, Info, Loader2, Menu, MessageCircle, MoreHorizontal, Share, Trash } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useState } from 'react'
 import Title from './Title'
@@ -24,6 +24,8 @@ import { useUser } from '@clerk/clerk-react'
 import { toast } from 'sonner'
 import PublishButton from './PublishButton'
 import { InfoSheet } from './Info'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Notifications } from './NotificationCard'
 interface DocNavbarProps {
     isCollapsed: boolean;
     onResetWidth: () => void;
@@ -87,6 +89,12 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                     </div>
                     <div className='flex items-center gap-2'>
                         <PublishButton doc={doc} />
+                        <Popover>
+                            <PopoverTrigger><Bell className='w-5 h-5 mx-2' /></PopoverTrigger>
+                            <PopoverContent side='left' className='p-0 border-none' align='start' alignOffset={30}>
+                                <Notifications />
+                            </PopoverContent>
+                        </Popover>
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <MoreHorizontal role='button' className='w-8 h-8 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 rounded-lg' />
