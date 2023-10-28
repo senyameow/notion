@@ -13,6 +13,7 @@ import { useUser } from '@clerk/clerk-react'
 import useStoreUserEffect from '@/hooks/use-store-user'
 import BannedView from './_components/BannedView'
 import { Loader2 } from 'lucide-react'
+import ReportModal from '@/components/modals/ReportModal'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -64,6 +65,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     return (
         <>
+            <ReportModal />
             {isBanned ? <BannedView userId={user?.id} doc={doc!} /> : <div className={cn(`pt-20 overflow-y-auto h-full`, isPreview && 'pt-0')}>
                 {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
 
