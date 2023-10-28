@@ -3,12 +3,14 @@ import searchModal from './reducers/SearchSlice'
 import settingsSlice from './reducers/SettingsSlice';
 import imageSlice from './reducers/ImageUploadSlice';
 import userModalSlice from './reducers/UserModalSlice';
+import reportModalSlice from './reducers/ReportModalSlice';
 
 const rootReducer = combineReducers({
     search: searchModal,
     settings: settingsSlice,
     cover: imageSlice,
     user: userModalSlice,
+    reports: reportModalSlice,
 })
 
 export const setupStore = () => {

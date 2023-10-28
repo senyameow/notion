@@ -3,18 +3,18 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface reportModalState {
     isOpen: boolean;
-    user: Doc<'users'> | undefined
+    userId: string | undefined
     docId: Id<'documents'> | undefined
 }
 
 const initialState: reportModalState = {
     isOpen: false,
-    user: undefined,
+    userId: undefined,
     docId: undefined
 }
 
 export type ReportModalPayload = {
-    user: Doc<'users'> | undefined
+    userId: string | undefined
     docId: Id<'documents'> | undefined
 }
 
@@ -25,12 +25,12 @@ export const reportModalSlice = createSlice({
         onOpen(state, action: PayloadAction<ReportModalPayload>) {
             state.isOpen = true;
             state.docId = action.payload.docId;
-            state.user = action.payload.user;
+            state.userId = action.payload.userId;
         },
         onClose(state) {
             state.isOpen = false;
             state.docId = undefined;
-            state.user = undefined
+            state.userId = undefined
         }
     }
 })
