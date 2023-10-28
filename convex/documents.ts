@@ -249,10 +249,13 @@ export const getUser = query({
 
 export const UsersDoc = query({
     args: {
-        userId: v.optional(v.string()),
         paginationOpts: paginationOptsValidator,
+        userId: v.optional(v.string())
     },
     handler: async (ctx, args) => {
-        return await ctx.db.query('documents').withIndex('by_user').paginate(args.paginationOpts)
+        // if (args.userId === undefined) return
+        // const user = await ctx.db.query('users').withIndex('by_userId').filter(q => q.eq(q.field('userId'), args.userId)).first()
+        // console.log(user)
+        return await ctx.db.query('documents').withIndex('by_user').filter(q => q.eq(q.field('userId'), args.userId)).paginate(args.paginationOpts)
     }
 })
