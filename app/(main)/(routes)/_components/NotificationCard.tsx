@@ -15,6 +15,7 @@ import { Doc } from "@/convex/_generated/dataModel"
 import { format } from "date-fns"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 // const notifications = [
 //     {
@@ -59,7 +60,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                         </div>
                         <Switch />
                     </div>
-                    <div>
+                    <ScrollArea className="w-full h-full max-h-[300px]">
                         {reports.map(notification => (
                             <div
                                 key={notification._id}
@@ -76,7 +77,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </ScrollArea>
                 </CardContent>
                 <CardFooter>
                     <Button className="w-full">
