@@ -16,11 +16,11 @@ const DocCard = ({ doc, preview, isLoading }: DocCardProps) => {
     const path = preview ? 'preview' : 'docs'
     return (
         <>
-            {isLoading ? <Skeleton className='w-[250px] h-[100px]' /> : <Link href={`/${path}/${doc._id}`} className='w-full h-[100px] relative border'>
+            {isLoading ? <Skeleton className='w-[250px] h-[120px]' /> : <Link href={`/${path}/${doc._id}`} className='w-full h-[120px] relative border'>
                 <ActionTooltip label={doc.title} side='top' align='center'>
 
                     {doc.cover_image ? <Image src={doc.cover_image} alt='doc image' className='object-cover' fill /> : (
-                        <div className='w-full h-full flex items-center justify-center'>
+                        <div className='w-full h-[120px] flex-1 flex items-center justify-center'>
                             {doc.title}
                         </div>
                     )}

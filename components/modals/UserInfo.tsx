@@ -84,7 +84,7 @@ const UserInfoModal = () => {
                             {docs.map((doc, ind) => {
                                 if (ind === results.length - 1 || ind === results.length - 2 || ind === results.length - 3 || ind === results.length - 4) {
                                     return (
-                                        <div className='w-[200px] h-[50px]' ref={ref} key={doc._id}>
+                                        <div className='w-full h-full border min-h-[100px]' ref={ref} key={doc._id}>
                                             <DocCard isLoading={isLoading} doc={doc} />
                                         </div>
                                     )
