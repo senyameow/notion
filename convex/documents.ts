@@ -310,3 +310,16 @@ export const createReport = mutation({
         })
     }
 })
+
+export const updateReport = mutation({
+    args: {
+        id: v.id('reports'),
+        isRead: v.optional(v.boolean())
+    },
+    handler: async (ctx, args) => {
+        const { id, ...rest } = args
+        return await ctx.db.patch(args.id, {
+            ...rest
+        })
+    }
+})
