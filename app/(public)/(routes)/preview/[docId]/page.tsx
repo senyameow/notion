@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { useUser } from '@clerk/clerk-react'
 import useStoreUserEffect from '@/hooks/use-store-user'
 import BannedView from './_components/BannedView'
+import { Loader2 } from 'lucide-react'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -28,11 +29,22 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const { user, isLoaded } = useUser()
 
-    if (user === undefined) return null
+    // if (doc === undefined) {
+    //     return (
+    //         <div className='w-full h-full flex items-center justify-center'>
+    //             <Loader2 className='w-12 h-12 animate-spin' />
+    //         </div>
+    //     )
+    // }
+
+    // if (user === undefined) return null
 
     if (user === null) return redirect('/')
 
-    const isBanned = doc?.banList?.includes(user.id)
+    const isBanned = doc?.banList?.includes(user?.id!)
+
+    console.log(doc)
+    console.log(isBanned)
 
     useEffect(() => {
         if (isLoaded) {
