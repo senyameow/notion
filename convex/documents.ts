@@ -279,3 +279,14 @@ export const UsersDoc = query({
         return await ctx.db.query('documents').withIndex('by_user').filter(q => q.eq(q.field('userId'), args.userId)).paginate(args.paginationOpts)
     }
 })
+
+export const reports = query({
+    args: {
+        docId: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query('reports').withIndex('by_document').filter(q =>
+            q.eq(q.field('docId'), args.docId)
+        ).order('desc').collect()
+    }
+})

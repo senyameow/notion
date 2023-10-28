@@ -92,7 +92,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                         <Popover>
                             <PopoverTrigger><Bell className='w-5 h-5 mx-2' /></PopoverTrigger>
                             <PopoverContent side='left' className='p-0 border-none' align='start' alignOffset={30}>
-                                <Notifications />
+                                <Notifications doc={doc} />
                             </PopoverContent>
                         </Popover>
                         <DropdownMenu>
