@@ -225,6 +225,26 @@ export const newVisiterUpdate = mutation({
         })
     }
 })
+export const banUser = mutation({
+    args: {
+        id: v.string(),
+        docId: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        if (!args.id) throw new Error('Unauthorized')
+        const doc = await ctx.db.get(args.docId)
+        if (doc === null) throw new Error('Not found')
+        const banned = doc.banList || []
+        if (doc.banList?.includes(args.id)) {
+            return await ctx.db.patch(args.docId, {
+                banList: banned.filter(id => id !== args.id)
+            })
+        }
+        return await ctx.db.patch(args.docId, {
+            banList: [...banned, args.id]
+        })
+    }
+})
 export const getAllPeople = query({
     args: {
         ids: v.optional(v.array(v.string()))

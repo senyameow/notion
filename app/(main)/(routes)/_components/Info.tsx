@@ -53,7 +53,7 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                     <ScrollArea className="h-full w-full">
                         <div className="flex flex-col gap-2">
                             {people?.map(user => (
-                                <UserCard key={user._id} user={user} />
+                                <UserCard doc={doc} key={user._id} user={user} />
                             ))}
                         </div>
                     </ScrollArea>
@@ -66,7 +66,7 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                         </div>
                         <div className="flex flex-row items-center gap-5 w-full">
                             <Label className="text-neutral-500 text-xs">by: </Label>
-                            <UserCard user={creator!} preview />
+                            <UserCard user={creator!} preview doc={doc} />
                         </div>
                     </div>
 

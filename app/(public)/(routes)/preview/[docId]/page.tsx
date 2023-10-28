@@ -11,6 +11,7 @@ import { redirect, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useUser } from '@clerk/clerk-react'
 import useStoreUserEffect from '@/hooks/use-store-user'
+import BannedView from './_components/BannedView'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -27,7 +28,11 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const { user, isLoaded } = useUser()
 
+    if (user === undefined) return null
+
     if (user === null) return redirect('/')
+
+    const isBanned = doc?.banList?.includes(user.id)
 
     useEffect(() => {
         if (isLoaded) {
@@ -46,18 +51,20 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     }
 
     return (
-        <div className={cn(`pt-20 overflow-y-auto h-full`, isPreview && 'pt-0')}>
-            {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
+        <>
+            {isBanned ? <BannedView doc={doc!} /> : <div className={cn(`pt-20 overflow-y-auto h-full`, isPreview && 'pt-0')}>
+                {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
 
-            <Cover preview doc={doc!} />
-            {isPreview && (
-                <div className='py-12' />
-            )}
-            <div className={cn(`max-w-3xl md:max-w-4xl mx-auto h-full`, isPreview && 'max-w-4xl md:max-w-6xl')}>
-                <Toolbar preview initialDoc={doc!} />
-                <Editor editable={false} onChange={onUpdateContent} initialContent={doc?.content} />
-            </div>
-        </div>
+                <Cover preview doc={doc!} />
+                {isPreview && (
+                    <div className='py-12' />
+                )}
+                <div className={cn(`max-w-3xl md:max-w-4xl mx-auto h-full`, isPreview && 'max-w-4xl md:max-w-6xl')}>
+                    <Toolbar preview initialDoc={doc!} />
+                    <Editor editable={false} onChange={onUpdateContent} initialContent={doc?.content} />
+                </div>
+            </div>}
+        </>
     )
 }
 
