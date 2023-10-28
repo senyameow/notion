@@ -290,3 +290,23 @@ export const reports = query({
         ).order('desc').collect()
     }
 })
+
+export const createReport = mutation({
+    args: {
+        docId: v.id('documents'),
+        content: v.string(),
+        title: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        await ctx.db.insert('reports', {
+            content: args.content,
+            title: args.title,
+            isRead: false,
+            userId,
+            docId: args.docId
+        })
+    }
+})
