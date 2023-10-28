@@ -50,6 +50,13 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                 </SheetHeader>
                 <div className="flex items-start gap-5 flex-col py-8">
                     <Label>People visited your page:</Label>
+                    <ScrollArea className="h-full w-full">
+                        <div className="flex flex-col gap-2">
+                            {people?.map(user => (
+                                <UserCard key={user._id} user={user} />
+                            ))}
+                        </div>
+                    </ScrollArea>
                     <div className="flex flex-col gap-2 w-full">
                         <Label className="py-3">Created: </Label>
                         <div className="flex flex-row items-center gap-5">
@@ -62,13 +69,7 @@ export function InfoSheet({ doc }: InfoSheetProps) {
                             <UserCard user={creator!} preview />
                         </div>
                     </div>
-                    <ScrollArea className="h-[300px] w-full">
-                        <div className="flex flex-col gap-2">
-                            {people?.map(user => (
-                                <UserCard key={user._id} user={user} />
-                            ))}
-                        </div>
-                    </ScrollArea>
+
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>

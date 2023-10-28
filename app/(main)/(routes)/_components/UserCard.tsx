@@ -18,6 +18,8 @@ const UserCard = ({ user, preview }: UserCardProps) => {
     const dispatch = useAppDispatch()
     const { onOpen } = userModalSlice.actions
 
+    console.log(user.name)
+
     return (
         <div className="w-full p-3 group border cursor-pointer relative">
             <div className="flex items-center w-full justify-between">

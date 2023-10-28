@@ -249,8 +249,8 @@ export const getUser = query({
 
 export const UsersDoc = query({
     args: {
+        userId: v.optional(v.string()),
         paginationOpts: paginationOptsValidator,
-        userId: v.optional(v.string())
     },
     handler: async (ctx, args) => {
         return await ctx.db.query('documents').withIndex('by_user').paginate(args.paginationOpts)

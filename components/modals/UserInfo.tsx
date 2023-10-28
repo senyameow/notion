@@ -21,11 +21,26 @@ const UserInfoModal = () => {
     const dispatch = useAppDispatch()
     const { onClose } = userModalSlice.actions
 
-    const { results, status, loadMore, isLoading } = usePaginatedQuery(
+    const [docs, setDocs] = useState<Doc<'documents'>[]>([])
+
+    const [fetchId, setFetchId] = useState<string | undefined>()
+
+    useEffect(() => {
+        setFetchId(user?.userId)
+    }, [user])
+
+    console.log(fetchId)
+
+    let { results, status, loadMore, isLoading } = usePaginatedQuery(
         api.documents.UsersDoc,
-        { userId: user?.userId! },
-        { initialNumItems: 4 }
+        { userId: fetchId },
+        { initialNumItems: 8 },
     );
+
+    const onCloseModal = () => {
+        dispatch(onClose())
+        setDocs([])
+    }
 
     const lastRowRef = useRef<HTMLElement>(null)
 
@@ -34,6 +49,13 @@ const UserInfoModal = () => {
         threshold: 1
     })
 
+
+    useEffect(() => {
+        if (!isLoading) {
+            setDocs(results)
+        }
+    }, [results, isLoading])
+
     useEffect(() => {
         if (entry?.isIntersecting) {
             loadMore(4)
@@ -41,8 +63,8 @@ const UserInfoModal = () => {
     }, [entry])
 
     return (
-        <Dialog open={isOpen} onOpenChange={() => dispatch(onClose())}>
-            <DialogContent className=''>
+        <Dialog open={isOpen} onOpenChange={onCloseModal}>
+            <DialogContent className='min-w-[600px]'>
                 <DialogHeader>
                     <DialogTitle className='py-4'>
                         <div className='flex items-center justify-between w-full'>
@@ -58,12 +80,12 @@ const UserInfoModal = () => {
                     </DialogTitle>
                     <h2 className='text-sm'>{user?.name}'s <span className='underline'>notes</span>: </h2>
                     <ScrollArea className='h-[250px] w-full py-4'>
-                        {!isLoading ? <div onClick={() => dispatch(onClose())} className='w-full grid grid-cols-2 gap-4'>
-                            {results.map((doc, ind) => {
-                                if (ind === results.length - 1) {
+                        <div onClick={() => dispatch(onClose())} className='w-full grid grid-cols-2 gap-4'>
+                            {docs.map((doc, ind) => {
+                                if (ind === results.length - 1 || ind === results.length - 2 || ind === results.length - 3 || ind === results.length - 4) {
                                     return (
                                         <div className='w-[200px] h-[50px]' ref={ref} key={doc._id}>
-                                            <DocCard doc={doc} />
+                                            <DocCard isLoading={isLoading} doc={doc} />
                                         </div>
                                     )
                                 } else {
@@ -73,14 +95,7 @@ const UserInfoModal = () => {
                                 }
 
                             })}
-                        </div> : (
-                            <div className='w-full h-full grid grid-cols-2 gap-4'>
-                                <Skeleton className='w-[100px] h-[40px] ' />
-                                <Skeleton className='w-[100px] h-[40px] ' />
-                                <Skeleton className='w-[100px] h-[40px] ' />
-                                <Skeleton className='w-[100px] h-[40px] ' />
-                            </div>
-                        )}
+                        </div>
                     </ScrollArea>
                 </DialogHeader>
             </DialogContent>
