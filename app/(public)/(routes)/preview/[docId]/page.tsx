@@ -12,7 +12,6 @@ import { cn } from '@/lib/utils'
 import { useUser } from '@clerk/clerk-react'
 import useStoreUserEffect from '@/hooks/use-store-user'
 import BannedView from './_components/BannedView'
-import { Loader2 } from 'lucide-react'
 import ReportModal from '@/components/modals/ReportModal'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
