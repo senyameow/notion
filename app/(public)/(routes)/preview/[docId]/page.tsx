@@ -28,6 +28,10 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     //         </div>
     //     )
     // }
+    if (doc && !doc.isPublished) {
+        console.log(doc.isPublished)
+        return redirect('/docs')
+    }
     const pathname = usePathname()
     const isPreview = pathname.includes('preview')
 
