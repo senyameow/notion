@@ -11,7 +11,7 @@ import Reported from './Reported';
 
 interface BannedViewProps {
     doc: Doc<'documents'>;
-    userId: string | undefined
+    userId: string
 }
 
 const BannedView = ({ doc, userId }: BannedViewProps) => {
@@ -19,7 +19,7 @@ const BannedView = ({ doc, userId }: BannedViewProps) => {
     const dispatch = useAppDispatch()
     const { onOpen } = reportModalSlice.actions
 
-    const report = useQuery(api.documents.report, { docId: doc._id })
+    const report = useQuery(api.documents.report, { docId: doc._id, userId: userId })
 
     return (
         <div className='w-screen h-screen text-xl flex items-center justify-center'>

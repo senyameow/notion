@@ -75,7 +75,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     return (
         <>
             <ReportModal />
-            {isBanned ? <BannedView userId={user?.id} doc={doc!} /> : <div className={cn(`pt-20 overflow-y-auto h-full`, isPreview && 'pt-0')}>
+            {isBanned && user?.id ? <BannedView userId={user.id} doc={doc!} /> : <div className={cn(`pt-20 overflow-y-auto h-full`, isPreview && 'pt-0')}>
                 {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
 
                 <Cover preview doc={doc!} />

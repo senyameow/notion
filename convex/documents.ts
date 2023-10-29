@@ -327,12 +327,13 @@ export const updateReport = mutation({
 export const report = query({
     args: {
         docId: v.id('documents'),
+        userId: v.string()
     },
     handler: async (ctx, args) => {
-        const identity = await ctx.auth.getUserIdentity()
-        if (!identity) throw new Error('Unauthorized')
-        const userId = identity.subject
-        return await ctx.db.query('reports').withIndex('by_document_user', q => q.eq('docId', args.docId).eq('userId', userId)).unique()
+        // const identity = await ctx.auth.getUserIdentity()
+        // if (identity?.subject === undefined) throw new Error('Unauthorized')
+        // const userId = identity.subject
+        return await ctx.db.query('reports').withIndex('by_document_user', q => q.eq('docId', args.docId).eq('userId', args.userId)).unique()
     }
 })
 
@@ -341,6 +342,8 @@ export const deleteReport = mutation({
         id: v.id('reports')
     },
     handler: async (ctx, args) => {
-        await ctx.db.delete(args.id)
+        await ctx.db.patch(args.id, {
+            isDeleted: true
+        })
     }
 })

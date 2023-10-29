@@ -60,6 +60,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     }
 
     const newReports = reports?.filter(rep => !rep.isRead)
+    const notDeleted = reports?.filter(rep => !rep.isDeleted)
 
     const onReadAll = async () => {
         try {
@@ -96,7 +97,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                         <Switch />
                     </div>
                     <ScrollArea className="w-full h-full max-h-[300px]">
-                        {reports.map(notification => (
+                        {notDeleted.map(notification => (
                             <ReportCard notification={notification} key={notification._id} />
                         ))}
                     </ScrollArea>
