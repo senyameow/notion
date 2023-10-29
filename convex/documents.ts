@@ -301,7 +301,7 @@ export const createReport = mutation({
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unauthorized')
         const userId = identity.subject
-        await ctx.db.insert('reports', {
+        return await ctx.db.insert('reports', {
             content: args.content,
             title: args.title,
             isRead: false,
@@ -321,5 +321,17 @@ export const updateReport = mutation({
         return await ctx.db.patch(args.id, {
             ...rest
         })
+    }
+})
+
+export const report = query({
+    args: {
+        docId: v.id('documents'),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        return await ctx.db.query('reports').withIndex('by_document_user', q => q.eq('docId', args.docId).eq('userId', userId)).unique()
     }
 })

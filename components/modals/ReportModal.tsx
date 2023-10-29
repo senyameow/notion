@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader } from '../ui/dialog'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { reportModalSlice } from '@/store/reducers/ReportModalSlice'
@@ -8,10 +8,10 @@ import TextArea from 'react-textarea-autosize'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 import { Loader2 } from 'lucide-react'
-import { useMutation } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { useParams } from 'next/navigation'
-import { Id } from '@/convex/_generated/dataModel'
+import { Doc, Id } from '@/convex/_generated/dataModel'
 import { toast } from 'sonner'
 import { Input } from '../ui/input'
 import { useForm } from 'react-hook-form';
@@ -51,28 +51,27 @@ const ReportModal = () => {
 
     const params = useParams()
 
-    const report = useMutation(api.documents.createReport)
+    const createReport = useMutation(api.documents.createReport)
 
     const [isLoading, setIsLoading] = useState(false)
 
     const onReport = async (values: z.infer<typeof formSchema>) => {
         try {
-            console.log(values)
             setIsLoading(true)
-            await report({
+            await createReport({
                 title: values.title,
                 docId: params.docId as Id<'documents'>,
                 content: values.content
             })
+            dispatch(onClose())
             toast.success('you created a report, now wait...')
         } catch (error) {
             toast.error('something went wrong')
+            console.log(error)
         } finally {
             setIsLoading(false)
         }
     }
-
-
 
     return (
         <Form {...form}>

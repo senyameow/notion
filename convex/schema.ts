@@ -34,7 +34,7 @@ export default defineSchema({
         isRead: v.optional(v.boolean()),
         image_url: v.optional(v.string()),
         docId: v.id('documents')
-    }).index('by_document', ['docId'])
+    }).index('by_document', ['docId']).index('by_document_user', ['docId', 'userId'])
 });
 
 
