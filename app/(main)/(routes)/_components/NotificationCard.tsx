@@ -18,6 +18,8 @@ import { api } from "@/convex/_generated/api"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ReportCard from "./ReportCard"
 import { toast } from "sonner"
+import { Skeleton } from "@/components/ui/skeleton"
+import { report } from "@/convex/documents"
 
 // const notifications = [
 //     {
@@ -46,8 +48,13 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
     if (reports === undefined) {
         return (
-            <div className="w-full h-full flex items-center justify-center">
-
+            <div className="w-[380px] h-[300px] flex flex-col items-start gap-4 p-6">
+                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
             </div>
         )
     }
@@ -56,7 +63,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
     const onReadAll = async () => {
         try {
-            newReports.forEach(async (rep) => {
+            reports.forEach(async (rep) => {
                 await updateRep({
                     id: rep._id,
                     isRead: true
@@ -89,7 +96,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                         <Switch />
                     </div>
                     <ScrollArea className="w-full h-full max-h-[300px]">
-                        {newReports.map(notification => (
+                        {reports.map(notification => (
                             <ReportCard notification={notification} key={notification._id} />
                         ))}
                     </ScrollArea>

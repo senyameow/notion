@@ -8,6 +8,7 @@ import { api } from '@/convex/_generated/api';
 import Image from 'next/image';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import UserReport from './UserReport';
+import { cn } from '@/lib/utils';
 
 
 interface ReportCardProps {
@@ -20,8 +21,6 @@ const ReportCard = ({ notification }: ReportCardProps) => {
     const reportRef = useRef<HTMLDivElement>(null)
 
     const [interactingTime, setInteractingTime] = useState<number>(0)
-
-
 
     const { ref, entry } = useIntersection({
         root: reportRef.current,
@@ -38,16 +37,26 @@ const ReportCard = ({ notification }: ReportCardProps) => {
 
     // }, [entry])
 
+    const onRead = () => {
+        setTimeout(() => {
+            change({
+                id: notification._id,
+                isRead: true
+            })
+        }, 500);
+    }
+
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <div
+                    onClick={onRead}
                     ref={ref}
                     key={notification._id}
                     className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-2  p-3 group hover:bg-gray-900 transition rounded-lg cursor-pointer"
                 >
-                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                    <span className={cn(`flex h-2 w-2 translate-y-1 rounded-full bg-sky-500 opacity-100 transition duration-300`, notification.isRead && 'opacity-0')} />
                     <div className="space-y-1">
                         <p className="text-sm font-medium leading-none">
                             {notification.title}
