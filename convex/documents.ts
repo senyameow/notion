@@ -335,3 +335,12 @@ export const report = query({
         return await ctx.db.query('reports').withIndex('by_document_user', q => q.eq('docId', args.docId).eq('userId', userId)).unique()
     }
 })
+
+export const deleteReport = mutation({
+    args: {
+        id: v.id('reports')
+    },
+    handler: async (ctx, args) => {
+        await ctx.db.delete(args.id)
+    }
+})
