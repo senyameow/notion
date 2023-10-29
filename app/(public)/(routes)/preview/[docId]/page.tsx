@@ -21,6 +21,13 @@ const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_compone
 const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const doc = useQuery(api.documents.getNote, { id: params.docId })
+    // if (doc === undefined) {
+    //     return (
+    //         <div className='w-full h-full flex items-center justify-center'>
+    //             <Loader2 className='w-12 h-12 animate-spin' />
+    //         </div>
+    //     )
+    // }
     const pathname = usePathname()
     const isPreview = pathname.includes('preview')
 
@@ -41,6 +48,8 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     // if (user === undefined) return null
 
     if (user === null) return redirect('/')
+
+
 
     const isBanned = doc?.banList?.includes(user?.id!)
 

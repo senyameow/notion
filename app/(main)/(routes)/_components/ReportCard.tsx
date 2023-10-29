@@ -3,8 +3,11 @@ import { format } from 'date-fns'
 import React, { useEffect, useRef, useState } from 'react'
 import { useIntersection } from '@mantine/hooks';
 import { number } from 'zod';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
+import Image from 'next/image';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import UserReport from './UserReport';
 
 
 interface ReportCardProps {
@@ -25,8 +28,6 @@ const ReportCard = ({ notification }: ReportCardProps) => {
         threshold: 1
     })
 
-
-
     // useEffect(() => {
     //     // if (entry?.time === undefined) setInteractingTime(0)
     //     // console.log(entry?.time)
@@ -39,21 +40,28 @@ const ReportCard = ({ notification }: ReportCardProps) => {
 
 
     return (
-        <div
-            ref={ref}
-            key={notification._id}
-            className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-        >
-            <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-            <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                    {notification.title}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                    {format(notification._creationTime, 'PPPpp')}
-                </p>
-            </div>
-        </div>
+        <Popover>
+            <PopoverTrigger asChild>
+                <div
+                    ref={ref}
+                    key={notification._id}
+                    className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-2  p-3 group hover:bg-gray-900 transition rounded-lg cursor-pointer"
+                >
+                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                    <div className="space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                            {notification.title}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                            {format(notification._creationTime, 'PPPpp')}
+                        </p>
+                    </div>
+                </div>
+            </PopoverTrigger>
+            <PopoverContent align='start' side='left'>
+                <UserReport report={notification} />
+            </PopoverContent>
+        </Popover>
     )
 }
 
