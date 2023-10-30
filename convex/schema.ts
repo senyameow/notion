@@ -29,9 +29,10 @@ export default defineSchema({
         docRole: v.optional(v.array(v.object({
             docId: v.id('documents'),
             role: v.union(
-                v.literal('admin'),
-                v.literal('editor'),
-                v.literal('mod'),
+                v.literal('ADMIN'),
+                v.literal('EDITOR'),
+                v.literal('MOD'),
+                v.literal('VISITER'),
             )
         })))
     }).index('by_token', ['tokenIdentifier']).index('by_userId', ['userId']),

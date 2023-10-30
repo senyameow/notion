@@ -16,6 +16,17 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
+import UserRole, { UserRoles } from './UserRole'
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface UserCardProps {
     user: Doc<'users'>;
@@ -32,6 +43,8 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     const ban = useMutation(api.documents.banUser)
 
     let isBanned = doc.banList?.includes(user.userId)
+
+    const userRole = user.docRole?.find(user => user.docId === doc._id)?.role
 
     const onBan = async () => {
         try {
@@ -54,10 +67,43 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                 </div>
             </div>
             <div className={cn(`flex items-center gap-2 absolute top-2 right-3`)}>
-                <Popover>
-                    <PopoverTrigger>Open</PopoverTrigger>
-                    <PopoverContent>Place content for the popover here.</PopoverContent>
-                </Popover>
+
+                {(userRole === 'ADMIN' || userRole === 'MOD') ? <DropdownMenu>
+                    <DropdownMenuTrigger>
+                        <UserRole role={UserRoles.ADMIN} />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
+                        <DropdownMenuGroup className="flex items-center p-1 flex-col">
+                            <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer'>
+                                <div className='flex w-full items-center gap-3'>
+                                    {<UserRole role={UserRoles.ADMIN} />}
+                                    <span>admin</span>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer'>
+                                <div className='flex w-full items-center gap-3'>
+                                    {<UserRole role={UserRoles.EDITOR} />}
+                                    <span>editor</span>
+                                </div>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
+                                <div className='w-full flex items-center gap-3'>
+                                    {<UserRole role={UserRoles.MOD} />}
+                                    <span>mod</span>
+                                </div>
+                                <Check className={cn(`w-4 h-4 opacity-0`, userRole === UserRoles.MOD && 'opacity-100')} />
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
+                                <div className='w-full flex items-center gap-3'>
+                                    {<UserRole role={UserRoles.VISITER} />}
+                                    <span>viewer</span>
+                                </div>
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu> : (
+                    <UserRole role={UserRoles[userRole!]} />
+                )}
                 <Button onClick={() => dispatch(onOpen(user))} className='w-fit bg-transparent' variant={'outline'}><Info className='w-4 h-4' /></Button>
                 <Button disabled={isLoading} onClick={onBan} className={cn(`w-fit bg-transparent `, preview && 'hidden', isBanned ? 'hover:bg-green-500' : 'hover:bg-rose-500')} variant={'outline'}>
                     {isLoading ? <Loader2 className='w-4 h-4 animate-spin' /> : (
