@@ -209,7 +209,7 @@ export const updateDoc = mutation({
 // делаем это с помощью того, что указываем поля как опциональные.
 // т.е. если мы их не передаем, они undefined => в патч приходит undefined => поле не меняется
 // теперь у нас есть мутация, которая позволит в рилтайме изменять наши доки (все, что нам угодно)
-export const newVisiterUpdate = mutation({
+export const docVisiterUpdate = mutation({
     args: {
         id: v.string(),
         docId: v.id('documents')
@@ -218,10 +218,11 @@ export const newVisiterUpdate = mutation({
         if (!args.id) throw new Error('Unauthorized')
         const doc = await ctx.db.get(args.docId)
         if (doc === null) throw new Error('Not found')
-        const visited = doc.visitedPeople || []
-        if (doc.visitedPeople?.includes(args.id)) return
+        const people = doc.people || []
+        if (doc.people?.map(q => q.id).includes(args.id)) return
         await ctx.db.patch(args.docId, {
-            visitedPeople: [...visited, args.id!]
+            people: [...people, { id: args.id, role: 'VISITER' }],
+
         })
     }
 })

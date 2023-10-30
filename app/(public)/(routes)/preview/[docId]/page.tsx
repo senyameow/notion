@@ -35,7 +35,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     const isPreview = pathname.includes('preview')
 
     useStoreUserEffect()
-    const updateVisiters = useMutation(api.documents.newVisiterUpdate)
+    const updateVisiters = useMutation(api.documents.docVisiterUpdate)
     const update = useMutation(api.documents.updateDoc)
 
     const { user, isLoaded } = useUser()
@@ -56,15 +56,13 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const isBanned = doc?.banList?.includes(user?.id!)
 
-    console.log(doc)
-    console.log(isBanned)
-
     useEffect(() => {
         if (isLoaded) {
             updateVisiters({
                 docId: params.docId,
                 id: user.id
             })
+
         }
     }, [isLoaded])
 

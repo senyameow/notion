@@ -44,7 +44,9 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
 
     let isBanned = doc.banList?.includes(user.userId)
 
-    const userRole = user.docRole?.find(user => user.docId === doc._id)?.role
+    // const userRole = user.docRole?.find(user => user.docId === doc._id)?.role
+
+    const userRole = doc.people?.find(visiter => visiter.id === user.userId)?.role
 
     const onBan = async () => {
         try {
