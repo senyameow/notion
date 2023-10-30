@@ -27,6 +27,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useUser } from '@clerk/clerk-react'
 
 interface UserCardProps {
     user: Doc<'users'>;
@@ -39,6 +40,8 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     const dispatch = useAppDispatch()
     const { onOpen } = userModalSlice.actions
     const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const { user: loggedInUser } = useUser()
 
     const ban = useMutation(api.documents.banUser)
 
@@ -60,6 +63,9 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
         }
     }
 
+    console.log(userRole)
+
+
     return (
         <div className="w-full p-3 group border cursor-pointer relative">
             <div className="flex items-center w-full justify-between">
@@ -69,43 +75,44 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                 </div>
             </div>
             <div className={cn(`flex items-center gap-2 absolute top-2 right-3`)}>
-
-                {(userRole === 'ADMIN' || userRole === 'MOD') ? <DropdownMenu>
-                    <DropdownMenuTrigger>
-                        <UserRole role={UserRoles.ADMIN} />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
-                        <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                            <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer'>
-                                <div className='flex w-full items-center gap-3'>
-                                    {<UserRole role={UserRoles.ADMIN} />}
-                                    <span>admin</span>
-                                </div>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer'>
-                                <div className='flex w-full items-center gap-3'>
-                                    {<UserRole role={UserRoles.EDITOR} />}
-                                    <span>editor</span>
-                                </div>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
-                                <div className='w-full flex items-center gap-3'>
-                                    {<UserRole role={UserRoles.MOD} />}
-                                    <span>mod</span>
-                                </div>
-                                <Check className={cn(`w-4 h-4 opacity-0`, userRole === UserRoles.MOD && 'opacity-100')} />
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
-                                <div className='w-full flex items-center gap-3'>
-                                    {<UserRole role={UserRoles.VISITER} />}
-                                    <span>viewer</span>
-                                </div>
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                </DropdownMenu> : (
-                    <UserRole role={UserRoles[userRole!]} />
-                )}
+                {loggedInUser === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <>
+                    {doc.people?.find(_ => _.id === loggedInUser?.id)?.role === 'ADMIN' ? <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <UserRole role={UserRoles[userRole!]} />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
+                            <DropdownMenuGroup className="flex items-center p-1 flex-col">
+                                <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer'>
+                                    <div className='flex w-full items-center gap-3'>
+                                        {<UserRole role={UserRoles.ADMIN} />}
+                                        <span>admin</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer'>
+                                    <div className='flex w-full items-center gap-3'>
+                                        {<UserRole role={UserRoles.EDITOR} />}
+                                        <span>editor</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
+                                    <div className='w-full flex items-center gap-3'>
+                                        {<UserRole role={UserRoles.MOD} />}
+                                        <span>mod</span>
+                                    </div>
+                                    <Check className={cn(`w-4 h-4 opacity-0`, userRole === UserRoles.MOD && 'opacity-100')} />
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
+                                    <div className='w-full flex items-center gap-3'>
+                                        {<UserRole role={UserRoles.VISITER} />}
+                                        <span>viewer</span>
+                                    </div>
+                                </DropdownMenuItem>
+                            </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                    </DropdownMenu> : (
+                        <UserRole role={UserRoles[userRole!]} />
+                    )}
+                </>}
                 <Button onClick={() => dispatch(onOpen(user))} className='w-fit bg-transparent' variant={'outline'}><Info className='w-4 h-4' /></Button>
                 <Button disabled={isLoading} onClick={onBan} className={cn(`w-fit bg-transparent `, preview && 'hidden', isBanned ? 'hover:bg-green-500' : 'hover:bg-rose-500')} variant={'outline'}>
                     {isLoading ? <Loader2 className='w-4 h-4 animate-spin' /> : (
