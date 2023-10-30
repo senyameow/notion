@@ -5,6 +5,9 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { docStatusSlice } from '@/store/reducers/DocStatusSlice';
+import { Loader2 } from 'lucide-react';
 
 
 interface BannerProps {
@@ -21,23 +24,31 @@ const Banner = ({
     const remove = useMutation(api.documents.removeDoc)
     const router = useRouter()
 
+    const dispatch = useAppDispatch()
+    const { deleteStatus, restoreStatus } = docStatusSlice.actions
+
+    const { isDeleting, isRestoring } = useAppSelector(state => state.docStatus)
+
     const onRemove = () => {
+        dispatch(deleteStatus(true))
         const promise = remove({ id: docId })
         toast.promise(promise, {
             loading: 'Deleting note..',
             success: 'Note deleted',
             error: 'Something went wrong'
         })
+        dispatch(deleteStatus(false))
         router.push(`/docs`)
     }
     const onRestore = () => {
+        dispatch(restoreStatus(true))
         const promise = restore({ id: docId })
         toast.promise(promise, {
             loading: 'Restoring note..',
             success: 'Note restored',
             error: 'Something went wrong'
         })
-
+        dispatch(restoreStatus(false))
     }
 
     return (
@@ -45,8 +56,12 @@ const Banner = ({
             <div className='w-full flex items-center justify-center'>
                 <div className='flex items-center gap-4 w-fit'>
                     <span className=''>{text}</span>
-                    <Button onClick={onRestore} className='bg-transparent border border-white' variant={'ghost'}>Restore note</Button>
-                    <Button onClick={onRemove} className='bg-transparent border border-white' variant={'ghost'}>Delete note</Button>
+                    <Button onClick={onRestore} className='bg-transparent border border-white' variant={'ghost'}>
+                        {isRestoring ? <Loader2 className='w-4 h-4 animate-spin' /> : 'Restore note'}
+                    </Button>
+                    <Button onClick={onRemove} className='bg-transparent border border-white' variant={'ghost'}>
+                        {isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : 'Delete note'}
+                    </Button>
                 </div>
             </div>
         </div>

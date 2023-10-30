@@ -26,6 +26,8 @@ import PublishButton from './PublishButton'
 import { InfoSheet } from './Info'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Notifications } from './NotificationCard'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux'
+import { docStatusSlice } from '@/store/reducers/DocStatusSlice'
 interface DocNavbarProps {
     isCollapsed: boolean;
     onResetWidth: () => void;
@@ -35,8 +37,9 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     const params = useParams()
 
-    const [isDeleting, setIsDeleting] = useState<boolean>(false)
-    const [isRestoring, setIsRestoring] = useState<boolean>(false)
+    const dispatch = useAppDispatch()
+    const { deleteStatus, restoreStatus } = docStatusSlice.actions
+    const { isDeleting, isRestoring } = useAppSelector(state => state.docStatus)
 
     const doc = useQuery(api.documents.getNote, { id: params.docId as Id<"documents"> })
     const archieve = useMutation(api.documents.archiveDoc)
@@ -54,27 +57,28 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     const onArchieve = async (e: Event) => {
         try {
+            dispatch(deleteStatus(true))
             e.stopPropagation()
             e.preventDefault()
-            setIsDeleting(true)
             await archieve({ docId: doc._id })
             toast.success(`you've deleted ${doc.title}`)
         } catch (error) {
             toast.error('something went wrong')
         } finally {
-            setIsDeleting(false)
+            dispatch(deleteStatus(false))
         }
     }
 
 
     const onRestore = () => {
+        dispatch(restoreStatus(true))
         const promise = restore({ id: doc._id })
         toast.promise(promise, {
             loading: 'Restoring note..',
             success: 'Note restored',
             error: 'Something went wrong'
         })
-        promise.finally(() => { setIsRestoring(false) })
+        promise.finally(() => { dispatch(restoreStatus(false)) })
 
     }
 
