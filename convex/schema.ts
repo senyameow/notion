@@ -13,7 +13,8 @@ export default defineSchema({
         isPublished: v.boolean(),
         visitedPeople: v.optional(v.array(v.string())),
         banList: v.optional(v.array(v.string())),
-        reportList: v.optional(v.array(v.id('reports')))
+        reportList: v.optional(v.array(v.id('reports'))),
+        modList: v.optional(v.array(v.string()))
     })
         .index('by_user', ['userId'])
         .index('by_user_parent', ['userId', 'parentDoc']),
@@ -24,7 +25,15 @@ export default defineSchema({
         name: v.string(),
         image_url: v.string(),
         email: v.string(),
-        documents: v.optional(v.array(v.id('documents')))
+        documents: v.optional(v.array(v.id('documents'))),
+        docRole: v.optional(v.array(v.object({
+            docId: v.id('documents'),
+            role: v.union(
+                v.literal('admin'),
+                v.literal('editor'),
+                v.literal('mod'),
+            )
+        })))
     }).index('by_token', ['tokenIdentifier']).index('by_userId', ['userId']),
 
     reports: defineTable({

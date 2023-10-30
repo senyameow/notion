@@ -11,6 +11,12 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+
 interface UserCardProps {
     user: Doc<'users'>;
     preview?: boolean;
@@ -48,6 +54,10 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                 </div>
             </div>
             <div className={cn(`flex items-center gap-2 absolute top-2 right-3`)}>
+                <Popover>
+                    <PopoverTrigger>Open</PopoverTrigger>
+                    <PopoverContent>Place content for the popover here.</PopoverContent>
+                </Popover>
                 <Button onClick={() => dispatch(onOpen(user))} className='w-fit bg-transparent' variant={'outline'}><Info className='w-4 h-4' /></Button>
                 <Button disabled={isLoading} onClick={onBan} className={cn(`w-fit bg-transparent `, preview && 'hidden', isBanned ? 'hover:bg-green-500' : 'hover:bg-rose-500')} variant={'outline'}>
                     {isLoading ? <Loader2 className='w-4 h-4 animate-spin' /> : (
