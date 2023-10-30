@@ -2,9 +2,9 @@
 import { api } from '@/convex/_generated/api'
 import { Doc as DocType } from '@/convex/_generated/dataModel'
 import { useMutation } from 'convex/react'
-import { SkipBack, StepBack, Trash } from 'lucide-react'
+import { Loader2, SkipBack, StepBack, Trash } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useState } from 'react'
 import { toast } from 'sonner'
 import ConfirmModal from './modals/ConfirmModal'
 
@@ -15,6 +15,8 @@ interface TrashItemProps {
 const TrashItem = ({ doc }: TrashItemProps) => {
 
     const router = useRouter()
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const onRedirect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
@@ -27,10 +29,13 @@ const TrashItem = ({ doc }: TrashItemProps) => {
     const onRestore = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.stopPropagation()
         try {
+            setIsLoading(true)
             await restore({ id: doc._id })
             toast.success(`you've successfully restored your note`)
         } catch (error) {
             toast.error(`something went wrong. Try again later`)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -50,7 +55,9 @@ const TrashItem = ({ doc }: TrashItemProps) => {
             <div className='w-full flex items-center justify-between'>
                 <span className='text-sm'>{doc.title}</span>
                 <div className='flex items-center gap-2 opacity-0 group-hover:opacity-100 transition'>
-                    <button onClick={onRestore} className='p-1 rounded-lg  dark:hover:bg-neutral-700/70'><SkipBack className='w-5 h-5 text-neutral-500' /></button>
+                    <button disabled={isLoading} onClick={onRestore} className='p-1 rounded-lg  dark:hover:bg-neutral-700/70'>
+                        {isLoading ? <Loader2 className='w-5 h-5 animate-spin' /> : <SkipBack className='w-5 h-5 text-neutral-500' />}
+                    </button>
                     <ConfirmModal onConfirm={(e) => {
                         e.stopPropagation()
                         onRemove()
