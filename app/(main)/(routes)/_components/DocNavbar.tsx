@@ -35,7 +35,8 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     const params = useParams()
 
-    const [isDeleting, setIsDeleting] = useState(false)
+    const [isDeleting, setIsDeleting] = useState<boolean>(false)
+    const [isRestoring, setIsRestoring] = useState<boolean>(false)
 
     const doc = useQuery(api.documents.getNote, { id: params.docId as Id<"documents"> })
     const archieve = useMutation(api.documents.archiveDoc)
@@ -73,6 +74,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
             success: 'Note restored',
             error: 'Something went wrong'
         })
+        promise.finally(() => { setIsRestoring(false) })
 
     }
 
@@ -105,8 +107,8 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                                 <DropdownMenuGroup className="flex items-center p-1 flex-col">
                                     <InfoSheet doc={doc} />
                                     {doc.isAcrchieved ? (
-                                        <DropdownMenuItem className="cursor-pointer hover:opacity-90 w-full" onSelect={onRestore}>
-                                            <ArchiveRestore className='w-4 h-4 mr-2' />
+                                        <DropdownMenuItem disabled={isRestoring} className="cursor-pointer hover:opacity-90 w-full" onSelect={onRestore}>
+                                            {isRestoring ? <Loader2 className='w-4 h-4 animate-spin' /> : <ArchiveRestore className='w-4 h-4 mr-2' />}
                                             Restore
                                         </DropdownMenuItem>
                                     ) : <DropdownMenuItem disabled={isDeleting} onSelect={onArchieve} className="cursor-pointer hover:opacity-90 w-full">
