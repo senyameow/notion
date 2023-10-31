@@ -52,6 +52,8 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
 
     const userRole = doc.people?.find(visiter => visiter.id === user.userId)?.role
 
+    console.log(doc.people)
+
     const onBan = async () => {
         try {
             setIsLoading(true)

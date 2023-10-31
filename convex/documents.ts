@@ -369,8 +369,12 @@ export const updateRole = mutation({
         if (!user) throw new Error('User not found')
         if (user?.role === args.role) return
         const newUser = { ...user, role: args.role }
+        const newPeople = doc.people?.map(user => {
+            if (user.id === newUser.id) return newUser
+            return user
+        })
         return await ctx.db.patch(args.docId, {
-            people: [...doc.people!, newUser]
+            people: [...newPeople!]
         })
     }
 })
