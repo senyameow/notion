@@ -30,6 +30,7 @@ import {
 import { useUser } from '@clerk/clerk-react'
 import ConfirmModal from './modals/ConfirmAdminModal'
 import AdminConfirmRole from './modals/ConfirmAdminModal'
+import { adminRoleModalSlice } from '@/store/reducers/ConfirmAdminRoleModalSlice'
 
 interface UserCardProps {
     user: Doc<'users'>;
@@ -42,6 +43,8 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     const dispatch = useAppDispatch()
     const { onOpen } = userModalSlice.actions
     const [isLoading, setIsLoading] = useState<boolean>(false)
+
+    const { onOpen: onAdminConfirmOpen } = adminRoleModalSlice.actions
 
     const { user: loggedInUser } = useUser()
 
@@ -75,7 +78,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
 
         toast.promise(promise, {
             loading: `Updating ${user.name}' role to ${role} ..`,
-            success: 'Updated',
+            success: `${user.name} Updated`,
             error: 'Something went wrong'
         })
 
@@ -83,6 +86,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
 
     return (
         <div className="w-full p-3 group border cursor-pointer relative">
+            <AdminConfirmRole />
             <div className="flex items-center w-full justify-between">
                 <div className='flex items-center gap-2'>
                     <Image src={user?.image_url} alt='user image' width={30} height={30} className='rounded-full ' />
@@ -97,14 +101,14 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
                             <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                <AdminConfirmRole user={user} doc={doc}>
-                                    <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer'>
-                                        <div className='flex w-full items-center gap-3'>
-                                            {<UserRole role={UserRoles.ADMIN} />}
-                                            <span>admin</span>
-                                        </div>
-                                    </DropdownMenuItem>
-                                </AdminConfirmRole>
+                                <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer' onSelect={() => { dispatch(onAdminConfirmOpen({ user, doc })) }}>
+
+                                    <div className='flex w-full items-center gap-3'>
+                                        {<UserRole role={UserRoles.ADMIN} />}
+                                        <span>admin</span>
+                                    </div>
+
+                                </DropdownMenuItem>
 
                                 <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.EDITOR)}>
                                     <div className='flex w-full items-center gap-3'>

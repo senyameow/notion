@@ -5,6 +5,7 @@ import imageSlice from './reducers/ImageUploadSlice';
 import userModalSlice from './reducers/UserModalSlice';
 import reportModalSlice from './reducers/ReportModalSlice';
 import docStatusSlice from './reducers/DocStatusSlice';
+import adminRoleModalSlice from './reducers/ConfirmAdminRoleModalSlice';
 
 const rootReducer = combineReducers({
     search: searchModal,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
     user: userModalSlice,
     reports: reportModalSlice,
     docStatus: docStatusSlice,
+    admin: adminRoleModalSlice,
 })
 
 export const setupStore = () => {
