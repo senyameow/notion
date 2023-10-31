@@ -351,7 +351,7 @@ export const deleteReport = mutation({
 
 export const updateRole = mutation({
     args: {
-        userId: v.id('users'),
+        userId: v.string(),
         docId: v.id('documents'),
         role: v.union(
             v.literal('ADMIN'),

@@ -44,7 +44,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     const { user: loggedInUser } = useUser()
 
     const ban = useMutation(api.documents.banUser)
-    const updateRole = useMutation(api.documents.u)
+    const updateRole = useMutation(api.documents.updateRole)
 
     let isBanned = doc.banList?.includes(user.userId)
 
@@ -65,7 +65,18 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     }
 
     const onGiveRole = async (role: UserRoles) => {
-        const promise = updateRole()
+        const promise = updateRole({
+            userId: user.userId,
+            role,
+            docId: doc._id
+        })
+
+        toast.promise(promise, {
+            loading: `Updating ${user.name}' role to ${role} ..`,
+            success: 'Updated',
+            error: 'Something went wrong'
+        })
+
     }
 
     return (
@@ -90,19 +101,19 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                                         <span>admin</span>
                                     </div>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
+                                <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.EDITOR)}>
                                     <div className='flex w-full items-center gap-3'>
                                         {<UserRole role={UserRoles.EDITOR} />}
                                         <span>editor</span>
                                     </div>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
+                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.MOD)}>
                                     <div className='w-full flex items-center gap-3'>
                                         {<UserRole role={UserRoles.MOD} />}
                                         <span>mod</span>
                                     </div>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
+                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.VISITER)}>
                                     <div className='w-full flex items-center gap-3'>
                                         {<UserRole role={UserRoles.VISITER} />}
                                         <span>viewer</span>
