@@ -28,6 +28,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useUser } from '@clerk/clerk-react'
+import ConfirmModal from './modals/ConfirmAdminModal'
+import AdminConfirmRole from './modals/ConfirmAdminModal'
 
 interface UserCardProps {
     user: Doc<'users'>;
@@ -51,8 +53,6 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     // const userRole = user.docRole?.find(user => user.docId === doc._id)?.role
 
     const userRole = doc.people?.find(visiter => visiter.id === user.userId)?.role
-
-    console.log(doc.people)
 
     const onBan = async () => {
         try {
@@ -97,12 +97,15 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
                             <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
-                                    <div className='flex w-full items-center gap-3'>
-                                        {<UserRole role={UserRoles.ADMIN} />}
-                                        <span>admin</span>
-                                    </div>
-                                </DropdownMenuItem>
+                                <AdminConfirmRole user={user} doc={doc}>
+                                    <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer'>
+                                        <div className='flex w-full items-center gap-3'>
+                                            {<UserRole role={UserRoles.ADMIN} />}
+                                            <span>admin</span>
+                                        </div>
+                                    </DropdownMenuItem>
+                                </AdminConfirmRole>
+
                                 <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.EDITOR)}>
                                     <div className='flex w-full items-center gap-3'>
                                         {<UserRole role={UserRoles.EDITOR} />}
