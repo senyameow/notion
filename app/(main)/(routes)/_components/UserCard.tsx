@@ -44,6 +44,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     const { user: loggedInUser } = useUser()
 
     const ban = useMutation(api.documents.banUser)
+    const updateRole = useMutation(api.documents.u)
 
     let isBanned = doc.banList?.includes(user.userId)
 
@@ -63,8 +64,9 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
         }
     }
 
-    console.log(userRole)
-
+    const onGiveRole = async (role: UserRoles) => {
+        const promise = updateRole()
+    }
 
     return (
         <div className="w-full p-3 group border cursor-pointer relative">
@@ -77,31 +79,30 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
             <div className={cn(`flex items-center gap-2 absolute top-2 right-3`)}>
                 {loggedInUser === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <>
                     {doc.people?.find(_ => _.id === loggedInUser?.id)?.role === 'ADMIN' ? <DropdownMenu>
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger className='mr-2 hover:opacity-80 cursor-pointer'>
                             <UserRole role={UserRoles[userRole!]} />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
                             <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer'>
+                                <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
                                     <div className='flex w-full items-center gap-3'>
                                         {<UserRole role={UserRoles.ADMIN} />}
                                         <span>admin</span>
                                     </div>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer'>
+                                <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
                                     <div className='flex w-full items-center gap-3'>
                                         {<UserRole role={UserRoles.EDITOR} />}
                                         <span>editor</span>
                                     </div>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
+                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
                                     <div className='w-full flex items-center gap-3'>
                                         {<UserRole role={UserRoles.MOD} />}
                                         <span>mod</span>
                                     </div>
-                                    <Check className={cn(`w-4 h-4 opacity-0`, userRole === UserRoles.MOD && 'opacity-100')} />
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer'>
+                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.ADMIN)}>
                                     <div className='w-full flex items-center gap-3'>
                                         {<UserRole role={UserRoles.VISITER} />}
                                         <span>viewer</span>

@@ -348,3 +348,29 @@ export const deleteReport = mutation({
         })
     }
 })
+
+export const updateRole = mutation({
+    args: {
+        userId: v.id('users'),
+        docId: v.id('documents'),
+        role: v.union(
+            v.literal('ADMIN'),
+            v.literal('EDITOR'),
+            v.literal('MOD'),
+            v.literal('VISITER'),
+        )
+    },
+    handler: async (ctx, args) => {
+        // check updater role
+        const doc = await ctx.db.get(args.docId)
+        if (doc === null) throw new Error('Not found')
+
+        let user = doc.people?.find(user => user.id === args.userId)
+        if (!user) throw new Error('User not found')
+        if (user?.role === args.role) return
+        const newUser = { ...user, role: args.role }
+        return await ctx.db.patch(args.docId, {
+            people: [...doc.people!, newUser]
+        })
+    }
+})
