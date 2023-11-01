@@ -36,7 +36,11 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const { user, isLoaded } = useUser()
 
-    if (isLoaded && (user?.id !== doc?.userId)) return redirect('/')
+    const userRole = doc.people?.find(human => human.id === user?.id)?.role
+
+    console.log(userRole)
+
+    if (isLoaded && (userRole !== 'ADMIN' && userRole !== 'MOD')) return redirect('/docs')
 
     const onUpdateContent = (content: string) => {
         update({
