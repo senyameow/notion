@@ -14,6 +14,7 @@ import useStoreUserEffect from '@/hooks/use-store-user'
 import BannedView from './_components/BannedView'
 import ReportModal from '@/components/modals/ReportModal'
 import { Loader2 } from 'lucide-react'
+import CommentButton from '@/app/(main)/(routes)/_components/CommentButton'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -90,7 +91,11 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
                         <div className='w-full h-full flex items-center justify-center'>
                             <Loader2 className='animate-spin w-4 h-4' />
                         </div>
-                    ) : <Editor docId={params.docId} editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />}
+                    ) : (
+                        <CommentButton>
+                            <Editor docId={params.docId} editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />
+                        </CommentButton>
+                    )}
                 </div>
             </div>}
         </>
