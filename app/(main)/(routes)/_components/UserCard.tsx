@@ -101,7 +101,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-36">
                             <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                <DropdownMenuItem className='flex w-full items-center justify-between gap-3 cursor-pointer' onSelect={() => { dispatch(onAdminConfirmOpen({ user, doc })) }}>
+                                <DropdownMenuItem disabled={userRole === 'ADMIN'} className={cn(`flex w-full items-center justify-between gap-3 cursor-pointer`, userRole === 'MOD' && 'hidden')} onSelect={() => { dispatch(onAdminConfirmOpen({ user, doc })) }}>
 
                                     <div className='flex w-full items-center gap-3'>
                                         {<UserRole role={UserRoles.ADMIN} />}
@@ -109,20 +109,19 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                                     </div>
 
                                 </DropdownMenuItem>
-
-                                <DropdownMenuItem className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.EDITOR)}>
-                                    <div className='flex w-full items-center gap-3'>
-                                        {<UserRole role={UserRoles.EDITOR} />}
-                                        <span>editor</span>
-                                    </div>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.MOD)}>
+                                <DropdownMenuItem disabled={userRole === 'MOD'} className={cn(`flex w-full items-center gap-3 cursor-pointer`, userRole === 'MOD' && 'hidden')} onSelect={() => onGiveRole(UserRoles.MOD)}>
                                     <div className='w-full flex items-center gap-3'>
                                         {<UserRole role={UserRoles.MOD} />}
                                         <span>mod</span>
                                     </div>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.VISITER)}>
+                                <DropdownMenuItem disabled={userRole === 'EDITOR'} className='flex w-full justify-between items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.EDITOR)}>
+                                    <div className='flex w-full items-center gap-3'>
+                                        {<UserRole role={UserRoles.EDITOR} />}
+                                        <span>editor</span>
+                                    </div>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem disabled={userRole === 'VISITER'} className='flex w-full items-center gap-3 cursor-pointer' onSelect={() => onGiveRole(UserRoles.VISITER)}>
                                     <div className='w-full flex items-center gap-3'>
                                         {<UserRole role={UserRoles.VISITER} />}
                                         <span>viewer</span>
