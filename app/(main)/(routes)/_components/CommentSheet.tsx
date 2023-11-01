@@ -21,12 +21,18 @@ import { MessageCircle } from "lucide-react"
 import UserCard from "./UserCard"
 import { format } from "date-fns"
 import Comment from "./Comment"
+import { Skeleton } from "@/components/ui/skeleton"
 
 interface CommentSheetProps {
     doc: Doc<'documents'>
 }
 
 const CommentSheet = ({ doc }: CommentSheetProps) => {
+
+    const comments = useQuery(api.documents.getComments, { docId: doc._id })
+
+    console.log(comments)
+
     return (
         <Sheet>
             <SheetTrigger className="flex items-center w-full px-2 py-1 hover:opacity-90 transition-colors focus:bg-accent hover:bg-accent focus:text-accent-foreground hover:text-accent-foreground rounded-md">
@@ -42,11 +48,15 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                 </SheetHeader>
                 <div className="flex items-start gap-5 flex-col py-8 h-full">
                     <Label>Comments: </Label>
-                    <ScrollArea className="h-full w-full">
-                        {doc.comments?.map((comment, ind) => (
-                            <Comment comment={comment} key={ind} />
+                    {comments === undefined ? (
+                        <div className="w-full h-full flex-col flex gap-4">
+                            <Skeleton className="w-[300px] h-[100px]" />
+                        </div>
+                    ) : <ScrollArea className="h-full w-full">
+                        {comments?.map(comment => (
+                            <Comment key={comment._id} comment={comment} />
                         ))}
-                    </ScrollArea>
+                    </ScrollArea>}
                 </div>
                 <SheetFooter>
                     <SheetClose asChild>

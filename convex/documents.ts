@@ -413,3 +413,20 @@ export const createComment = mutation({
         return await ctx.db.insert('comments', newComment)
     }
 })
+
+// export const getComment = query({
+//     args: {
+//         id: v.id('comments')
+//     },
+//     handler: async (ctx, args) => {
+//         return await ctx.db.get(args.id)
+//     }
+// })
+export const getComments = query({
+    args: {
+        docId: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query('comments').withIndex('by_document', q => q.eq('docId', args.docId)).order('desc').collect()
+    }
+})
