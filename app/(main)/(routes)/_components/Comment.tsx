@@ -23,6 +23,8 @@ import { Check, MoreHorizontal, Send, Smile } from 'lucide-react';
 import { ActionTooltip } from '@/components/ui/ActionTooltip';
 import { useUser } from '@clerk/clerk-react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import CommentReply from './CommentReply';
 
 interface CommentProps {
     comment: Doc<'comments'>
@@ -40,14 +42,26 @@ const Comment = ({ comment }: CommentProps) => {
     const createReply = useMutation(api.documents.createCommentReply)
 
 
-    const onSave = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'esc') {
-            setIsEditing(false)
-            setMessage(message)
+    const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(message)
+        if (isLoaded) {
+            if (e.key === 'Enter') {
+                setIsEditing(false)
+                await createReply({
+                    content: message,
+                    commentId: comment._id,
+                    userId: user?.id!
+                })
+                setMessage('')
+            }
         }
     }
 
-    const onReply = async () => {
+    const onReply = async (e: any) => {
+        if (e.keyCode === 13) {
+            setIsEditing(false)
+            console.log(message)
+        }
         console.log(message)
         if (isLoaded) {
             await createReply({
@@ -55,7 +69,8 @@ const Comment = ({ comment }: CommentProps) => {
                 commentId: comment._id,
                 userId: user?.id!
             })
-            toast.success('qwe')
+
+            setMessage('')
         }
     }
 
@@ -69,7 +84,7 @@ const Comment = ({ comment }: CommentProps) => {
 
     return (
         <>
-            {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px]">
+            {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px] mb-2">
                 <CardHeader className='pb-2 w-full'>
                     <CardTitle className='pb-2 flex items-center justify-between w-full '>
                         <div className='w-full flex items-center gap-3'>
@@ -92,18 +107,25 @@ const Comment = ({ comment }: CommentProps) => {
                     </CardDescription>}
                 </CardHeader >
                 <CardContent className=''>
-                    {comment.content}
+                    <div>
+                        {comment.content}
+                    </div>
                 </CardContent>
+
+                {comment.replies?.map(reply => (
+                    <CommentReply key={reply.created_at} {...reply} />
+                ))}
+
                 {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">
                     <Image src={user?.imageUrl!} alt='user avatar' className='rounded-full' width={30} height={30} />
                     <div className='relative w-full h-full'>
-                        {isEditing ? <Input placeholder='reply...' onMouseOver={enableInput} ref={inputRef} onKeyDown={onSave} className='h-8 relative w-full flex-1 bg-transparent py-0 border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} /> : <Button variant={'ghost'} onClick={enableInput} className='w-full flex justify-start duration-300 px-2 py-0.5 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition rounded-xl'>
+                        {isEditing ? <Input placeholder='reply...' onMouseOver={enableInput} ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[95%] bg-transparent py-0 border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} /> : <Button variant={'ghost'} onClick={enableInput} className='w-full flex justify-start duration-300 px-2 py-0.5 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition rounded-xl'>
                             <div className=''>
                                 Reply...
                             </div>
 
                         </Button>}
-                        <Send role='button' onClick={onReply} className='w-4 h-4 text-blue-400 absolute top-2 -right-3 cursor-pointer ' />
+                        <Send role='button' onClick={e => onReply(e)} className={cn(`w-4 h-4 text-blue-400 absolute top-[8px] -right-0 cursor-pointer opacity-0 transition`, isEditing && 'opacity-100')} />
                     </div>
                 </CardFooter> : (
                     <div className='flex gap-2 h-full w-full items-center'>

@@ -40,7 +40,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                 <MessageCircle className='w-4 h-4 mr-2 ' />
                 Comments
             </SheetTrigger>
-            <SheetContent className="z-[99999] min-w-[500px] h-full flex-1">
+            <SheetContent className="z-[99999] min-w-[500px] h-full flex-1 px-4">
                 <SheetHeader>
                     <SheetTitle>{doc.title}</SheetTitle>
                     <SheetDescription>
