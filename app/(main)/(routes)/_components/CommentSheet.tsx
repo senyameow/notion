@@ -23,6 +23,7 @@ import { format } from "date-fns"
 import Comment from "./Comment"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
+import { useUser } from "@clerk/clerk-react"
 
 interface CommentSheetProps {
     doc: Doc<'documents'>
@@ -32,7 +33,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
 
     const comments = useQuery(api.documents.getComments, { docId: doc._id })
 
-    console.log(comments)
+    const { user, isLoaded } = useUser()
 
     return (
         <Sheet>

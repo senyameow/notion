@@ -20,6 +20,8 @@ import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { Check, MoreHorizontal, Smile } from 'lucide-react';
+import { ActionTooltip } from '@/components/ui/ActionTooltip';
+import { useUser } from '@clerk/clerk-react';
 
 interface CommentProps {
     comment: Doc<'comments'>
@@ -28,6 +30,8 @@ interface CommentProps {
 const Comment = ({ comment }: CommentProps) => {
 
     const commentCreater = useQuery(api.documents.getUser, { id: comment.userId })
+
+    const { user, isLoaded } = useUser()
 
     return (
         <>
@@ -40,9 +44,9 @@ const Comment = ({ comment }: CommentProps) => {
                             <span className='text-xs text-gray-300'>{format(comment._creationTime, 'Ppaaa')}</span>
                         </div >
                         <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
-                            <button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button>
-                            <button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button>
-                            <button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button>
+                            <ActionTooltip label='add reaction' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip>
+                            <ActionTooltip label='resolve' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button></ActionTooltip>
+                            <ActionTooltip label='more' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                         </div>
                     </CardTitle >
                     <CardDescription className=''>
@@ -56,10 +60,17 @@ const Comment = ({ comment }: CommentProps) => {
                 <CardContent className=''>
                     {comment.content}
                 </CardContent>
-                <CardFooter className="flex justify-between">
-                    <Button variant="outline">Cancel</Button>
-                    <Button>Close</Button>
-                </CardFooter>
+                {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">
+                    <Image src={user?.imageUrl!} alt='user avatar' className='rounded-full' width={30} height={30} />
+                    <div className='flex-1 w-full px-[6px] py-2 transition text-gray-500 font-semibold hover:bg-gray-800 cursor-pointer rounded-lg'>
+                        Reply...
+                    </div>
+                </CardFooter> : (
+                    <div className='flex gap-2 h-full w-full items-center'>
+                        <Skeleton className='w-[30px] h-[30px] rounded-full' />
+                        <Skeleton className='flex-1 h-6 rounded-md bg-white' />
+                    </div>
+                )}
             </Card >}
         </>
     )
