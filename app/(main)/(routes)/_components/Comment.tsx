@@ -2,8 +2,8 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel';
-import { useQuery } from 'convex/react';
-import React from 'react'
+import { useMutation, useQuery } from 'convex/react';
+import React, { useRef, useState } from 'react'
 
 import {
     Card,
@@ -19,9 +19,10 @@ import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { format } from 'date-fns';
-import { Check, MoreHorizontal, Smile } from 'lucide-react';
+import { Check, MoreHorizontal, Send, Smile } from 'lucide-react';
 import { ActionTooltip } from '@/components/ui/ActionTooltip';
 import { useUser } from '@clerk/clerk-react';
+import { toast } from 'sonner';
 
 interface CommentProps {
     comment: Doc<'comments'>
@@ -32,6 +33,39 @@ const Comment = ({ comment }: CommentProps) => {
     const commentCreater = useQuery(api.documents.getUser, { id: comment.userId })
 
     const { user, isLoaded } = useUser()
+
+    const [isEditing, setIsEditing] = useState(false)
+    const [message, setMessage] = useState('')
+
+    const createReply = useMutation(api.documents.createCommentReply)
+
+
+    const onSave = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'esc') {
+            setIsEditing(false)
+            setMessage(message)
+        }
+    }
+
+    const onReply = async () => {
+        console.log(message)
+        if (isLoaded) {
+            await createReply({
+                content: message,
+                commentId: comment._id,
+                userId: user?.id!
+            })
+            toast.success('qwe')
+        }
+    }
+
+    const enableInput = () => {
+        setIsEditing(true)
+        setTimeout(() => {
+            inputRef.current?.focus()
+        }, 0);
+    }
+    const inputRef = useRef<HTMLInputElement>(null)
 
     return (
         <>
@@ -49,21 +83,27 @@ const Comment = ({ comment }: CommentProps) => {
                             <ActionTooltip label='more' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                         </div>
                     </CardTitle >
-                    <CardDescription className=''>
+                    {comment.commentLine && <CardDescription className=''>
                         <div className='flex w-full h-full items-center gap-2 break-words '>
                             <div className='max-w-[300px] leading-5 border-l-4 border-l-yellow-400 pl-2'>
                                 {comment.commentLine}
                             </div>
                         </div>
-                    </CardDescription>
+                    </CardDescription>}
                 </CardHeader >
                 <CardContent className=''>
                     {comment.content}
                 </CardContent>
                 {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">
                     <Image src={user?.imageUrl!} alt='user avatar' className='rounded-full' width={30} height={30} />
-                    <div className='flex-1 w-full px-[6px] py-2 transition text-gray-500 font-semibold hover:bg-gray-800 cursor-pointer rounded-lg'>
-                        Reply...
+                    <div className='relative w-full h-full'>
+                        {isEditing ? <Input placeholder='reply...' onMouseOver={enableInput} ref={inputRef} onKeyDown={onSave} className='h-8 relative w-full flex-1 bg-transparent py-0 border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} /> : <Button variant={'ghost'} onClick={enableInput} className='w-full flex justify-start duration-300 px-2 py-0.5 hover:bg-neutral-200 dark:hover:bg-neutral-600 transition rounded-xl'>
+                            <div className=''>
+                                Reply...
+                            </div>
+
+                        </Button>}
+                        <Send role='button' onClick={onReply} className='w-4 h-4 text-blue-400 absolute top-2 -right-3 cursor-pointer ' />
                     </div>
                 </CardFooter> : (
                     <div className='flex gap-2 h-full w-full items-center'>

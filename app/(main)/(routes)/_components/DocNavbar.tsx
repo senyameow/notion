@@ -46,8 +46,6 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
     const archieve = useMutation(api.documents.archiveDoc)
     const restore = useMutation(api.documents.restore)
 
-    const user = useQuery(api.documents.getUser, { id: doc?.userId })
-
     if (doc === undefined) {
         return (
             <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>

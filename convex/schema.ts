@@ -50,9 +50,15 @@ export default defineSchema({
     comments: defineTable({
         userId: v.string(),
         content: v.string(),
-        commentLine: v.string(),
-        isReviewed: v.boolean(),
-        docId: v.id('documents')
+        commentLine: v.optional(v.string()),
+        isReviewed: v.optional(v.boolean()),
+        docId: v.id('documents'),
+        replies: v.optional(v.array(v.object({
+            content: v.string(),
+            userId: v.string(),
+            icons: v.optional(v.array(v.string())),
+            created_at: v.number()
+        })))
     }).index('by_document', ['docId'])
 
 })

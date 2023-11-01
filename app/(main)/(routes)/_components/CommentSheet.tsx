@@ -33,7 +33,6 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
 
     const comments = useQuery(api.documents.getComments, { docId: doc._id })
 
-    const { user, isLoaded } = useUser()
 
     return (
         <Sheet>

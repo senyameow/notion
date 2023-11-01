@@ -408,9 +408,38 @@ export const createComment = mutation({
             content: args.content,
             commentLine: args.commentLine,
             isReviewed: false,
-            docId: args.docId
+            docId: args.docId,
+            replies: []
         }
         return await ctx.db.insert('comments', newComment)
+    }
+})
+
+export const createCommentReply = mutation({
+    args: {
+        commentId: v.id('comments'),
+        content: v.string(),
+        userId: v.string(),
+        icons: v.optional(v.array(v.string()))
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+
+        const { commentId, ...rest } = args
+
+        const comment = await ctx.db.get(commentId)
+
+        console.log(comment)
+        if (comment === null) throw new Error('Not found')
+        const replies = comment.replies
+        console.log(replies)
+        if (replies === undefined) throw new Error('Not found')
+
+
+        return await ctx.db.patch(args.commentId, {
+            replies: [...replies, { ...rest, created_at: Date.now() }]
+        })
     }
 })
 
