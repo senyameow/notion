@@ -148,7 +148,7 @@ const Navbar = () => {
                     <Action label='add new doc' icon={Plus} onClick={onCreate} />
                 </div>
                 <div className='flex-1 text-sm font-medium text-neutral-500 px-2 py-4 flex flex-col gap-2'>
-                    <span>You have access to:</span>
+                    {allowedDocs.length > 0 && <span>You have access to:</span>}
                     <div className='flex flex-col '>
                         {allowedDocs.map(doc => (
                             <Doc icon={File} access={UserRoles[doc.people?.find(human => human.id === user?.id)?.role!]} id={doc._id} title={doc.title} />

@@ -85,7 +85,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     }
 
     return (
-        <div className="w-full p-3 group border cursor-pointer relative">
+        <div className="w-full p-3 group border cursor-pointer relative flex items-center justify-between">
             <AdminConfirmRole />
             <div className="flex items-center w-full justify-between">
                 <div className='flex items-center gap-2'>
@@ -93,7 +93,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                     <span>{user?.name}</span>
                 </div>
             </div>
-            <div className={cn(`flex items-center gap-2 absolute top-2 right-3`)}>
+            <div className={cn(`flex items-center gap-2 top-2 right-3`)}>
                 {loggedInUser === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <>
                     {doc.people?.find(_ => _.id === loggedInUser?.id)?.role === 'ADMIN' && doc.people.find(user => user.role === 'ADMIN')?.id !== user.userId ? <DropdownMenu>
                         <DropdownMenuTrigger className='mr-2 hover:opacity-80 cursor-pointer'>
@@ -133,14 +133,16 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                         <UserRole role={UserRoles[userRole!]} className='mr-2' />
                     )}
                 </>}
-                <Button onClick={() => dispatch(onOpen(user))} className='w-fit bg-transparent' variant={'outline'}><Info className='w-4 h-4' /></Button>
-                <Button disabled={isLoading} onClick={onBan} className={cn(`w-fit bg-transparent `, preview && 'hidden', isBanned ? 'hover:bg-green-500' : 'hover:bg-rose-500')} variant={'outline'}>
-                    {isLoading ? <Loader2 className='w-4 h-4 animate-spin' /> : (
-                        <>
-                            {!isBanned ? <Ban className='w-4 h-4' /> : <Check className='w-4 h-4' />}
-                        </>
-                    )}
-                </Button>
+                <div className={cn(`flex items-center gap-2`, user.userId === loggedInUser?.id && 'hidden')}>
+                    <Button onClick={() => dispatch(onOpen(user))} className='w-fit bg-transparent' variant={'outline'}><Info className='w-4 h-4' /></Button>
+                    {loggedInUser === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <Button disabled={isLoading} onClick={onBan} className={cn(`w-fit bg-transparent `, preview || (doc.people?.find(human => human.id === loggedInUser?.id)?.role === UserRoles.VISITER || doc.people?.find(human => human.id === loggedInUser?.id)?.role === UserRoles.EDITOR) && 'hidden', isBanned ? 'hover:bg-green-500' : 'hover:bg-rose-500')} variant={'outline'}>
+                        {isLoading ? <Loader2 className='w-4 h-4 animate-spin' /> : (
+                            <>
+                                {!isBanned ? <Ban className='w-4 h-4' /> : <Check className='w-4 h-4' />}
+                            </>
+                        )}
+                    </Button>}
+                </div>
             </div>
         </div>
     )

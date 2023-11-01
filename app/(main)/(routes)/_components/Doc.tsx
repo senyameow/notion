@@ -82,7 +82,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
     return (
         <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`, params.docId === id && 'dark:bg-black/60 bg-neutral-100')}>
             <div onClick={onRedirect} className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
-                <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`, access !== UserRoles.ADMIN && 'hidden')} onClick={handleExpand}>
+                <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`, (access && access !== UserRoles.ADMIN) && 'hidden')} onClick={handleExpand}>
                     <Icon className='w-4 h-4' />
                 </button>
                 {icon && (
