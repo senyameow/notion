@@ -67,8 +67,8 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
         }
     }, [isLoaded])
 
-    const onUpdateContent = (content: string) => {
-        update({
+    const onUpdateContent = async (content: string) => {
+        await update({
             id: params.docId,
             content
         })
@@ -90,7 +90,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
                         <div className='w-full h-full flex items-center justify-center'>
                             <Loader2 className='animate-spin w-4 h-4' />
                         </div>
-                    ) : <Editor editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />}
+                    ) : <Editor docId={params.docId} editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />}
                 </div>
             </div>}
         </>

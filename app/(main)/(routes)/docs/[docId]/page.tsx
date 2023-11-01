@@ -32,6 +32,8 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
         )
     }
 
+    if (doc === null) return redirect('/docs')
+
     const { user, isLoaded } = useUser()
 
     if (isLoaded && (user?.id !== doc?.userId)) return redirect('/')
@@ -49,7 +51,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
             <Cover doc={doc!} />
             <div className='max-w-3xl md:max-w-4xl mx-auto h-full'>
                 <Toolbar initialDoc={doc!} />
-                <Editor onChange={onUpdateContent} initialContent={doc?.content} />
+                <Editor docId={doc?._id} onChange={onUpdateContent} initialContent={doc?.content} />
             </div>
         </div>
     )
