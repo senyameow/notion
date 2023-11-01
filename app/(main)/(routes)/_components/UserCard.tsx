@@ -95,7 +95,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
             </div>
             <div className={cn(`flex items-center gap-2 absolute top-2 right-3`)}>
                 {loggedInUser === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <>
-                    {doc.people?.find(_ => _.id === loggedInUser?.id)?.role === 'ADMIN' ? <DropdownMenu>
+                    {doc.people?.find(_ => _.id === loggedInUser?.id)?.role === 'ADMIN' && doc.people.find(user => user.role === 'ADMIN')?.id !== user.userId ? <DropdownMenu>
                         <DropdownMenuTrigger className='mr-2 hover:opacity-80 cursor-pointer'>
                             <UserRole role={UserRoles[userRole!]} />
                         </DropdownMenuTrigger>
@@ -130,7 +130,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
                             </DropdownMenuGroup>
                         </DropdownMenuContent>
                     </DropdownMenu> : (
-                        <UserRole role={UserRoles[userRole!]} />
+                        <UserRole role={UserRoles[userRole!]} className='mr-2' />
                     )}
                 </>}
                 <Button onClick={() => dispatch(onOpen(user))} className='w-fit bg-transparent' variant={'outline'}><Info className='w-4 h-4' /></Button>
