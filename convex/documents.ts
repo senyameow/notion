@@ -191,7 +191,9 @@ export const updateDoc = mutation({
 
         const doc = await ctx.db.get(args.id)
         if (!doc) throw new Error('Not found')
-        if (doc.userId !== identity?.subject) throw new Error('Unauthorized')
+        const user = doc.people?.find(updater => updater.id === identity.subject)
+        if (!user) throw new Error('Not found')
+        if (user?.role !== 'ADMIN' && user.role !== 'EDITOR' && user.role !== 'MOD') throw new Error('Unauthorized')
 
 
         let { id, newVisiter, ...rest } = args

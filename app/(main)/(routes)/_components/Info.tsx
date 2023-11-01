@@ -37,7 +37,7 @@ export function InfoSheet({ doc }: InfoSheetProps) {
 
     return (
         <Sheet>
-            <SheetTrigger className="flex items-center w-full px-2">
+            <SheetTrigger className="flex items-center w-full px-2 py-1 hover:opacity-90 transition-colors focus:bg-accent hover:bg-accent focus:text-accent-foreground hover:text-accent-foreground rounded-md">
                 <MessageCircle className='w-4 h-4 mr-2' />
                 Info
             </SheetTrigger>

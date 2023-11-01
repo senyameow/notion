@@ -13,6 +13,7 @@ import { useUser } from '@clerk/clerk-react'
 import useStoreUserEffect from '@/hooks/use-store-user'
 import BannedView from './_components/BannedView'
 import ReportModal from '@/components/modals/ReportModal'
+import { Loader2 } from 'lucide-react'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -52,7 +53,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     if (user === null) return redirect('/')
 
-
+    const userRole = doc?.people?.find(man => man.id === user?.id)?.role
 
     const isBanned = doc?.banList?.includes(user?.id!)
 
@@ -85,7 +86,11 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
                 )}
                 <div className={cn(`max-w-3xl md:max-w-4xl mx-auto h-full`, isPreview && 'max-w-4xl md:max-w-6xl')}>
                     <Toolbar preview initialDoc={doc!} />
-                    <Editor editable={false} onChange={onUpdateContent} initialContent={doc?.content} />
+                    {userRole === undefined ? (
+                        <div className='w-full h-full flex items-center justify-center'>
+                            <Loader2 className='animate-spin w-4 h-4' />
+                        </div>
+                    ) : <Editor editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />}
                 </div>
             </div>}
         </>
