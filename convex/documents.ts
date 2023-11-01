@@ -11,7 +11,7 @@ export const create = mutation({
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unaithenticated')
-        const newDoc = await ctx.db.insert('documents', { title: args.title, userId: identity.subject, isAcrchieved: false, isPublished: false, parentDoc: args.parentDoc, people: [{ id: identity.subject, role: 'ADMIN' }], comments: [] })
+        const newDoc = await ctx.db.insert('documents', { title: args.title, userId: identity.subject, isAcrchieved: false, isPublished: false, parentDoc: args.parentDoc, people: [{ id: identity.subject, role: 'ADMIN' }] })
         return newDoc;
     }
 })
@@ -403,21 +403,13 @@ export const createComment = mutation({
 
         const doc = await ctx.db.get(args.docId)
         if (doc === null) throw new Error('Not found')
-        const docComments = doc.comments;
         const newComment = {
             userId,
             content: args.content,
             commentLine: args.commentLine,
             isReviewed: false,
+            docId: args.docId
         }
-        console.log(docComments)
-        if (docComments?.length === 0) {
-            return await ctx.db.patch(args.docId, {
-                comments: [newComment]
-            })
-        }
-        return await ctx.db.patch(args.docId, {
-            comments: [...docComments!, newComment]
-        })
+        return await ctx.db.insert('comments', newComment)
     }
 })

@@ -23,12 +23,7 @@ export default defineSchema({
         banList: v.optional(v.array(v.string())),
         reportList: v.optional(v.array(v.id('reports'))),
         modList: v.optional(v.array(v.string())),
-        comments: v.optional(v.array(v.object({
-            userId: v.string(),
-            content: v.string(),
-            commentLine: v.string(),
-            isReviewed: v.boolean(),
-        })))
+
     })
         .index('by_user', ['userId'])
         .index('by_user_parent', ['userId', 'parentDoc']),
@@ -50,10 +45,17 @@ export default defineSchema({
         image_url: v.optional(v.string()),
         docId: v.id('documents'),
         isDeleted: v.optional(v.boolean())
-    }).index('by_document', ['docId']).index('by_document_user', ['docId', 'userId'])
-});
+    }).index('by_document', ['docId']).index('by_document_user', ['docId', 'userId']),
 
+    comments: defineTable({
+        userId: v.string(),
+        content: v.string(),
+        commentLine: v.string(),
+        isReviewed: v.boolean(),
+        docId: v.id('documents')
+    }).index('by_document', ['docId'])
 
+})
 // допустим, нам понадобилось найти все доки для определенного юзера (для нас)
 // как мы это обычно сделаем без индексов?
 // просто найдем все документы, вернем collect() и скорее всего, просто на фронте фильтром отрисуем

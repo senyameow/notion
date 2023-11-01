@@ -28,6 +28,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Notifications } from './NotificationCard'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { docStatusSlice } from '@/store/reducers/DocStatusSlice'
+import CommentSheet from './CommentSheet'
 interface DocNavbarProps {
     isCollapsed: boolean;
     onResetWidth: () => void;
@@ -121,12 +122,10 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                                         )}
                                         Delete
                                     </DropdownMenuItem>}
-                                    <DropdownMenuItem className="cursor-pointer hover:opacity-90 w-full">
-                                        <MessageCircle className='w-4 h-4 mr-2' />
-                                        Comments
-                                    </DropdownMenuItem>
+                                    <CommentSheet doc={doc} />
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
+
                         </DropdownMenu>
                     </div>
                 </div>
