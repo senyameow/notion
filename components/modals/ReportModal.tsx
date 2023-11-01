@@ -81,7 +81,7 @@ const ReportModal = () => {
                     <form onSubmit={form.handleSubmit(onReport)}>
 
 
-                        <DialogHeader className='text-xl font-semibold'>
+                        <DialogHeader className='text-xl font-semibold '>
                             Ask to unban yourself
                         </DialogHeader>
                         <DialogDescription className='flex flex-col gap-3 items-start w-full'>
@@ -92,7 +92,7 @@ const ReportModal = () => {
                                     <FormItem>
                                         <FormLabel>Title</FormLabel>
                                         <FormControl className='w-full'>
-                                            <Input {...field} className='text-xl text-black focus-visible:border-none focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                                            <Input {...field} className='text-xl text-white focus-visible:border-none focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
                                         </FormControl>
                                         <FormDescription>Creater of this doc will see that text immediately.</FormDescription>
                                         <FormMessage />
@@ -107,7 +107,7 @@ const ReportModal = () => {
                                         <FormItem className='h-full w-full'>
                                             <FormLabel>Message</FormLabel>
                                             <ScrollArea className='w-full h-full max-h-[300px]'>
-                                                <TextArea {...field} className='w-full p-3 min-h-[100px] py-2 h-[300px] text-black border resize-none text-xl font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                                                <TextArea {...field} className='w-full p-3 min-h-[100px] py-2 h-[300px] text-white border resize-none text-xl font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
                                             </ScrollArea>
                                             <FormMessage />
                                         </FormItem>

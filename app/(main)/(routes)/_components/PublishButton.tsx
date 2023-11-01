@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { api } from '@/convex/_generated/api'
 import { Doc } from '@/convex/_generated/dataModel'
 import { useOrigin } from '@/hooks/use-origin'
+import { useUser } from '@clerk/clerk-react'
 import { useMutation } from 'convex/react'
 import { Check, Copy, Dot, Globe, Loader2, X } from 'lucide-react'
 import { Share } from 'lucide-react'
@@ -23,6 +24,10 @@ const PublishButton = ({ doc }: PublishButtonProps) => {
     const [copied, setCopied] = useState(false)
 
     const url = `${origin}/preview/${doc._id}`
+
+    const { user, isLoaded } = useUser()
+
+    const userRole = doc.people?.find(human => human.id === user?.id)
 
     const onPublish = async () => {
         try {
@@ -64,9 +69,9 @@ const PublishButton = ({ doc }: PublishButtonProps) => {
 
     return (
         <Popover>
-            <PopoverTrigger>
+            {isLoaded && doc.people?.find(human => human.id === user?.id)?.role === 'ADMIN' || doc.people?.find(human => human.id === user?.id)?.role === 'MOD' && <PopoverTrigger>
                 <Button variant={'ghost'}>Share</Button>
-            </PopoverTrigger>
+            </PopoverTrigger>}
             <PopoverContent className='w-[400px]'>
                 <div className='w-full flex items-center border-b px-3 pb-2'>
                     <span>Publish</span>
