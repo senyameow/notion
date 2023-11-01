@@ -43,7 +43,11 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
     }
 
     const onRedirect = () => {
-        router.push(`/docs/${id}`)
+        if (access) {
+            router.push(`/${access === UserRoles.MOD ? 'docs' : 'preview'}/${id}`)
+        } else {
+            router.push(`/docs/${id}`)
+        }
     }
 
     const createChild = useMutation(api.documents.create)
