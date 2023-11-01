@@ -22,7 +22,13 @@ export default defineSchema({
         }))),
         banList: v.optional(v.array(v.string())),
         reportList: v.optional(v.array(v.id('reports'))),
-        modList: v.optional(v.array(v.string()))
+        modList: v.optional(v.array(v.string())),
+        comments: v.optional(v.array(v.object({
+            userId: v.string(),
+            content: v.string(),
+            commentLine: v.string(),
+            isReviewed: v.boolean(),
+        })))
     })
         .index('by_user', ['userId'])
         .index('by_user_parent', ['userId', 'parentDoc']),

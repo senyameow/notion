@@ -389,3 +389,29 @@ export const updateRole = mutation({
         })
     }
 })
+
+export const createComment = mutation({
+    args: {
+        docId: v.id('documents'),
+        content: v.string(),
+        commentLine: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+
+        const doc = await ctx.db.get(args.docId)
+        if (doc === null) throw new Error('Not found')
+        const docComments = doc.comments;
+        const newComment = {
+            userId,
+            content: args.content,
+            commentLine: args.commentLine,
+            isReviewed: false,
+        }
+        return await ctx.db.patch(args.docId, {
+            comments: [...docComments!, newComment]
+        })
+    }
+})

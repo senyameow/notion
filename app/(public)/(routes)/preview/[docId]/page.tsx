@@ -92,7 +92,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
                             <Loader2 className='animate-spin w-4 h-4' />
                         </div>
                     ) : (
-                        <CommentButton>
+                        <CommentButton userId={user?.id!}>
                             <Editor docId={params.docId} editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />
                         </CommentButton>
                     )}

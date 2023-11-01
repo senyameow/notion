@@ -1,13 +1,21 @@
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Loader2 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
 import Textarea from 'react-textarea-autosize'
 
-const CommentButton = ({ children }: React.PropsWithChildren) => {
+interface CommentButtonProps {
+    children: React.ReactNode;
+    userId: string;
+}
+
+const CommentButton = ({ children, userId }: CommentButtonProps) => {
     const [selectedText, setSelectedText] = useState('');
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
     const textRef = useRef(null);
+
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleSelection = () => {
         const selection = window.getSelection();
@@ -34,9 +42,14 @@ const CommentButton = ({ children }: React.PropsWithChildren) => {
 
     };
 
-    const addComment = () => {
-        // Implement your logic to add a comment to the selected text.
-        // You can show a modal or a form for the user to add their comment.
+    const onSubmit = async () => {
+        try {
+            setIsSubmitting(true)
+        } catch (error) {
+
+        } finally {
+            setIsSubmitting(false)
+        }
     };
 
     return (
@@ -64,8 +77,8 @@ const CommentButton = ({ children }: React.PropsWithChildren) => {
                                 <Button variant={'outline'} onClick={() => setSelectedText('')}>
                                     Cancel
                                 </Button>
-                                <Button className='text-sm w-fit ml-auto h-fit'>
-                                    Submit
+                                <Button disabled={isSubmitting} onClick={onSubmit} className='text-sm w-fit ml-auto h-fit'>
+                                    {isSubmitting ? <Loader2 className='w-4 h-4 animate-spin' /> : 'Submit'}
                                 </Button>
                             </div>
                         </div>
