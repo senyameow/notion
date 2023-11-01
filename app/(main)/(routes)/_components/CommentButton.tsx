@@ -1,6 +1,9 @@
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { api } from '@/convex/_generated/api';
+import { Id } from '@/convex/_generated/dataModel';
+import { useMutation } from 'convex/react';
 import { Loader2 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
 import Textarea from 'react-textarea-autosize'
@@ -8,14 +11,19 @@ import Textarea from 'react-textarea-autosize'
 interface CommentButtonProps {
     children: React.ReactNode;
     userId: string;
+    docId: Id<'documents'>
 }
 
-const CommentButton = ({ children, userId }: CommentButtonProps) => {
+const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
     const [selectedText, setSelectedText] = useState('');
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
     const textRef = useRef(null);
 
+    const [content, setContent] = useState('')
+
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    const createComment = useMutation(api.documents.createComment)
 
     const handleSelection = () => {
         const selection = window.getSelection();
@@ -45,6 +53,11 @@ const CommentButton = ({ children, userId }: CommentButtonProps) => {
     const onSubmit = async () => {
         try {
             setIsSubmitting(true)
+            await createComment({
+                docId,
+                content: content,
+                commentLine: selectedText,
+            })
         } catch (error) {
 
         } finally {
@@ -70,7 +83,7 @@ const CommentButton = ({ children, userId }: CommentButtonProps) => {
                             <h2 className='text-sm text-neutral-400'>Add a comment</h2>
                             <div className='w-full'>
                                 <ScrollArea className='h-[100px]'>
-                                    <Textarea placeholder='type here..' className='w-full p-3 min-h-[100px] py-2 h-[300px] placeholder:text-sm placeholder:text-gray-600 text-gray-400 border resize-none text-sm font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                                    <Textarea value={content} onChange={e => setContent(e.target.value)} placeholder='type here..' className='w-full p-3 min-h-[100px] py-2 h-[300px] placeholder:text-sm placeholder:text-gray-600 text-gray-400 border resize-none text-sm font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
                                 </ScrollArea>
                             </div>
                             <div className='flex w-full items-center justify-between'>

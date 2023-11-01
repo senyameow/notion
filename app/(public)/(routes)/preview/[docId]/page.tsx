@@ -52,7 +52,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     // if (user === undefined) return null
 
-    if (user === null) return redirect('/')
+    if (user === null || doc === null) return redirect('/docs')
 
     const userRole = doc?.people?.find(man => man.id === user?.id)?.role
 
@@ -87,12 +87,12 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
                 )}
                 <div className={cn(`max-w-3xl md:max-w-4xl mx-auto h-full`, isPreview && 'max-w-4xl md:max-w-6xl')}>
                     <Toolbar preview initialDoc={doc!} />
-                    {userRole === undefined ? (
+                    {userRole === undefined || doc === undefined ? (
                         <div className='w-full h-full flex items-center justify-center'>
                             <Loader2 className='animate-spin w-4 h-4' />
                         </div>
                     ) : (
-                        <CommentButton userId={user?.id!}>
+                        <CommentButton docId={doc._id} userId={user?.id!}>
                             <Editor docId={params.docId} editable={userRole === 'EDITOR' || userRole === 'MOD'} onChange={onUpdateContent} initialContent={doc?.content} />
                         </CommentButton>
                     )}
