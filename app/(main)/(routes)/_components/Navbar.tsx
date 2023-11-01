@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronsLeft, LucideChevronLeft, Menu, Plus, Trash } from 'lucide-react'
+import { ChevronLeft, ChevronsLeft, File, Loader2, LucideChevronLeft, Menu, Plus, Trash } from 'lucide-react'
 import React, { ElementRef, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import UserAction from './UserAction'
@@ -23,6 +23,8 @@ import { Input } from '@/components/ui/input'
 import TrashBox from './TrashBox'
 import { useParams } from 'next/navigation'
 import DocNavbar from './DocNavbar'
+import { useUser } from '@clerk/clerk-react'
+import { UserRoles } from './UserRole'
 
 const Navbar = () => {
 
@@ -38,9 +40,41 @@ const Navbar = () => {
 
     const create = useMutation(api.documents.create)
 
+    const allDocs = useQuery(api.documents.getAllDocs)
+
+    const { user, isLoaded } = useUser()
+
+    const trash = useQuery(api.documents.getTrash)
+
     const onCreate = async () => {
         await create({ title: 'Untitled' })
         toast.success(`you've created new doc`)
+    }
+
+    const resetWidth = () => {
+        setIsResetting(true)
+        if (sidebarRef.current && navbarRef.current) {
+            sidebarRef.current.style.width = isMobile ? '100%' : '240px' // на мобилке хотим на фулскрин открыть, а так просто 240px (начальная ширина)
+            navbarRef.current.style.setProperty('width', isMobile ? `0` : 'calc(100% - 240px)')
+            navbarRef.current.style.setProperty('left', isMobile ? '0' : '240px')
+        }
+        setTimeout(() => {
+            setIsResetting(false)
+        }, 300);
+        setIsCollapsed(false)
+    }
+    const collapse = () => {
+        setIsCollapsed(true)
+        setIsResetting(true)
+        if (sidebarRef.current && navbarRef.current) {
+            sidebarRef.current.style.width = '0px'
+            navbarRef.current.style.setProperty('width', isMobile ? `0` : '100%')
+            navbarRef.current.style.setProperty('left', '0')
+        }
+        setTimeout(() => {
+            setIsResetting(false)
+        }, 300);
+        setIsCollapsed(true)
     }
 
     useEffect(() => {
@@ -50,6 +84,20 @@ const Navbar = () => {
             resetWidth()
         }
     }, [isMobile])
+
+    if (allDocs === undefined || !isLoaded) {
+        return (
+            <div className='w-full h-full flex items-center justify-center'>
+                <Loader2 />
+            </div>
+        )
+    }
+
+    console.log(allDocs)
+
+    const allowedDocs = allDocs.filter(doc => doc.people?.some(human => (human.id === user?.id) && (human.role === 'MOD' || human.role === 'EDITOR')))
+
+    console.log(allowedDocs)
 
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -82,33 +130,6 @@ const Navbar = () => {
 
     }
 
-    const resetWidth = () => {
-        setIsResetting(true)
-        if (sidebarRef.current && navbarRef.current) {
-            sidebarRef.current.style.width = isMobile ? '100%' : '240px' // на мобилке хотим на фулскрин открыть, а так просто 240px (начальная ширина)
-            navbarRef.current.style.setProperty('width', isMobile ? `0` : 'calc(100% - 240px)')
-            navbarRef.current.style.setProperty('left', isMobile ? '0' : '240px')
-        }
-        setTimeout(() => {
-            setIsResetting(false)
-        }, 300);
-        setIsCollapsed(false)
-    }
-    const collapse = () => {
-        setIsCollapsed(true)
-        setIsResetting(true)
-        if (sidebarRef.current && navbarRef.current) {
-            sidebarRef.current.style.width = '0px'
-            navbarRef.current.style.setProperty('width', isMobile ? `0` : '100%')
-            navbarRef.current.style.setProperty('left', '0')
-        }
-        setTimeout(() => {
-            setIsResetting(false)
-        }, 300);
-        setIsCollapsed(true)
-    }
-
-    const trash = useQuery(api.documents.getTrash)
 
     return (
         <>
@@ -126,8 +147,16 @@ const Navbar = () => {
                     <DocList />
                     <Action label='add new doc' icon={Plus} onClick={onCreate} />
                 </div>
+                <div className='flex-1 text-sm font-medium text-neutral-500 px-2 py-4 flex flex-col gap-2'>
+                    <span>You have access to:</span>
+                    <div className='flex flex-col '>
+                        {allowedDocs.map(doc => (
+                            <Doc icon={File} access={UserRoles[doc.people?.find(human => human.id === user?.id)?.role!]} id={doc._id} title={doc.title} />
+                        ))}
+                    </div>
+                </div>
                 <Popover>
-                    <PopoverTrigger className='w-full p-1 pt-4'>
+                    <PopoverTrigger className='w-full p-1 pt-4 pb-4'>
                         <Action label='Помойка' icon={Trash} />
                     </PopoverTrigger>
                     <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>

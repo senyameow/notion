@@ -160,7 +160,7 @@ export const removeDoc = mutation({
     }
 })
 
-export const getAllDocs = query({
+export const getAllUserDocs = query({
     handler: async (ctx) => {
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unaithenticated')
@@ -174,6 +174,15 @@ export const getAllDocs = query({
         return docs
     }
 })
+
+export const getAllDocs = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unaithenticated')
+        return await ctx.db.query('documents').order('desc').collect()
+    }
+})
+
 
 export const updateDoc = mutation({
     args: {

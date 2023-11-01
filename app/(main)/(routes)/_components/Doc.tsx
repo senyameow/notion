@@ -12,19 +12,21 @@ import React, { use } from 'react'
 import { toast } from 'sonner';
 
 import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+import { UserRoles } from './UserRole';
 
 
 interface DocProps {
     id: Id<'documents'>;
     icon?: LucideIcon;
-    onExpand: () => void;
-    isExpanded: boolean;
+    onExpand?: () => void;
+    isExpanded?: boolean;
     level?: number;
     title: string;
     active?: boolean;
+    access?: UserRoles;
 }
 
-const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
+const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps) => {
 
     const Icon = isExpanded ? ChevronDown : ChevronRight
 
@@ -50,12 +52,12 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
         e.stopPropagation()
         e.preventDefault()
         if (!id) return
-        const doc = await createChild({ parentDoc: id, title: 'Untitled' })
+        await createChild({ parentDoc: id, title: 'Untitled' })
         if (!isExpanded) {
             onExpand?.()
         }
         toast.success(`you've created new note!`)
-        // router.push(`/docs/${doc}`)
+        router.push(`/docs/${doc}`)
 
     }
 
@@ -76,7 +78,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
     return (
         <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`, params.docId === id && 'dark:bg-black/60 bg-neutral-100')}>
             <div onClick={onRedirect} className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
-                <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`)} onClick={handleExpand}>
+                <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`, access !== UserRoles.ADMIN && 'hidden')} onClick={handleExpand}>
                     <Icon className='w-4 h-4' />
                 </button>
                 {icon && (
@@ -85,8 +87,8 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                     </div>
                 )}
                 <span className='text-sm truncate w-full mr-auto text-left'>{title}</span>
-                <div className='flex items-center ml-auto w-full justify-end mr-2 gap-2'>
-                    <button onClick={onCreateChild} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
+                {access === UserRoles.ADMIN && <div className='flex items-center ml-auto w-full justify-end mr-2 gap-2'>
+                    < button onClick={onCreateChild} className='p-1 dark:hover:bg-neutral-950 hover:bg-neutral-500 rounded-md opacity-0 group-hover/note:opacity-100 transition'>
                         <Plus className='w-4 h-4 text-neutral-500' />
                     </button>
                     <DropdownMenu >
@@ -104,7 +106,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title }: DocProps) => {
                             </div> : null}
                         </DropdownMenuContent>
                     </DropdownMenu>
-                </div>
+                </div>}
             </div>
         </button >
     )

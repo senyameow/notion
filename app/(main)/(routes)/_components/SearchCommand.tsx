@@ -22,7 +22,7 @@ import { File } from 'lucide-react'
 
 const SearchCommand = () => {
 
-    const docs = useQuery(api.documents.getAllDocs)
+    const docs = useQuery(api.documents.getAllUserDocs)
 
     const { onToggle, onClose, onOpen } = searchSlice.actions
     const { isOpen } = useAppSelector(state => state.search)

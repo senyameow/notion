@@ -69,7 +69,7 @@ const PublishButton = ({ doc }: PublishButtonProps) => {
 
     return (
         <Popover>
-            {isLoaded && doc.people?.find(human => human.id === user?.id)?.role === 'ADMIN' || doc.people?.find(human => human.id === user?.id)?.role === 'MOD' && <PopoverTrigger>
+            {isLoaded && (doc.people?.find(human => human.id === user?.id)?.role === 'ADMIN' || doc.people?.find(human => human.id === user?.id)?.role === 'MOD') && <PopoverTrigger>
                 <Button variant={'ghost'}>Share</Button>
             </PopoverTrigger>}
             <PopoverContent className='w-[400px]'>
