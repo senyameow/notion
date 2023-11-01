@@ -61,7 +61,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
         try {
             setIsLoading(true)
             await ban({ id: user.userId, docId: doc._id })
-            toast.success(`${user.name} won't be able to see ${doc.title}`)
+            toast.success(`you changed access for ${user.name} to ${doc.title}`)
         } catch (error) {
             toast.error('something went wrong')
         } finally {

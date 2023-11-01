@@ -14,6 +14,7 @@ import Cover from './_components/Cover'
 import dynamic from "next/dynamic";
 import { Loader2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
+import { toast } from 'sonner'
 
 const Editor = dynamic(() => import('./_components/Editor'), { ssr: false });
 
@@ -38,7 +39,12 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const userRole = doc.people?.find(human => human.id === user?.id)?.role
 
-    console.log(userRole)
+    console.log(doc.banList?.includes(user?.id!))
+
+    if (doc.banList?.includes(user?.id!)) {
+        toast.error(`you've been banned on this doc`)
+        return redirect('/docs')
+    }
 
     if (isLoaded && (userRole !== 'ADMIN' && userRole !== 'MOD')) return redirect('/docs')
 
@@ -55,7 +61,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
             <Cover doc={doc!} />
             <div className='max-w-3xl md:max-w-4xl mx-auto h-full'>
                 <Toolbar initialDoc={doc!} />
-                <Editor docId={doc?._id} onChange={onUpdateContent} initialContent={doc?.content} />
+                <Editor docId={doc._id} onChange={onUpdateContent} initialContent={doc.content} />
             </div>
         </div>
     )
