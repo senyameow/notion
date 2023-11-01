@@ -37,10 +37,10 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
     return (
         <Sheet>
             <SheetTrigger className="flex items-center w-full h-full px-2 py-1 hover:opacity-90 transition-colors focus:bg-accent hover:bg-accent focus:text-accent-foreground hover:text-accent-foreground rounded-md">
-                <MessageCircle className='w-4 h-4 mr-2' />
+                <MessageCircle className='w-4 h-4 mr-2 ' />
                 Comments
             </SheetTrigger>
-            <SheetContent className="z-[99999] w-full h-full flex-1">
+            <SheetContent className="z-[99999] min-w-[500px] h-full flex-1">
                 <SheetHeader>
                     <SheetTitle>{doc.title}</SheetTitle>
                     <SheetDescription>

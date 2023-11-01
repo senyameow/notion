@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { format } from 'date-fns';
+import { Check, MoreHorizontal, Smile } from 'lucide-react';
 
 interface CommentProps {
     comment: Doc<'comments'>
@@ -29,25 +31,30 @@ const Comment = ({ comment }: CommentProps) => {
 
     return (
         <>
-            {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-[300px] min-h-[150px]">
-                <CardHeader>
-                    <CardTitle>
+            {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px]">
+                <CardHeader className='pb-2 w-full'>
+                    <CardTitle className='pb-2 flex items-center justify-between w-full '>
                         <div className='w-full flex items-center gap-3'>
                             <Image src={commentCreater.image_url} alt='avatar' className='rounded-full' width={30} height={30} />
                             <span className='text-lg font-semibold'>{commentCreater.name}</span>
+                            <span className='text-xs text-gray-300'>{format(comment._creationTime, 'Ppaaa')}</span>
                         </div >
+                        <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
+                            <button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button>
+                            <button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button>
+                            <button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button>
+                        </div>
                     </CardTitle >
-                    <CardDescription>Deploy your new project in one-click.</CardDescription>
-                </CardHeader >
-                <CardContent>
-                    <form>
-                        <div className="grid w-full items-center gap-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="name">Name</Label>
-                                <Input id="name" placeholder="Name of your project" />
+                    <CardDescription className=''>
+                        <div className='flex w-full h-full items-center gap-2 break-words '>
+                            <div className='max-w-[300px] leading-5 border-l-4 border-l-yellow-400 pl-2'>
+                                {comment.commentLine}
                             </div>
                         </div>
-                    </form>
+                    </CardDescription>
+                </CardHeader >
+                <CardContent className=''>
+                    {comment.content}
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Button variant="outline">Cancel</Button>
