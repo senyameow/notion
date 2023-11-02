@@ -39,12 +39,25 @@ const Comment = ({ comment }: CommentProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')
 
-    const [isResolving, setIsResolving] = useState(false)
-
     const createReply = useMutation(api.documents.createCommentReply)
 
-    const resolveComment = useMutation(api.documents.resolveComment)
-
+    const resolveComment = useMutation(api.documents.resolveComment).withOptimisticUpdate(
+        (localStorage, args) => {
+            const { id } = args
+            const existingComments = localStorage.getQuery(api.documents.getComments, { docId: comment.docId })
+            if (existingComments !== undefined) {
+                const currentComment = existingComments.find(comment => comment._id === id)
+                if (currentComment !== undefined) {
+                    localStorage.setQuery(api.documents.getComments, { docId: comment.docId }, [
+                        ...existingComments.map(com => {
+                            if (com._id === id) return { ...com, isResolved: true }
+                            return com
+                        }),
+                    ])
+                }
+            }
+        }
+    )
 
     const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         console.log(message)
@@ -87,18 +100,12 @@ const Comment = ({ comment }: CommentProps) => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     const onResolve = async () => {
-        try {
-            setIsResolving(true)
-            await resolveComment({
-                id: comment._id
-            })
-            toast.success('comment resolved')
-        } catch (error) {
-            toast.error('something went wrong')
-        } finally {
-            setIsResolving(false)
-        }
+        toast.success('comment resolved')
+        resolveComment({
+            id: comment._id
+        })
     }
+
 
     return (
         <>
@@ -113,9 +120,7 @@ const Comment = ({ comment }: CommentProps) => {
                         <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
                             <ActionTooltip label='add reaction' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip>
                             <ActionTooltip label='resolve' side='top' align='center'>
-                                {
-                                    isResolving ? <Loader2 className='w-4 h-4 animate-spin' /> : <button onClick={onResolve} disabled={isResolving} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button>
-                                }
+                                <button onClick={onResolve} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button>
                             </ActionTooltip>
                             <ActionTooltip label='more' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                         </div>
