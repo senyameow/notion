@@ -69,7 +69,6 @@ const Cover = ({ doc, preview }: CoverProps) => {
             {doc?.cover_image && (
                 <div className='w-full h-[300px] relative group'>
                     <Image src={doc.cover_image} alt='cover' className='object-cover' fill />
-                    <CommentSheet preview doc={doc} />
                     {!preview && <Button onClick={() => dispatch(onOpen({ id: doc._id, type: 'change', url: doc.cover_image }))} className='absolute bottom-2 opacity-0 right-32 group-hover:opacity-100 transition'>
                         Change Cover
                     </Button>}

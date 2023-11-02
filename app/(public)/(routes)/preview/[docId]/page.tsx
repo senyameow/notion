@@ -15,6 +15,7 @@ import BannedView from './_components/BannedView'
 import ReportModal from '@/components/modals/ReportModal'
 import { Loader2 } from 'lucide-react'
 import CommentButton from '@/app/(main)/(routes)/_components/CommentButton'
+import CommentSheet from '@/app/(main)/(routes)/_components/CommentSheet'
 
 const Editor = dynamic(() => import('@/app/(main)/(routes)/docs/[docId]/_components/Editor'), { ssr: false });
 
@@ -80,6 +81,8 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
             <ReportModal />
             {isBanned && user?.id ? <BannedView userId={user.id} doc={doc!} /> : <div className={cn(`pt-20 overflow-y-auto h-full`, isPreview && 'pt-0')}>
                 {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
+
+                {doc === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <CommentSheet preview doc={doc} />}
 
                 <Cover preview doc={doc!} />
                 {isPreview && (

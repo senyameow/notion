@@ -24,6 +24,7 @@ import Comment from "./Comment"
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
 import { useUser } from "@clerk/clerk-react"
+import { usePathname } from "next/navigation"
 
 interface CommentSheetProps {
     doc: Doc<'documents'>;
@@ -34,11 +35,17 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
 
     const comments = useQuery(api.documents.getComments, { docId: doc._id })
 
+    const pathname = usePathname()
+
+    const preview = pathname.includes('preview')
+
+    console.log(preview)
 
     return (
         <Sheet>
-            <SheetTrigger className="flex absolute top-6 right-6">
-                <MessageCircle className='w-6 h-6 mr-2 ' />
+            <SheetTrigger className={cn(preview ? 'absolute top-6 right-6 z-[99999]' : `flex w-full relative hover:bg-accent hover:text-accent-foreground select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none cursor-pointer data-[disabled]:opacity-50`)}>
+                <MessageCircle className={cn(`w-4 h-4 mr-2 `, preview && 'w-6 h-6')} />
+                <span className={cn(``, preview && 'hidden')}>Comments</span>
             </SheetTrigger>
             <SheetContent className="z-[99999] min-w-[500px] h-full flex-1 px-4">
                 <SheetHeader>
@@ -66,7 +73,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                         </div>
                     ) : <ScrollArea className={cn(`h-full w-full`, comments.length === 0 && 'hidden')}>
                         {comments.filter(comment => !comment.isResolved)?.map(comment => (
-                            <Comment preview key={comment._id} comment={comment} />
+                            <Comment preview={preview} key={comment._id} comment={comment} />
                         ))}
                     </ScrollArea>}
                 </div>
