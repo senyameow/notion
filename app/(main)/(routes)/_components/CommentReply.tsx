@@ -37,7 +37,7 @@ const CommentReply = ({ icons, userId, content, created_at }: CommentReplyProps)
                             <Skeleton className='w-[30px] h-[30px] rounded-full' />
                         </div>
                     ) : <div className='w-full flex items-center gap-3'>
-                        <Image src={user.image_url} alt='avatar' className='rounded-full' width={30} height={30} />
+                        <ActionTooltip label={user.email!} side='top' align='center'><Image src={user.image_url} alt='avatar' className='rounded-full' width={30} height={30} /></ActionTooltip>
                         <span className='text-lg font-semibold'>{user.name}</span>
                         <span className='text-xs text-gray-300'>{format(created_at, 'Ppaaa')}</span>
                     </div >}

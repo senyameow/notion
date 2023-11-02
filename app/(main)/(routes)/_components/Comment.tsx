@@ -113,7 +113,7 @@ const Comment = ({ comment }: CommentProps) => {
                 <CardHeader className='pb-2 w-full'>
                     <CardTitle className='pb-2 flex items-center justify-between w-full '>
                         <div className='w-full flex items-center gap-3'>
-                            <Image src={commentCreater.image_url} alt='avatar' className='rounded-full' width={30} height={30} />
+                            <ActionTooltip label={commentCreater.email!} side='top' align='center'><Image src={commentCreater.image_url} alt='avatar' className='rounded-full' width={30} height={30} /></ActionTooltip>
                             <span className='text-lg font-semibold'>{commentCreater.name}</span>
                             <span className='text-xs text-gray-300'>{format(comment._creationTime, 'Ppaaa')}</span>
                         </div >
@@ -144,7 +144,7 @@ const Comment = ({ comment }: CommentProps) => {
                 ))}
 
                 {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">
-                    <Image src={user?.imageUrl!} alt='user avatar' className='rounded-full' width={30} height={30} />
+                    <ActionTooltip label={user?.emailAddresses[0].emailAddress!} side='top' align='center'><Image src={user?.imageUrl!} alt='user avatar' className='rounded-full' width={30} height={30} /></ActionTooltip>
                     <div className='relative w-full h-full'>
                         {isEditing ? <Input placeholder='reply...' onMouseOver={enableInput} ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[95%] bg-transparent py-0 border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} /> : <Button variant={'ghost'} onClick={enableInput} className='w-full flex justify-start duration-300 px-2 py-0.5 hover:bg-neutral-200 dark:hover:bg-neutral-800 transition rounded-xl'>
                             <div className=''>
