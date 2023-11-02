@@ -39,7 +39,34 @@ const Comment = ({ comment }: CommentProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')
 
-    const createReply = useMutation(api.documents.createCommentReply)
+    const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
+        (localStorage, { content, userId, commentId, icons }) => {
+            const existingComments = localStorage.getQuery(api.documents.getComments, { docId: comment.docId })
+            if (existingComments !== undefined) {
+                const currentComment = existingComments.find(comment => comment._id === commentId)
+                if (currentComment !== undefined) {
+                    const existingReplies = currentComment.replies
+                    if (existingReplies !== undefined) {
+                        const newReply = {
+                            icons,
+                            userId,
+                            content,
+                            created_at: Date.now(),
+                        }
+                        localStorage.setQuery(api.documents.getComments, { docId: comment.docId }, [
+                            ...existingComments.map(com => {
+                                if (com._id === currentComment._id) return {
+                                    ...com, replies: [...com.replies!, newReply]
+                                }
+                                return com
+                            })
+                        ]
+                        )
+                    }
+                }
+            }
+        }
+    )
 
     const resolveComment = useMutation(api.documents.resolveComment).withOptimisticUpdate(
         (localStorage, args) => {
