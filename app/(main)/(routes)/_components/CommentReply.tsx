@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
     Card,
@@ -19,6 +19,9 @@ import { Copy, Edit, MoreHorizontal, Smile, Trash } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
+import { useAppDispatch } from '@/hooks/redux'
+import { editReplySlice } from '@/store/reducers/EditReplySlice'
+import { Input } from '@/components/ui/input'
 
 interface CommentReplyProps {
     icons?: string[] | undefined;
@@ -34,7 +37,14 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
 
     const deleteReply = useMutation(api.documents.deleteCommentReply)
 
+    const [isEditing, setIsEditing] = useState(false)
+
+    const [message, setMessage] = useState(content)
+
     const user = useQuery(api.documents.getUser, { id: userId })
+
+    const updateReply = useMutation(api.documents.updateCommentReply)
+
 
     const onDeleteReply = async () => {
         try {
@@ -47,6 +57,29 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
             toast.error('something went wrong')
         }
     }
+
+    const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (isEditing) {
+            if (e.key === 'Enter') {
+                setIsEditing(false)
+                try {
+                    await updateReply({
+                        content: message,
+                        commentId,
+                        replyId
+                    })
+                    toast.success('editted')
+                } catch (error) {
+                    toast.error('something went wrong')
+                } finally {
+                    setMessage('')
+                }
+
+            }
+        }
+    }
+
+
 
     return (
         <div className='group/reply'>
@@ -69,7 +102,7 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
                                 <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                    <DropdownMenuItem className='cursor-pointer w-full flex items-center gap-2'>
+                                    <DropdownMenuItem onSelect={() => setIsEditing(true)} className='cursor-pointer w-full flex items-center gap-2'>
                                         <Edit className='w-4 h-4' />
                                         Edit reply
                                     </DropdownMenuItem>
@@ -84,11 +117,15 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
                     </div>
                 </CardTitle >
             </CardHeader >
-            <CardContent className=''>
-                {content}
-            </CardContent>
 
-        </div>
+            {isEditing ? (
+                <Input placeholder='reply...' onKeyDown={onSave} className='h-8 relative w-[90%] mx-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
+            ) : <CardContent className=''>
+                {content}
+            </CardContent>}
+
+
+        </div >
     )
 }
 

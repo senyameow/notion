@@ -25,6 +25,8 @@ import { useUser } from '@clerk/clerk-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import CommentReply from './CommentReply';
+import { useAppSelector } from '@/hooks/redux';
+import { editReplySlice } from '@/store/reducers/EditReplySlice';
 
 interface CommentProps {
     comment: Doc<'comments'>;
@@ -39,6 +41,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
 
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')
+
 
     const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
         (localStorage, { content, userId, commentId, icons }) => {
@@ -89,7 +92,6 @@ const Comment = ({ comment, preview }: CommentProps) => {
     )
 
     const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log(message)
         if (isLoaded) {
             if (e.key === 'Enter') {
                 setIsEditing(false)
@@ -133,6 +135,14 @@ const Comment = ({ comment, preview }: CommentProps) => {
         resolveComment({
             id: comment._id
         })
+    }
+
+    const editReply = useMutation(api.documents.updateCommentReply)
+
+    const onEditCommentReply = async () => {
+        // await editReply({
+        //     content
+        // })
     }
 
 

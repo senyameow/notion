@@ -505,12 +505,58 @@ export const deleteCommentReply = mutation({
             const existingReplies = comment.replies
 
             if (existingReplies !== undefined) {
-                return await ctx.db.patch(commentId, {
+                await ctx.db.patch(commentId, {
                     replies: [
                         ...existingReplies.filter(reply => reply.id !== replyId)
                     ]
                 })
+                return reply
             }
+        }
+    }
+})
+
+export const updateCommentReply = mutation({
+    args: {
+        commentId: v.id('comments'),
+        replyId: v.string(),
+        content: v.optional(v.string()),
+        icons: v.optional(v.array(v.string()))
+    },
+    handler: async (ctx, { commentId, replyId, content, icons }) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const comment = await ctx.db.get(commentId)
+        if (comment === null) throw new Error('Not found')
+        const doc = await ctx.db.get(comment.docId)
+        if (doc !== null) {
+            const userRole = doc.people?.find(human => human.id === userId)?.role!
+            const reply = comment.replies?.find(r => r.id === replyId)
+            console.log(userRole)
+            if (reply !== undefined) {
+                if ((reply.userId !== userId)) throw new Error('Unauthorized')
+                const updatedReply = {
+                    ...reply,
+                    content: content!,
+                    icons,
+                }
+
+                const existingReplies = comment.replies
+
+                if (existingReplies !== undefined) {
+                    return await ctx.db.patch(commentId, {
+                        replies: [
+                            ...existingReplies.map(reply => {
+                                if (reply.id === replyId) return updatedReply
+                                return reply
+                            })
+                        ]
+                    })
+                }
+            }
+
+
         }
     }
 })
