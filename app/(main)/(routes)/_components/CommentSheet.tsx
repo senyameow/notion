@@ -49,7 +49,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                 </SheetHeader>
                 <div className="flex items-start gap-5 flex-col py-8 h-full w-full">
                     <Label>Comments: </Label>
-                    {comments?.length === 0 && (
+                    {comments?.filter(comment => !comment.isResolved)?.length === 0 && (
                         <div className="w-full h-full gap-2 flex flex-col items-center justify-center text-sm text-center">
                             <MessagesSquare className="w-12 h-12" />
                             <span className="text-gray-400">No open comments yet</span>
@@ -65,7 +65,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                             <Comment.Skeleton />
                         </div>
                     ) : <ScrollArea className={cn(`h-full w-full`, comments.length === 0 && 'hidden')}>
-                        {comments?.map(comment => (
+                        {comments.filter(comment => !comment.isResolved)?.map(comment => (
                             <Comment key={comment._id} comment={comment} />
                         ))}
                     </ScrollArea>}

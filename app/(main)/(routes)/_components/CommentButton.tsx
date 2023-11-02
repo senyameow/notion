@@ -7,6 +7,7 @@ import { useMutation } from 'convex/react';
 import { Loader2 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
 import Textarea from 'react-textarea-autosize'
+import { toast } from 'sonner';
 
 interface CommentButtonProps {
     children: React.ReactNode;
@@ -59,9 +60,11 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
                 commentLine: selectedText,
             })
         } catch (error) {
-
+            toast.error('something went wrong. Check you Internet connection')
         } finally {
             setIsSubmitting(false)
+            setSelectedText('')
+            setContent('')
         }
     };
 
