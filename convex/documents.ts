@@ -262,7 +262,7 @@ export const getAllPeople = query({
         ids: v.optional(v.array(v.string()))
     },
     handler: async (ctx, args) => {
-        return (await ctx.db.query('users').collect()).filter(user => args.ids?.includes(user.userId))
+        return (await ctx.db.query('users').collect()).filter(user => args.ids?.includes(user?.userId))
     }
 })
 
