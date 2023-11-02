@@ -26,7 +26,8 @@ import { cn } from "@/lib/utils"
 import { useUser } from "@clerk/clerk-react"
 
 interface CommentSheetProps {
-    doc: Doc<'documents'>
+    doc: Doc<'documents'>;
+    preview?: boolean
 }
 
 const CommentSheet = ({ doc }: CommentSheetProps) => {
@@ -36,9 +37,8 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
 
     return (
         <Sheet>
-            <SheetTrigger className="flex items-center w-full h-full px-2 py-1 hover:opacity-90 transition-colors focus:bg-accent hover:bg-accent focus:text-accent-foreground hover:text-accent-foreground rounded-md">
-                <MessageCircle className='w-4 h-4 mr-2 ' />
-                Comments
+            <SheetTrigger className="flex absolute top-6 right-6">
+                <MessageCircle className='w-6 h-6 mr-2 ' />
             </SheetTrigger>
             <SheetContent className="z-[99999] min-w-[500px] h-full flex-1 px-4">
                 <SheetHeader>
@@ -66,7 +66,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                         </div>
                     ) : <ScrollArea className={cn(`h-full w-full`, comments.length === 0 && 'hidden')}>
                         {comments.filter(comment => !comment.isResolved)?.map(comment => (
-                            <Comment key={comment._id} comment={comment} />
+                            <Comment preview key={comment._id} comment={comment} />
                         ))}
                     </ScrollArea>}
                 </div>

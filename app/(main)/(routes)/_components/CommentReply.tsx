@@ -16,15 +16,17 @@ import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Skeleton } from '@/components/ui/skeleton'
 import { MoreHorizontal, Smile } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface CommentReplyProps {
     icons?: string[] | undefined;
     userId: string;
     content: string;
     created_at: number;
+    preview?: boolean;
 }
 
-const CommentReply = ({ icons, userId, content, created_at }: CommentReplyProps) => {
+const CommentReply = ({ icons, userId, content, created_at, preview }: CommentReplyProps) => {
 
     const user = useQuery(api.documents.getUser, { id: userId })
 
@@ -43,7 +45,7 @@ const CommentReply = ({ icons, userId, content, created_at }: CommentReplyProps)
                     </div >}
                     <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[2.5px] group-hover/reply:opacity-100 transition bg-gray-800 rounded-md p-1'>
                         <ActionTooltip label='add reaction' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip>
-                        <ActionTooltip label='more' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
+                        <ActionTooltip label='more' side='top' align='center'><button className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                     </div>
                 </CardTitle >
             </CardHeader >

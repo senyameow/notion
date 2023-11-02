@@ -8,10 +8,11 @@ import { useAppDispatch } from '@/hooks/redux'
 import { useEdgeStore } from '@/lib/edgestore'
 import { imageSlice } from '@/store/reducers/ImageUploadSlice'
 import { useMutation } from 'convex/react'
-import { Loader2, X } from 'lucide-react'
+import { Loader2, MessageSquare, X } from 'lucide-react'
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
+import CommentSheet from '../../../_components/CommentSheet'
 
 interface CoverProps {
     doc: Doc<'documents'>;
@@ -68,6 +69,7 @@ const Cover = ({ doc, preview }: CoverProps) => {
             {doc?.cover_image && (
                 <div className='w-full h-[300px] relative group'>
                     <Image src={doc.cover_image} alt='cover' className='object-cover' fill />
+                    <CommentSheet preview doc={doc} />
                     {!preview && <Button onClick={() => dispatch(onOpen({ id: doc._id, type: 'change', url: doc.cover_image }))} className='absolute bottom-2 opacity-0 right-32 group-hover:opacity-100 transition'>
                         Change Cover
                     </Button>}

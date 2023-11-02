@@ -27,10 +27,11 @@ import { cn } from '@/lib/utils';
 import CommentReply from './CommentReply';
 
 interface CommentProps {
-    comment: Doc<'comments'>
+    comment: Doc<'comments'>;
+    preview?: boolean
 }
 
-const Comment = ({ comment }: CommentProps) => {
+const Comment = ({ comment, preview }: CommentProps) => {
 
     const commentCreater = useQuery(api.documents.getUser, { id: comment.userId })
 
@@ -147,9 +148,9 @@ const Comment = ({ comment }: CommentProps) => {
                         <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
                             <ActionTooltip label='add reaction' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip>
                             <ActionTooltip label='resolve' side='top' align='center'>
-                                <button onClick={onResolve} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button>
+                                <button onClick={onResolve} className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><Check className='w-4 h-4' /></button>
                             </ActionTooltip>
-                            <ActionTooltip label='more' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
+                            <ActionTooltip label='more' side='top' align='center'><button className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                         </div>
                     </CardTitle >
                     {comment.commentLine && <CardDescription className=''>
@@ -167,7 +168,7 @@ const Comment = ({ comment }: CommentProps) => {
                 </CardContent>
 
                 {comment.replies?.map(reply => (
-                    <CommentReply key={reply.created_at} {...reply} />
+                    <CommentReply preview={preview} key={reply.created_at} {...reply} />
                 ))}
 
                 {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">
