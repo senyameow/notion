@@ -53,6 +53,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
                             userId,
                             content,
                             created_at: Date.now(),
+                            id: crypto.randomUUID()
                         }
                         localStorage.setQuery(api.documents.getComments, { docId: comment.docId }, [
                             ...existingComments.map(com => {
@@ -95,7 +96,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
                 await createReply({
                     content: message,
                     commentId: comment._id,
-                    userId: user?.id!
+                    userId: user?.id!,
                 })
                 setMessage('')
             }
@@ -168,7 +169,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
                 </CardContent>
 
                 {comment.replies?.map(reply => (
-                    <CommentReply preview={preview} key={reply.created_at} {...reply} />
+                    <CommentReply replyId={reply.id} commentId={comment._id} preview={preview} key={reply.created_at} {...reply} />
                 ))}
 
                 {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">

@@ -438,7 +438,7 @@ export const createCommentReply = mutation({
 
 
         return await ctx.db.patch(args.commentId, {
-            replies: [...replies, { ...rest, created_at: Date.now() }]
+            replies: [...replies, { ...rest, created_at: Date.now(), id: crypto.randomUUID() }]
         })
     }
 })
@@ -479,5 +479,38 @@ export const resolveComment = mutation({
         return await ctx.db.patch(comment._id, {
             isResolved: true
         })
+    }
+})
+
+export const deleteCommentReply = mutation({
+    args: {
+        commentId: v.id('comments'),
+        replyId: v.string()
+    },
+    handler: async (ctx, { commentId, replyId }) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const comment = await ctx.db.get(commentId)
+        if (comment === null) throw new Error('Not found')
+        const doc = await ctx.db.get(comment.docId)
+        if (doc !== null) {
+            const userRole = doc.people?.find(human => human.id === userId)?.role!
+            const reply = comment.replies?.find(r => r.id === replyId)
+            console.log(userRole)
+            if (reply !== undefined) {
+                if ((reply.userId !== userId && (userRole !== 'ADMIN' && userRole !== 'MOD'))) throw new Error('Unauthorized')
+            }
+
+            const existingReplies = comment.replies
+
+            if (existingReplies !== undefined) {
+                return await ctx.db.patch(commentId, {
+                    replies: [
+                        ...existingReplies.filter(reply => reply.id !== replyId)
+                    ]
+                })
+            }
+        }
     }
 })

@@ -57,7 +57,8 @@ export default defineSchema({
             content: v.string(),
             userId: v.string(),
             icons: v.optional(v.array(v.string())),
-            created_at: v.number()
+            created_at: v.number(),
+            id: v.string()
         })))
     }).index('by_document', ['docId'])
 

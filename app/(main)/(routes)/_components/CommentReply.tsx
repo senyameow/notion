@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/card"
 import Image from 'next/image'
 import { ActionTooltip } from '@/components/ui/ActionTooltip'
-import { Doc } from '@/convex/_generated/dataModel'
+import { Doc, Id } from '@/convex/_generated/dataModel'
 import { format } from 'date-fns'
-import { useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Copy, Edit, MoreHorizontal, Smile, Trash } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { toast } from 'sonner'
 
 interface CommentReplyProps {
     icons?: string[] | undefined;
@@ -25,11 +26,27 @@ interface CommentReplyProps {
     content: string;
     created_at: number;
     preview?: boolean;
+    replyId: string;
+    commentId: Id<'comments'>;
 }
 
-const CommentReply = ({ icons, userId, content, created_at, preview }: CommentReplyProps) => {
+const CommentReply = ({ icons, userId, content, created_at, preview, replyId, commentId }: CommentReplyProps) => {
+
+    const deleteReply = useMutation(api.documents.deleteCommentReply)
 
     const user = useQuery(api.documents.getUser, { id: userId })
+
+    const onDeleteReply = async () => {
+        try {
+            await deleteReply({
+                commentId,
+                replyId
+            })
+            toast.success('deleted')
+        } catch (error) {
+            toast.error('something went wrong')
+        }
+    }
 
     return (
         <div className='group/reply'>
@@ -52,17 +69,13 @@ const CommentReply = ({ icons, userId, content, created_at, preview }: CommentRe
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
                                 <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                    <DropdownMenuItem className='flex items-center gap-2'>
-                                        <Edit />
-                                        Edit comment
+                                    <DropdownMenuItem className='cursor-pointer w-full flex items-center gap-2'>
+                                        <Edit className='w-4 h-4' />
+                                        Edit reply
                                     </DropdownMenuItem>
-                                    <DropdownMenuItem className='flex items-center gap-2'>
-                                        <Copy />
-                                        Copy link to this discussion
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem className='flex items-center gap-2'>
-                                        <Trash />
-                                        Delete comment
+                                    <DropdownMenuItem onSelect={onDeleteReply} className='cursor-pointer w-full flex items-center gap-2'>
+                                        <Trash className='w-4 h-4' />
+                                        Delete reply
                                     </DropdownMenuItem>
                                 </DropdownMenuGroup>
                             </DropdownMenuContent>
