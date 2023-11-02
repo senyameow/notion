@@ -407,7 +407,7 @@ export const createComment = mutation({
             userId,
             content: args.content,
             commentLine: args.commentLine,
-            isReviewed: false,
+            isResolved: false,
             docId: args.docId,
             replies: []
         }
@@ -457,5 +457,27 @@ export const getComments = query({
     },
     handler: async (ctx, args) => {
         return await ctx.db.query('comments').withIndex('by_document', q => q.eq('docId', args.docId)).order('desc').collect()
+    }
+})
+
+export const resolveComment = mutation({
+    args: {
+        id: v.id('comments'),
+    },
+    handler: async (ctx, { id }) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const comment = await ctx.db.get(id)
+        if (comment === null) throw new Error('Not found')
+        const doc = await ctx.db.get(comment.docId)
+        if (doc === null) throw new Error('Not found')
+
+        const role = doc.people?.find(user => user.id === userId)?.role!
+        if (role !== 'ADMIN' && role !== 'MOD') throw new Error('Unathorized')
+
+        return await ctx.db.patch(comment._id, {
+            isResolved: true
+        })
     }
 })

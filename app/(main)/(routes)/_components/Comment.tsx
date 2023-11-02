@@ -82,6 +82,14 @@ const Comment = ({ comment }: CommentProps) => {
     }
     const inputRef = useRef<HTMLInputElement>(null)
 
+    const onResolve = async () => {
+        try {
+
+        } catch (error) {
+
+        }
+    }
+
     return (
         <>
             {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px] mb-2">
@@ -94,7 +102,7 @@ const Comment = ({ comment }: CommentProps) => {
                         </div >
                         <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
                             <ActionTooltip label='add reaction' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip>
-                            <ActionTooltip label='resolve' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button></ActionTooltip>
+                            <ActionTooltip label='resolve' side='top' align='center'><button onClick={onResolve} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Check className='w-4 h-4' /></button></ActionTooltip>
                             <ActionTooltip label='more' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                         </div>
                     </CardTitle >

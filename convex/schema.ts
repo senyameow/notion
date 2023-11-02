@@ -51,7 +51,7 @@ export default defineSchema({
         userId: v.string(),
         content: v.string(),
         commentLine: v.optional(v.string()),
-        isReviewed: v.optional(v.boolean()),
+        isResolved: v.optional(v.boolean()),
         docId: v.id('documents'),
         replies: v.optional(v.array(v.object({
             content: v.string(),
