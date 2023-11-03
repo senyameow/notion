@@ -44,7 +44,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
 
 
     const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
-        (localStorage, { content, userId, commentId, icons }) => {
+        (localStorage, { content, userId, commentId }) => {
             const existingComments = localStorage.getQuery(api.documents.getComments, { docId: comment.docId })
             if (existingComments !== undefined) {
                 const currentComment = existingComments.find(comment => comment._id === commentId)
@@ -52,11 +52,11 @@ const Comment = ({ comment, preview }: CommentProps) => {
                     const existingReplies = currentComment.replies
                     if (existingReplies !== undefined) {
                         const newReply = {
-                            icons,
                             userId,
                             content,
                             created_at: Date.now(),
-                            id: crypto.randomUUID()
+                            id: crypto.randomUUID(),
+                            icons: []
                         }
                         localStorage.setQuery(api.documents.getComments, { docId: comment.docId }, [
                             ...existingComments.map(com => {
@@ -179,7 +179,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
                 </CardContent>
 
                 {comment.replies?.map(reply => (
-                    <CommentReply replyId={reply.id} commentId={comment._id} preview={preview} key={reply.created_at} {...reply} />
+                    <CommentReply {...reply} replyId={reply.id} commentId={comment._id} preview={preview} key={reply.created_at} icons={reply.icons!} />
                 ))}
 
                 {isLoaded ? <CardFooter className="flex gap-4 group h-full w-full items-center">

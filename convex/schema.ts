@@ -56,7 +56,11 @@ export default defineSchema({
         replies: v.optional(v.array(v.object({
             content: v.string(),
             userId: v.string(),
-            icons: v.optional(v.array(v.string())),
+            icons: v.optional(v.array(v.object({
+                icon: v.optional(v.string()),
+                amount: v.optional(v.number()),
+                userId: v.string(),
+            }))),
             created_at: v.number(),
             id: v.string()
         })))

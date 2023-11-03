@@ -1,4 +1,3 @@
-'use client'
 import React, { useRef, useState } from 'react'
 
 import {
@@ -24,9 +23,10 @@ import { useAppDispatch } from '@/hooks/redux'
 import { editReplySlice } from '@/store/reducers/EditReplySlice'
 import { Input } from '@/components/ui/input'
 import { EmojiPicker } from '@/components/EmojiPicker'
+import IconReplyButton from './IconReplyButton'
 
 interface CommentReplyProps {
-    icons?: string[] | undefined;
+    icons: { icon?: string | undefined; amount?: number | undefined }[]
     userId: string;
     content: string;
     created_at: number;
@@ -89,7 +89,7 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
         }, 0);
     }
 
-    const updateCommentReply = useMutation(api.documents.updateCommentReply)
+    const updateCommentReply = useMutation(api.documents.addIconCommentReply)
 
     const onIconChange = async (icon: string) => {
         try {
@@ -103,6 +103,8 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
             toast.error('something went wrong')
         }
     }
+
+    console.log(icons)
 
 
     return (
@@ -145,7 +147,12 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
             {isEditing ? (
                 <Input placeholder='reply...' ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[90%] mx-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
             ) : <CardContent className=''>
-                {content}
+                <span>{content}</span>
+                {icons.length > 0 && <div className='flex items-center gap-2 flex-wrap'>
+                    {icons.map(icon => (
+                        <IconReplyButton icons={icons!} key={icon.icon} icon={icon!} replyId={replyId} commentId={commentId} />
+                    ))}
+                </div>}
             </CardContent>}
 
 

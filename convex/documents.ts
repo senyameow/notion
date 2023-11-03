@@ -525,12 +525,12 @@ export const updateCommentReply = mutation({
             // const userRole = doc.people?.find(human => human.id === userId)?.role!
             const reply = comment.replies?.find(r => r.id === replyId)
             if (reply !== undefined) {
-                console.log(reply.icons)
-                if ((reply.userId !== userId)) throw new Error('Unauthorized')
+                // console.log(reply.icons)
+                // if ((reply.userId !== userId)) throw new Error('Unauthorized')
+
                 const updatedReply = {
                     ...reply,
                     content: content || reply.content,
-                    icons: [...reply.icons!, icon!],
                 }
 
                 const existingReplies = comment.replies
@@ -547,7 +547,115 @@ export const updateCommentReply = mutation({
                 }
             }
 
-
         }
+
+
+    }
+})
+
+export const addIconCommentReply = mutation({
+    args: {
+        commentId: v.id('comments'),
+        replyId: v.string(),
+        icon: v.string()
+    },
+    handler: async (ctx, { commentId, replyId, icon }) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const comment = await ctx.db.get(commentId)
+        if (comment === null) throw new Error('Not found')
+
+        const existingReplies = comment.replies
+
+        const reply = comment.replies?.find(r => r.id === replyId)
+        if (existingReplies) {
+            if (reply !== undefined) {
+                const existingIcons = reply.icons
+                console.log(existingIcons, 'existing icons within reply')
+                if (existingIcons !== undefined) {
+                    const replyIcon = existingIcons.find(i => i.icon === icon)
+                    console.log(replyIcon, ' replyIcon')
+
+                    if (replyIcon && replyIcon.userId === userId) return
+
+                    if (replyIcon === undefined) {
+                        const updatedReply = {
+                            ...reply,
+                            icons: [
+                                ...existingIcons,
+                                {
+                                    icon: icon,
+                                    userId: userId,
+                                    amount: 1
+                                }
+                            ]
+                        }
+                        return await ctx.db.patch(commentId, {
+                            replies: [
+                                ...existingReplies?.map(r => {
+                                    if (r.id === replyId) {
+                                        return updatedReply
+                                    }
+                                    return r
+                                })
+                            ]
+                        })
+                    } else {
+
+                        const updatedReply = {
+                            ...reply,
+                            icons: [
+                                ...existingIcons.filter(i => i.icon !== icon),
+                                {
+                                    icon: icon,
+                                    userId: userId,
+                                    amount: replyIcon.amount! + 1
+                                }
+                            ]
+                        }
+                        return await ctx.db.patch(commentId, {
+                            replies: [
+                                ...existingReplies?.map(r => {
+                                    if (r.id === replyId) {
+                                        return updatedReply
+                                    }
+                                    return r
+                                })
+                            ]
+                        })
+                    }
+
+
+
+
+
+                }
+                else {
+                    if (reply !== undefined) {
+                        const existingIcons = reply.icons
+                        if (existingIcons !== undefined) {
+                            const updatedReply = {
+                                ...reply,
+                                icons: [
+                                    ...existingIcons,
+                                    {
+                                        icon: icon,
+                                        userId: userId,
+                                        amount: 1
+                                    }
+                                ]
+                            }
+                            return await ctx.db.patch(commentId, {
+                                replies: [
+                                    updatedReply
+                                ]
+                            })
+                        }
+                    }
+                }
+            }
+        }
+
     }
 })
