@@ -59,7 +59,7 @@ export default defineSchema({
             icons: v.optional(v.array(v.object({
                 icon: v.optional(v.string()),
                 amount: v.optional(v.number()),
-                userId: v.string(),
+                userId: v.array(v.string()),
             }))),
             created_at: v.number(),
             id: v.string()

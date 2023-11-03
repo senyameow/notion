@@ -577,7 +577,7 @@ export const addIconCommentReply = mutation({
                     const replyIcon = existingIcons.find(i => i.icon === icon)
                     console.log(replyIcon, ' replyIcon')
 
-                    if (replyIcon && replyIcon.userId === userId) return
+                    if (replyIcon && replyIcon.userId.includes(userId)) return
 
                     if (replyIcon === undefined) {
                         const updatedReply = {
@@ -586,7 +586,7 @@ export const addIconCommentReply = mutation({
                                 ...existingIcons,
                                 {
                                     icon: icon,
-                                    userId: userId,
+                                    userId: [userId],
                                     amount: 1
                                 }
                             ]
@@ -609,7 +609,7 @@ export const addIconCommentReply = mutation({
                                 ...existingIcons.filter(i => i.icon !== icon),
                                 {
                                     icon: icon,
-                                    userId: userId,
+                                    userId: [...replyIcon.userId, userId],
                                     amount: replyIcon.amount! + 1
                                 }
                             ]
@@ -641,7 +641,7 @@ export const addIconCommentReply = mutation({
                                     ...existingIcons,
                                     {
                                         icon: icon,
-                                        userId: userId,
+                                        userId: [userId],
                                         amount: 1
                                     }
                                 ]
