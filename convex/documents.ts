@@ -577,7 +577,54 @@ export const addIconCommentReply = mutation({
                     const replyIcon = existingIcons.find(i => i.icon === icon)
                     console.log(replyIcon, ' replyIcon')
 
-                    if (replyIcon && replyIcon.userId.includes(userId)) return
+                    if (replyIcon && replyIcon.userId.includes(userId)) {
+                        if (replyIcon.amount! - 1 === 0) {
+                            const updatedReply = {
+                                ...reply,
+                                icons: [
+                                    ...existingIcons.filter(i => i.icon !== icon)
+                                ]
+                            }
+                            return await ctx.db.patch(commentId, {
+                                replies: [
+                                    ...existingReplies?.map(r => {
+                                        if (r.id === replyId) {
+                                            return updatedReply
+                                        }
+                                        return r
+                                    })
+                                ]
+                            })
+                        } else {
+                            const updatedReply = {
+                                ...reply,
+                                icons: [
+                                    ...existingIcons.map(i => {
+                                        if (i.icon === icon) {
+                                            return {
+                                                icon: i.icon,
+                                                userId: [...replyIcon.userId.filter(id => id !== userId)],
+                                                amount: replyIcon.amount! - 1
+                                            }
+                                        }
+                                        return i
+                                    })
+                                ]
+                            }
+                            return await ctx.db.patch(commentId, {
+                                replies: [
+                                    ...existingReplies?.map(r => {
+                                        if (r.id === replyId) {
+                                            return updatedReply
+                                        }
+                                        return r
+                                    })
+                                ]
+                            })
+                        }
+
+
+                    }
 
                     if (replyIcon === undefined) {
                         const updatedReply = {
