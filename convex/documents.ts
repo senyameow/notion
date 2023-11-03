@@ -422,8 +422,11 @@ export const createCommentReply = mutation({
         userId: v.string(),
     },
     handler: async (ctx, args) => {
+        if (args.content === '') return
+
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unauthorized')
+
 
         const { commentId, ...rest } = args
 

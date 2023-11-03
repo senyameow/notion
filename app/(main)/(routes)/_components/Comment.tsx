@@ -42,9 +42,12 @@ const Comment = ({ comment, preview }: CommentProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')
 
+    console.log(message)
+
 
     const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
         (localStorage, { content, userId, commentId }) => {
+            if (content === '') return
             const existingComments = localStorage.getQuery(api.documents.getComments, { docId: comment.docId })
             if (existingComments !== undefined) {
                 const currentComment = existingComments.find(comment => comment._id === commentId)
@@ -106,19 +109,22 @@ const Comment = ({ comment, preview }: CommentProps) => {
     }
 
     const onReply = async (e: any) => {
+        console.log(message, 'MESSAGE')
         if (e.keyCode === 13) {
             setIsEditing(false)
-            console.log(message)
         }
         console.log(message)
         if (isLoaded) {
-            await createReply({
-                content: message,
-                commentId: comment._id,
-                userId: user?.id!
-            })
+            if (message === '') return
+            if (message !== '') {
+                await createReply({
+                    content: message,
+                    commentId: comment._id,
+                    userId: user?.id!
+                })
 
-            setMessage('')
+                setMessage('')
+            }
         }
     }
 

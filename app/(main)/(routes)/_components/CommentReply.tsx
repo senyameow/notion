@@ -61,8 +61,10 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
     }
 
     const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+        console.log(message, 'MESSAGE')
         if (isEditing) {
             if (e.key === 'Enter') {
+                if (message === '') return
                 setIsEditing(false)
                 try {
                     await updateReply({
@@ -76,6 +78,7 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
                 } finally {
                     setMessage('')
                 }
+
 
             }
         }
@@ -103,8 +106,6 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
             toast.error('something went wrong')
         }
     }
-
-    console.log(icons)
 
 
     return (
