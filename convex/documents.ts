@@ -420,7 +420,6 @@ export const createCommentReply = mutation({
         commentId: v.id('comments'),
         content: v.string(),
         userId: v.string(),
-        icons: v.optional(v.array(v.string()))
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
@@ -438,19 +437,11 @@ export const createCommentReply = mutation({
 
 
         return await ctx.db.patch(args.commentId, {
-            replies: [...replies, { ...rest, created_at: Date.now(), id: crypto.randomUUID() }]
+            replies: [...replies, { ...rest, created_at: Date.now(), id: crypto.randomUUID(), icons: [] }]
         })
     }
 })
 
-// export const getComment = query({
-//     args: {
-//         id: v.id('comments')
-//     },
-//     handler: async (ctx, args) => {
-//         return await ctx.db.get(args.id)
-//     }
-// })
 export const getComments = query({
     args: {
         docId: v.id('documents')
@@ -521,9 +512,9 @@ export const updateCommentReply = mutation({
         commentId: v.id('comments'),
         replyId: v.string(),
         content: v.optional(v.string()),
-        icons: v.optional(v.array(v.string()))
+        icon: v.optional(v.string())
     },
-    handler: async (ctx, { commentId, replyId, content, icons }) => {
+    handler: async (ctx, { commentId, replyId, content, icon }) => {
         const identity = await ctx.auth.getUserIdentity()
         if (!identity) throw new Error('Unauthorized')
         const userId = identity.subject
@@ -531,15 +522,15 @@ export const updateCommentReply = mutation({
         if (comment === null) throw new Error('Not found')
         const doc = await ctx.db.get(comment.docId)
         if (doc !== null) {
-            const userRole = doc.people?.find(human => human.id === userId)?.role!
+            // const userRole = doc.people?.find(human => human.id === userId)?.role!
             const reply = comment.replies?.find(r => r.id === replyId)
-            console.log(userRole)
             if (reply !== undefined) {
+                console.log(reply.icons)
                 if ((reply.userId !== userId)) throw new Error('Unauthorized')
                 const updatedReply = {
                     ...reply,
-                    content: content!,
-                    icons,
+                    content: content || reply.content,
+                    icons: [...reply.icons!, icon!],
                 }
 
                 const existingReplies = comment.replies
