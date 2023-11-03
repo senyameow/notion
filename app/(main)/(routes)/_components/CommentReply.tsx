@@ -26,7 +26,7 @@ import { EmojiPicker } from '@/components/EmojiPicker'
 import IconReplyButton from './IconReplyButton'
 
 interface CommentReplyProps {
-    icons: { icon?: string | undefined; amount?: number | undefined }[]
+    icons: { icon?: string | undefined; amount?: number | undefined, userId: string[] }[]
     userId: string;
     content: string;
     created_at: number;
@@ -150,7 +150,7 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
                 <span>{content}</span>
                 {icons.length > 0 && <div className='flex items-center gap-2 flex-wrap'>
                     {icons.map(icon => (
-                        <IconReplyButton icons={icons!} key={icon.icon} icon={icon!} replyId={replyId} commentId={commentId} />
+                        <IconReplyButton userId={userId} icons={icons!} key={icon.icon} icon={icon!} replyId={replyId} commentId={commentId} />
                     ))}
                 </div>}
             </CardContent>}

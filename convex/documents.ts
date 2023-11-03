@@ -625,11 +625,6 @@ export const addIconCommentReply = mutation({
                             ]
                         })
                     }
-
-
-
-
-
                 }
                 else {
                     if (reply !== undefined) {

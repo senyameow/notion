@@ -1,6 +1,10 @@
 'use client'
+import { api } from '@/convex/_generated/api';
 import { Id } from '@/convex/_generated/dataModel';
+import { cn } from '@/lib/utils';
+import { useMutation } from 'convex/react';
 import React from 'react'
+import { toast } from 'sonner';
 import { string } from 'zod'
 
 interface IconReplyButtonProps {
@@ -10,21 +14,32 @@ interface IconReplyButtonProps {
     };
     replyId: string;
     commentId: Id<'comments'>;
-    icons: { icon?: string | undefined; amount?: number | undefined }[]
+    icons: { icon?: string | undefined; amount?: number | undefined, userId: string[] }[];
+    userId: string
 }
 
-const IconReplyButton = ({ icon, replyId, commentId, icons }: IconReplyButtonProps) => {
+const IconReplyButton = ({ icon, replyId, commentId, icons, userId }: IconReplyButtonProps) => {
 
+    const updateIcon = useMutation(api.documents.addIconCommentReply)
 
-    const numberOfIcon = icons.reduce((acc, c) => {
-        if (icon.icon === c.icon) return acc + 1
-        return acc
-    }, 0)
+    const isAdded = !!icons.find(obj => obj.userId.includes(userId))
 
-    console.log(numberOfIcon)
+    const onUpdateIcon = async () => {
+        try {
+            console.log(icon.icon)
+            await updateIcon({
+                replyId,
+                commentId,
+                icon: icon.icon!
+            })
+            toast.success('qwe')
+        } catch (error) {
+            toast.error('something went wrong')
+        }
+    }
 
     return (
-        <button onClick={() => { }} className='flex items-center gap-1 border-[0.5px] transition rounded-md px-1 py-[0.5px] bg-blue-700 bg-opacity-25 hover:bg-opacity-40 border-blue-7' >
+        <button onClick={onUpdateIcon} className={cn(`flex items-center gap-1 border-[0.5px] transition rounded-md px-1 py-[0.5px] bg-blue-700 bg-opacity-40 hover:bg-opacity-80 border-blue-7`, isAdded && 'bg-opacity-80 hover:bg-opacity-60')} >
             <span>{icon.icon}</span>
             <span>{icon.amount}</span>
         </button>
