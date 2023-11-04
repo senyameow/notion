@@ -24,10 +24,7 @@ export default defineSchema({
         reportList: v.optional(v.array(v.id('reports'))),
         modList: v.optional(v.array(v.string())),
         commentList: v.optional(v.array(v.id('comments'))),
-        notifications: v.object({
-            reports: v.boolean(),
-            comments: v.boolean()
-        })
+
     })
         .index('by_user', ['userId'])
         .index('by_user_parent', ['userId', 'parentDoc']),
@@ -39,6 +36,10 @@ export default defineSchema({
         image_url: v.string(),
         email: v.string(),
         documents: v.optional(v.array(v.id('documents'))),
+        notifications: v.object({
+            reports: v.boolean(),
+            comments: v.boolean()
+        })
     }).index('by_token', ['tokenIdentifier']).index('by_userId', ['userId']),
 
     reports: defineTable({

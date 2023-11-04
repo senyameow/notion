@@ -46,6 +46,8 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
     const updateRep = useMutation(api.documents.updateReport)
 
+    const notifications = useQuery(api.documents.getNotifications)
+
     if (reports === undefined) {
         return (
             <div className="w-[380px] h-[300px] flex flex-col items-start gap-4 p-6">
@@ -58,6 +60,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
             </div>
         )
     }
+
 
     const newReports = reports?.filter(rep => !rep.isRead)
     const notDeleted = reports?.filter(rep => !rep.isDeleted)
@@ -96,11 +99,11 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                         </div>
                         <Switch />
                     </div>
-                    <ScrollArea className="w-full h-full max-h-[300px]">
+                    {notifications.reports === true && <ScrollArea className="w-full h-full max-h-[300px]">
                         {notDeleted.map(notification => (
                             <ReportCard notification={notification} key={notification._id} />
                         ))}
-                    </ScrollArea>
+                    </ScrollArea>}
                 </CardContent>
                 <CardFooter>
                     <Button className="w-full" onClick={onReadAll}>

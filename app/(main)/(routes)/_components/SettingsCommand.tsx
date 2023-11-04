@@ -27,7 +27,6 @@ import { Switch } from '@/components/ui/switch'
 
 const SettingsCommand = () => {
 
-
     const { onToggle, onClose, onOpen } = settingsSlice.actions
     const { isOpen } = useAppSelector(state => state.settings)
     const dispatch = useAppDispatch()
