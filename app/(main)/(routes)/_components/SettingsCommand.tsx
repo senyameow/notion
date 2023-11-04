@@ -18,11 +18,12 @@ import { searchSlice } from '@/store/reducers/SearchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useUser } from '@clerk/clerk-react'
 import { useRouter } from 'next/navigation'
-import { File } from 'lucide-react'
+import { Bell, File } from 'lucide-react'
 import { settingsSlice } from '@/store/reducers/SettingsSlice'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ModeToggle } from '@/components/ui/ModToggle'
+import { Switch } from '@/components/ui/switch'
 
 const SettingsCommand = () => {
 
@@ -69,6 +70,33 @@ const SettingsCommand = () => {
                         <p className='text-neutral-500'>Customize how Notion looks on your device</p>
                     </div>
                     <ModeToggle />
+                </div>
+                <div className='text-lg font-medium'>
+                    Notifications
+                </div>
+                <div className=" flex items-center space-x-4 rounded-md border p-4">
+                    <Bell />
+                    <div className="flex-1 space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                            Report Notifications
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                            You will receive all reports from other people.
+                        </p>
+                    </div>
+                    <Switch checked={true} />
+                </div>
+                <div className=" flex items-center space-x-4 rounded-md border p-4">
+                    <Bell />
+                    <div className="flex-1 space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                            Comment Notifications
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                            If new comment comes up you will immediately know.
+                        </p>
+                    </div>
+                    <Switch />
                 </div>
             </DialogContent>
         </Dialog>

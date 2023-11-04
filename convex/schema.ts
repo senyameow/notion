@@ -23,7 +23,11 @@ export default defineSchema({
         banList: v.optional(v.array(v.string())),
         reportList: v.optional(v.array(v.id('reports'))),
         modList: v.optional(v.array(v.string())),
-        commentList: v.optional(v.array(v.id('comments')))
+        commentList: v.optional(v.array(v.id('comments'))),
+        notifications: v.array(v.object({
+            reports: v.boolean(),
+            comments: v.boolean()
+        }))
     })
         .index('by_user', ['userId'])
         .index('by_user_parent', ['userId', 'parentDoc']),
