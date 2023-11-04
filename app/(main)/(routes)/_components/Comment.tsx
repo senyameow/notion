@@ -25,9 +25,10 @@ import { useUser } from '@clerk/clerk-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import CommentReply from './CommentReply';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { editReplySlice } from '@/store/reducers/EditReplySlice';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { deleteCommentModalSlice } from '@/store/reducers/DeleteCommentModalSlice';
 
 interface CommentProps {
     comment: Doc<'comments'>;
@@ -37,6 +38,11 @@ interface CommentProps {
 const Comment = ({ comment, preview }: CommentProps) => {
 
     const commentCreater = useQuery(api.documents.getUser, { id: comment.userId })
+
+    const dispatch = useAppDispatch()
+
+    const { onOpen } = deleteCommentModalSlice.actions
+    const { isOpen } = useAppSelector(state => state.deleteComment)
 
     const { user, isLoaded } = useUser()
 
@@ -173,10 +179,11 @@ const Comment = ({ comment, preview }: CommentProps) => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
                                     <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                        <DropdownMenuItem onSelect={() => { }} className='cursor-pointer w-full flex items-center gap-2'>
+                                        <DropdownMenuItem onSelect={() => dispatch(onOpen({ commentId: comment._id }))} className='cursor-pointer w-full flex items-center gap-2'>
                                             <Trash className='w-4 h-4' />
                                             Delete comment
                                         </DropdownMenuItem>
+
                                     </DropdownMenuGroup>
                                 </DropdownMenuContent>
 

@@ -704,3 +704,23 @@ export const addIconCommentReply = mutation({
 
     }
 })
+
+export const deleteComment = mutation({
+    args: {
+        commentId: v.id('comments'),
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const comment = await ctx.db.get(args.commentId)
+        if (comment === null) throw new Error('Not found')
+        const doc = await ctx.db.get(comment.docId)
+        if (doc !== undefined) {
+            const userRole = doc?.people?.find(user => user.id === userId)?.role
+            if (userRole !== 'MOD' && userRole !== 'ADMIN' && userId !== comment.userId) throw new Error('Unauthorized')
+            return await ctx.db.delete(args.commentId)
+        }
+
+    }
+})
