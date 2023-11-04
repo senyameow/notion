@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { format } from 'date-fns';
-import { Check, Loader2, MoreHorizontal, Send, Smile } from 'lucide-react';
+import { Check, Edit, Loader2, MoreHorizontal, Send, Smile, Trash } from 'lucide-react';
 import { ActionTooltip } from '@/components/ui/ActionTooltip';
 import { useUser } from '@clerk/clerk-react';
 import { toast } from 'sonner';
@@ -27,6 +27,7 @@ import { cn } from '@/lib/utils';
 import CommentReply from './CommentReply';
 import { useAppSelector } from '@/hooks/redux';
 import { editReplySlice } from '@/store/reducers/EditReplySlice';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface CommentProps {
     comment: Doc<'comments'>;
@@ -167,7 +168,20 @@ const Comment = ({ comment, preview }: CommentProps) => {
                             <ActionTooltip label='resolve' side='top' align='center'>
                                 <button onClick={onResolve} className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><Check className='w-4 h-4' /></button>
                             </ActionTooltip>
-                            <ActionTooltip label='more' side='top' align='center'><button className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <ActionTooltip label='more' side='top' align='center'><button onClick={() => { }} className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
+                                    <DropdownMenuGroup className="flex items-center p-1 flex-col">
+                                        <DropdownMenuItem onSelect={() => { }} className='cursor-pointer w-full flex items-center gap-2'>
+                                            <Trash className='w-4 h-4' />
+                                            Delete comment
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+
+                            </DropdownMenu>
                         </div>
                     </CardTitle >
                     {comment.commentLine && <CardDescription className=''>

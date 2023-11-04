@@ -64,6 +64,9 @@ const Editor = ({ editable, initialContent, onChange, docId }: EditorProps) => {
         uploadFile: onImageUpload
     });
 
+    let selectedText = editor.getSelectedText()
+    console.log(selectedText)
+
     return <BlockNoteView theme={currentTheme} editor={editor} />;
 }
 
