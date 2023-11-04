@@ -29,6 +29,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { editReplySlice } from '@/store/reducers/EditReplySlice';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { deleteCommentModalSlice } from '@/store/reducers/DeleteCommentModalSlice';
+import DeleteCommentModal from '@/components/modals/DeleteCommentModal';
 
 interface CommentProps {
     comment: Doc<'comments'>;
@@ -161,6 +162,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
     return (
         <>
             {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px] mb-2">
+                <DeleteCommentModal />
                 <CardHeader className='pb-2 w-full'>
                     <CardTitle className='pb-2 flex items-center justify-between w-full '>
                         <div className='w-full flex items-center gap-3'>
