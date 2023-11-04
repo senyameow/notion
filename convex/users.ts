@@ -46,7 +46,11 @@ export const store = mutation({
             tokenIdentifier: identity.tokenIdentifier,
             image_url: args.image_url,
             email: args.email,
-            userId: identity.subject
+            userId: identity.subject,
+            notifications: {
+                reports: true,
+                comments: false
+            }
         });
     },
 });

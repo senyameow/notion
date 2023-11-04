@@ -20,6 +20,7 @@ import ReportCard from "./ReportCard"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
 import { report } from "@/convex/documents"
+import { useUser } from "@clerk/clerk-react"
 
 // const notifications = [
 //     {
@@ -46,9 +47,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
     const updateRep = useMutation(api.documents.updateReport)
 
-    const notifications = useQuery(api.documents.getNotifications)
+    const user = useQuery(api.documents.getUser, { id: doc.userId })
 
-    if (reports === undefined) {
+    if (reports === undefined || user === undefined) {
         return (
             <div className="w-[380px] h-[300px] flex flex-col items-start gap-4 p-6">
                 <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
@@ -99,7 +100,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                         </div>
                         <Switch />
                     </div>
-                    {notifications.reports === true && <ScrollArea className="w-full h-full max-h-[300px]">
+                    {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
                         {notDeleted.map(notification => (
                             <ReportCard notification={notification} key={notification._id} />
                         ))}
