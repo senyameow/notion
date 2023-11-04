@@ -152,7 +152,6 @@ const Comment = ({ comment, preview }: CommentProps) => {
         // })
     }
 
-
     return (
         <>
             {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px] mb-2">
