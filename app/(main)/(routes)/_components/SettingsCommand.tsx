@@ -31,6 +31,7 @@ const SettingsCommand = () => {
     const { isOpen } = useAppSelector(state => state.settings)
     const dispatch = useAppDispatch()
 
+
     // const [isMounted, setIsMounted] = useState(false)
 
     // useEffect(() => {
@@ -83,7 +84,7 @@ const SettingsCommand = () => {
                             You will receive all reports from other people.
                         </p>
                     </div>
-                    <Switch checked={true} />
+                    <Switch checked={ } />
                 </div>
                 <div className=" flex items-center space-x-4 rounded-md border p-4">
                     <Bell />
