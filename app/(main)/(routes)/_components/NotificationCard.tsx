@@ -21,6 +21,7 @@ import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
 import { report } from "@/convex/documents"
 import { useUser } from "@clerk/clerk-react"
+import CommentCard from "./CommentCard"
 
 // const notifications = [
 //     {
@@ -103,6 +104,11 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                     {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
                         {notDeleted.map(notification => (
                             <ReportCard notification={notification} key={notification._id} />
+                        ))}
+                    </ScrollArea>}
+                    {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
+                        {notDeleted.map(notification => (
+                            <CommentCard comment={comment} key={notification._id} />
                         ))}
                     </ScrollArea>}
                 </CardContent>

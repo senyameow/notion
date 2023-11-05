@@ -24,6 +24,10 @@ export default defineSchema({
         reportList: v.optional(v.array(v.id('reports'))),
         modList: v.optional(v.array(v.string())),
         commentList: v.optional(v.array(v.id('comments'))),
+        notifications: v.optional(v.object({
+            comments: v.boolean(),
+            reports: v.boolean()
+        }))
 
     })
         .index('by_user', ['userId'])

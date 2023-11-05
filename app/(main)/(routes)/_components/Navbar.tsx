@@ -144,7 +144,7 @@ const Navbar = () => {
                     <UserActions />
                 </div>
                 <div className='pt-2'>
-                    <DocList />
+                    <DocList userId={user?.id!} />
                     <Action label='add new doc' icon={Plus} onClick={onCreate} />
                 </div>
                 <div className='flex-1 text-sm font-medium text-neutral-500 px-2 py-4 flex flex-col gap-2'>

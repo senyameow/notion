@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { useTheme } from 'next-themes';
@@ -17,6 +17,10 @@ interface EditorProps {
     initialContent?: string;
     onChange: (value: string) => void;
     docId: Id<'documents'>
+}
+
+type extendedBlock = Block & {
+    created_at: number
 }
 
 const Editor = ({ editable, initialContent, onChange, docId }: EditorProps) => {
