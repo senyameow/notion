@@ -84,7 +84,7 @@ const SettingsCommand = () => {
                             You will receive all reports from other people.
                         </p>
                     </div>
-                    <Switch checked={ } />
+                    <Switch checked={true} />
                 </div>
                 <div className=" flex items-center space-x-4 rounded-md border p-4">
                     <Bell />
