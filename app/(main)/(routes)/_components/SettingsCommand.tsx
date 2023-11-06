@@ -23,7 +23,7 @@ interface ToggleNot {
 
 const SettingsCommand = () => {
 
-    const { onClose, onOpen, onToggle } = settingsSlice.actions
+    const { onClose, onToggle } = settingsSlice.actions
     const { isOpen, userId } = useAppSelector(state => state.settings)
     const dispatch = useAppDispatch()
 
@@ -31,25 +31,17 @@ const SettingsCommand = () => {
 
     const user = useQuery(api.documents.getCurrentUser)
 
+    const notifications = useQuery(api.documents.getCurrentUserNotifications)
+
     const updateNotifications = useMutation(api.documents.toggleNotifications).withOptimisticUpdate(
         (localStorage, args) => {
-            const currentUser = localStorage.getQuery(api.documents.getCurrentUser)
-            if (currentUser !== undefined) {
-                const currentValue = user?.notifications
-                if (currentValue !== undefined) {
-                    localStorage.setQuery(api.documents.getCurrentUser, {}, currentUser?.notifications)
-                }
+            const currentValue = localStorage.getQuery(api.documents.getCurrentUserNotifications)
+            console.log(currentValue)
+            if (currentValue !== undefined || currentValue !== null) {
+                localStorage.setQuery(api.documents.getCurrentUserNotifications, {}, args)
             }
         }
     )
-
-    // const [isMounted, setIsMounted] = useState(false)
-
-    // useEffect(() => {
-    //     setIsMounted(true)
-    // }, [])
-
-    // if (!isMounted) return null
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -63,7 +55,7 @@ const SettingsCommand = () => {
         return () => document.removeEventListener("keydown", down);
     }, [onToggle]);
 
-    if (user === undefined) {
+    if (user === undefined || notifications === undefined) {
         return (
             <div className='w-full h-full flex items-center justify-center'>
                 <Loader2 className='w-4 h-4 animate-spin' />
@@ -72,15 +64,8 @@ const SettingsCommand = () => {
     }
     if (user === null) return redirect('/')
 
-    console.log(user)
-
-
-    const onSwitchNotifications = async (value: ToggleNot) => {
-        console.log(value)
-        await updateNotifications(
-            value
-        )
-        toast.success('это фишка если чо')
+    const onSwitchNotifications = (value: ToggleNot) => {
+        updateNotifications(value)
     }
 
     return (
@@ -114,7 +99,7 @@ const SettingsCommand = () => {
                             You will receive all reports from other people.
                         </p>
                     </div>
-                    <Switch onCheckedChange={() => onSwitchNotifications({ reports: !(!!user.notifications?.reports), comments: (!!user.notifications?.comments!) })} checked={!!user.notifications?.reports} />
+                    <Switch onCheckedChange={() => onSwitchNotifications({ reports: !(notifications?.reports), comments: (!!user.notifications?.comments!) })} checked={notifications?.reports} />
                 </div>
                 <div className=" flex items-center space-x-4 rounded-md border p-4">
                     <Bell />
@@ -126,7 +111,7 @@ const SettingsCommand = () => {
                             If new comment comes up you will immediately know.
                         </p>
                     </div>
-                    <Switch onCheckedChange={() => onSwitchNotifications({ reports: (!!user.notifications?.reports!), comments: !(!!user.notifications?.comments!) })} checked={!!user.notifications?.comments} />
+                    <Switch onCheckedChange={() => onSwitchNotifications({ reports: (notifications?.reports!), comments: !(notifications?.comments) })} checked={notifications?.comments} />
                 </div>
             </DialogContent>
         </Dialog>
