@@ -739,8 +739,8 @@ export const getCurrentUser = query({
 
 export const toggleNotifications = mutation({
     args: {
-        reports: v.optional(v.boolean()),
-        comments: v.optional(v.boolean())
+        reports: v.boolean(),
+        comments: v.boolean()
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity()
@@ -753,8 +753,8 @@ export const toggleNotifications = mutation({
         if (user === null) throw new Error('Unauthorized')
         return await ctx.db.patch(user._id, {
             notifications: {
-                comments: args.comments || user.notifications?.comments!,
-                reports: args.reports || user.notifications?.reports!
+                comments: args.comments,
+                reports: args.reports
             }
         })
     }

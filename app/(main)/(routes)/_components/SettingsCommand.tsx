@@ -2,18 +2,24 @@
 import React, { useEffect, useState } from 'react'
 
 
-import { useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { searchSlice } from '@/store/reducers/SearchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useUser } from '@clerk/clerk-react'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { Bell, File, Loader2 } from 'lucide-react'
 import { settingsSlice } from '@/store/reducers/SettingsSlice'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 import { ModeToggle } from '@/components/ui/ModToggle'
 import { Switch } from '@/components/ui/switch'
+import { toast } from 'sonner'
+
+interface ToggleNot {
+    reports: boolean;
+    comments: boolean;
+}
 
 const SettingsCommand = () => {
 
@@ -24,6 +30,8 @@ const SettingsCommand = () => {
     console.log(userId)
 
     const user = useQuery(api.documents.getCurrentUser)
+
+    const updateNotifications = useMutation(api.documents.toggleNotifications)
 
     // const [isMounted, setIsMounted] = useState(false)
 
@@ -52,8 +60,18 @@ const SettingsCommand = () => {
             </div>
         )
     }
+    if (user === null) return redirect('/')
 
     console.log(user)
+
+
+    const onSwitchNotifications = async (value: ToggleNot) => {
+        console.log(value)
+        await updateNotifications(
+            value
+        )
+        toast.success('это фишка если чо')
+    }
 
     return (
         <Dialog open={isOpen} onOpenChange={() => dispatch(onClose())}>
@@ -86,7 +104,7 @@ const SettingsCommand = () => {
                             You will receive all reports from other people.
                         </p>
                     </div>
-                    <Switch checked={!!user.notifications?.reports!} />
+                    <Switch onCheckedChange={() => onSwitchNotifications({ reports: !(!!user.notifications?.reports), comments: (!!user.notifications?.comments!) })} checked={!!user.notifications?.reports} />
                 </div>
                 <div className=" flex items-center space-x-4 rounded-md border p-4">
                     <Bell />
@@ -98,7 +116,7 @@ const SettingsCommand = () => {
                             If new comment comes up you will immediately know.
                         </p>
                     </div>
-                    <Switch checked={!!user.notifications?.comments!} />
+                    <Switch onCheckedChange={() => onSwitchNotifications({ reports: (!!user.notifications?.reports!), comments: !(!!user.notifications?.comments!) })} checked={!!user.notifications?.comments} />
                 </div>
             </DialogContent>
         </Dialog>
