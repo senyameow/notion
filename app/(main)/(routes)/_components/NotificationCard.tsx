@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import ReportCard from "./ReportCard"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
-import { report } from "@/convex/documents"
+import { report, updateCommentNotification } from "@/convex/documents"
 import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
@@ -50,6 +50,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     const comments = useQuery(api.documents.comments, { docId: doc._id })
 
     const updateRep = useMutation(api.documents.updateReport)
+    const updateCommentNotification = useMutation(api.documents.updateCommentNotification)
 
     const user = useQuery(api.documents.getUser, { id: doc.userId })
 
@@ -72,7 +73,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     const newComments = comments?.filter(rep => !rep.isRead)
     const notDeletedComments = comments?.filter(comment => !comment.isDeleted)
 
-    const onReadAll = async () => {
+    const onReadAllReports = async () => {
         try {
             reports.forEach(async (rep) => {
                 await updateRep({
@@ -80,6 +81,18 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                     isRead: true
                 })
                 toast.success(`you have marked as read ${rep.title}`)
+            })
+        } catch (error) {
+            toast.error('something went wrong')
+        }
+    }
+    const onReadAllComments = async () => {
+        try {
+            comments.forEach(async (comment) => {
+                await updateCommentNotification({
+                    commentId: comment._id,
+                    isRead: true
+                })
             })
         } catch (error) {
             toast.error('something went wrong')
@@ -131,6 +144,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                         <CommentCard comment={comment} key={comment._id} />
                                     ))}
                                 </ScrollArea>}
+                                <Button className="w-full mt-6" onClick={onReadAllComments}>
+                                    <Check className="mr-2 h-4 w-4" /> Mark all as read
+                                </Button>
 
                             </Tab.Panel>
                             <Tab.Panel className={cn(
@@ -142,6 +158,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                         <ReportCard notification={notification} key={notification._id} />
                                     ))}
                                 </ScrollArea>}
+                                <Button className="w-full mt-6" onClick={onReadAllReports}>
+                                    <Check className="mr-2 h-4 w-4" /> Mark all as read
+                                </Button>
 
                             </Tab.Panel>
                         </Tab.Panels>
@@ -149,11 +168,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
                     </Tab.Group>
                 </CardContent>
-                <CardFooter>
-                    <Button className="w-full" onClick={onReadAll}>
-                        <Check className="mr-2 h-4 w-4" /> Mark all as read
-                    </Button>
-                </CardFooter>
+                {/* <CardFooter>
+
+                </CardFooter> */}
             </> : (
                 <div className="w-full h-[300px] flex items-center justify-center">
                     <Loader2 className="w-12 h-12 animate-spin" />
