@@ -783,3 +783,19 @@ export const getCurrentUserNotifications = query({
         return user.notifications
     }
 })
+
+export const updateCommentNotification = mutation({
+    args: {
+        commentId: v.id('comments'),
+        isRead: v.optional(v.boolean()),
+        isDeleted: v.optional(v.boolean())
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const { commentId, ...rest } = args
+        return await ctx.db.patch(args.commentId, {
+            ...rest
+        })
+    }
+})

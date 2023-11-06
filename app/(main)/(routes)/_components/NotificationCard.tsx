@@ -70,7 +70,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     const newReports = reports?.filter(rep => !rep.isRead)
     const notDeletedReports = reports?.filter(rep => !rep.isDeleted)
     const newComments = comments?.filter(rep => !rep.isRead)
-    // const notDeletedComments = comments?.filter(rep => !rep.isDeleted)
+    const notDeletedComments = comments?.filter(comment => !comment.isDeleted)
 
     const onReadAll = async () => {
         try {
@@ -87,11 +87,11 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     }
 
     return (
-        <Card className={cn("w-[380px]", className)} {...props}>
+        <Card className={cn("w-[400px]", className)} {...props}>
             {reports ? <>
                 <CardHeader>
                     <CardTitle>Notifications</CardTitle>
-                    <CardDescription>You have {newReports.length} unread reports.</CardDescription>
+                    <CardDescription>You have {newComments.length} unread comments and {newReports.length} unread reports </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                     {/* <div className=" flex items-center space-x-4 rounded-md border p-4">
@@ -125,20 +125,28 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                 'rounded-xl',
                                 'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
                             )}>
+
+                                {user.notifications?.comments && <ScrollArea className="w-full h-full max-h-[300px]">
+                                    {notDeletedComments.map(comment => (
+                                        <CommentCard comment={comment} key={comment._id} />
+                                    ))}
+                                </ScrollArea>}
+
+                            </Tab.Panel>
+                            <Tab.Panel className={cn(
+                                'rounded-xl',
+                                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                            )}>
                                 {user.notifications?.reports && <ScrollArea className="w-full h-full max-h-[300px]">
                                     {notDeletedReports.map(notification => (
                                         <ReportCard notification={notification} key={notification._id} />
                                     ))}
                                 </ScrollArea>}
+
                             </Tab.Panel>
                         </Tab.Panels>
 
 
-                        {user.notifications?.comments && <ScrollArea className="w-full h-full max-h-[300px]">
-                            {newComments.map(comment => (
-                                <CommentCard comment={comment} key={comment._id} />
-                            ))}
-                        </ScrollArea>}
                     </Tab.Group>
                 </CardContent>
                 <CardFooter>
