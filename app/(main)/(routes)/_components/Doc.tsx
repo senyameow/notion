@@ -30,6 +30,8 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
 
     const Icon = isExpanded ? ChevronDown : ChevronRight
 
+    console.log(access)
+
     const DocIcon = icon!
 
     const router = useRouter()
@@ -44,7 +46,7 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
 
     const onRedirect = () => {
         if (access) {
-            router.push(`/${access === UserRoles.MOD ? 'docs' : 'preview'}/${id}`)
+            router.push(`/${(access === UserRoles.MOD || access === UserRoles.ADMIN) ? 'docs' : 'preview'}/${id}`)
         } else {
             router.push(`/docs/${id}`)
         }

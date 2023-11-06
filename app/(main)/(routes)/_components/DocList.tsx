@@ -21,6 +21,7 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
 
     const params = useParams()
     const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({})
+
     // id: true/false,
     // id1: true/false
 
@@ -61,6 +62,7 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
             </div>
         )
     }
+    // console.log(UserRoles[doc.people?.find(_ => _.id === userId)?.role!])
 
     return (
         <>
