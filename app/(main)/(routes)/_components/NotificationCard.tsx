@@ -99,6 +99,8 @@ export function Notifications({ doc, className, ...props }: CardProps) {
         }
     }
 
+    console.log(newComments.filter(c => c.isRead || !c.isDeleted))
+
     return (
         <Card className={cn("w-[400px]", className)} {...props}>
             {reports ? <>
@@ -144,7 +146,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                         <CommentCard comment={comment} key={comment._id} />
                                     ))}
                                 </ScrollArea>}
-                                <Button className="w-full mt-6" onClick={onReadAllComments}>
+                                <Button disabled={newComments.filter(c => c.isRead || !c.isDeleted).length === 0} className="w-full mt-6" onClick={onReadAllComments}>
                                     <Check className="mr-2 h-4 w-4" /> Mark all as read
                                 </Button>
 
@@ -158,7 +160,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                         <ReportCard notification={notification} key={notification._id} />
                                     ))}
                                 </ScrollArea>}
-                                <Button className="w-full mt-6" onClick={onReadAllReports}>
+                                <Button disabled={notDeletedReports.length !== 0} className="w-full mt-6" onClick={onReadAllReports}>
                                     <Check className="mr-2 h-4 w-4" /> Mark all as read
                                 </Button>
 
