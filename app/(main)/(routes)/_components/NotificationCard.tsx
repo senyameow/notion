@@ -23,6 +23,8 @@ import { report } from "@/convex/documents"
 import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
+import { Tab } from '@headlessui/react'
+
 // const notifications = [
 //     {
 //         title: "Your call has been confirmed.",
@@ -45,12 +47,13 @@ type CardProps = React.ComponentProps<typeof Card> & {
 export function Notifications({ doc, className, ...props }: CardProps) {
 
     const reports = useQuery(api.documents.reports, { docId: doc._id })
+    const comments = useQuery(api.documents.comments, { docId: doc._id })
 
     const updateRep = useMutation(api.documents.updateReport)
 
     const user = useQuery(api.documents.getUser, { id: doc.userId })
 
-    if (reports === undefined || user === undefined) {
+    if (reports === undefined || comments === undefined || user === undefined) {
         return (
             <div className="w-[380px] h-[300px] flex flex-col items-start gap-4 p-6">
                 <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
@@ -65,7 +68,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
 
     const newReports = reports?.filter(rep => !rep.isRead)
-    const notDeleted = reports?.filter(rep => !rep.isDeleted)
+    const notDeletedReports = reports?.filter(rep => !rep.isDeleted)
+    const newComments = comments?.filter(rep => !rep.isRead)
+    // const notDeletedComments = comments?.filter(rep => !rep.isDeleted)
 
     const onReadAll = async () => {
         try {
@@ -89,7 +94,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                     <CardDescription>You have {newReports.length} unread reports.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
-                    <div className=" flex items-center space-x-4 rounded-md border p-4">
+                    {/* <div className=" flex items-center space-x-4 rounded-md border p-4">
                         <Bell />
                         <div className="flex-1 space-y-1">
                             <p className="text-sm font-medium leading-none">
@@ -100,17 +105,41 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                             </p>
                         </div>
                         <Switch onCheckedChange={() => { }} />
-                    </div>
-                    {user.notifications?.reports && <ScrollArea className="w-full h-full max-h-[300px]">
-                        {notDeleted.map(notification => (
-                            <ReportCard notification={notification} key={notification._id} />
-                        ))}
-                    </ScrollArea>}
-                    {/* {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
-                        {notDeleted.map(notification => (
-                            <CommentCard comment={comment} key={notification._id} />
-                        ))}
-                    </ScrollArea>} */}
+                    </div> */}
+                    <Tab.Group>
+                        <Tab.List className={'flex space-x-1 rounded-xl bg-blue-900/20 p-1'}>
+                            {Object.keys(user.notifications!).map(notification => (
+                                <Tab key={notification} className={({ selected }) =>
+                                    cn(
+                                        'w-full rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
+                                        'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none',
+                                        selected
+                                            ? 'bg-white shadow'
+                                            : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                                    )
+                                }>{notification}</Tab>
+                            ))}
+                        </Tab.List>
+                        <Tab.Panels className={'mt-2'}>
+                            <Tab.Panel className={cn(
+                                'rounded-xl',
+                                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                            )}>
+                                {user.notifications?.reports && <ScrollArea className="w-full h-full max-h-[300px]">
+                                    {notDeletedReports.map(notification => (
+                                        <ReportCard notification={notification} key={notification._id} />
+                                    ))}
+                                </ScrollArea>}
+                            </Tab.Panel>
+                        </Tab.Panels>
+
+
+                        {user.notifications?.comments && <ScrollArea className="w-full h-full max-h-[300px]">
+                            {newComments.map(comment => (
+                                <CommentCard comment={comment} key={comment._id} />
+                            ))}
+                        </ScrollArea>}
+                    </Tab.Group>
                 </CardContent>
                 <CardFooter>
                     <Button className="w-full" onClick={onReadAll}>

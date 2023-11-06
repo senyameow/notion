@@ -17,6 +17,7 @@
     "@edgestore/server": "^0.1.4",
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
+    "@headlessui/react": "^1.7.17",
     "@hookform/resolvers": "^3.3.2",
     "@mantine/hooks": "^5.10.5",
     "@radix-ui/react-alert-dialog": "^1.0.5",

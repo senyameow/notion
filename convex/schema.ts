@@ -72,7 +72,9 @@ export default defineSchema({
             }))),
             created_at: v.number(),
             id: v.string()
-        })))
+        }))),
+        isRead: v.optional(v.boolean()),
+        isDeleted: v.optional(v.boolean())
     }).index('by_document', ['docId'])
 
 })

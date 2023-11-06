@@ -16,17 +16,16 @@ const CommentCard = ({ comment }: CommentCardProps) => {
             <PopoverTrigger asChild>
                 <div
                     onClick={onRead}
-                    ref={ref}
                     key={comment._id}
                     className="mb-4 grid relative grid-cols-[25px_1fr] group items-start pb-4 last:mb-0 last:pb-2  p-3 group hover:bg-gray-900 transition rounded-lg cursor-pointer"
                 >
                     <span className={cn(`flex h-2 w-2 translate-y-1 rounded-full bg-sky-500 opacity-100 transition duration-300`, notification.isRead && 'opacity-0')} />
                     <div className="space-y-1">
                         <p className="text-sm font-medium leading-none">
-                            {notification.title}
+                            {comment.commentLine}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                            {format(notification._creationTime, 'PPPpp')}
+                            {format(comment._creationTime, 'PPPpp')}
                         </p>
                     </div>
                     <Button disabled={isDeleting} onClick={onDelete} size={'icon'} variant={'outline'} className='absolute group-hover:opacity-100 top-2 right-2 opacity-0 transition'>{isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash className='w-4 h-4' />}</Button>

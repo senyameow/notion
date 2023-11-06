@@ -304,6 +304,17 @@ export const reports = query({
     }
 })
 
+export const comments = query({
+    args: {
+        docId: v.id('documents')
+    },
+    handler: async (ctx, args) => {
+        return await ctx.db.query('comments').withIndex('by_document').filter(q =>
+            q.eq(q.field('docId'), args.docId)
+        ).order('desc').collect()
+    }
+})
+
 export const createReport = mutation({
     args: {
         docId: v.id('documents'),
@@ -410,7 +421,9 @@ export const createComment = mutation({
             commentLine: args.commentLine,
             isResolved: false,
             docId: args.docId,
-            replies: []
+            replies: [],
+            isDeleted: false,
+            isRead: false,
         }
         return await ctx.db.insert('comments', newComment)
     }
