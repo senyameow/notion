@@ -10,8 +10,12 @@ import { searchSlice } from '@/store/reducers/SearchSlice';
 import { settingsSlice } from '@/store/reducers/SettingsSlice';
 import { useRouter } from 'next/navigation';
 
+interface UserActionsProps {
+    userId: string;
+}
 
-const UserActions = () => {
+
+const UserActions = ({ userId }: UserActionsProps) => {
 
     const createNote = useMutation(api.documents.create)
 
@@ -39,7 +43,7 @@ const UserActions = () => {
     return (
         <div className='w-full flex flex-col items-start '>
             <Action isSearch label='Search' onClick={() => dispatch(onOpenSearch())} icon={Search} />
-            <Action label='Settings' onClick={() => dispatch(onOpenSettings())} icon={Settings} />
+            <Action label='Settings' onClick={() => dispatch(onOpenSettings(userId))} icon={Settings} />
             <Action label='New page' onClick={onCreate} icon={PlusCircle} />
         </div>
     )

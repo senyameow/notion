@@ -1,24 +1,14 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
-import {
-    Command,
-    CommandDialog,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-    CommandShortcut,
-} from "@/components/ui/command"
+
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { searchSlice } from '@/store/reducers/SearchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useUser } from '@clerk/clerk-react'
 import { useRouter } from 'next/navigation'
-import { Bell, File } from 'lucide-react'
+import { Bell, File, Loader2 } from 'lucide-react'
 import { settingsSlice } from '@/store/reducers/SettingsSlice'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
@@ -27,10 +17,13 @@ import { Switch } from '@/components/ui/switch'
 
 const SettingsCommand = () => {
 
-    const { onToggle, onClose, onOpen } = settingsSlice.actions
-    const { isOpen } = useAppSelector(state => state.settings)
+    const { onClose, onOpen, onToggle } = settingsSlice.actions
+    const { isOpen, userId } = useAppSelector(state => state.settings)
     const dispatch = useAppDispatch()
 
+    console.log(userId)
+
+    const user = useQuery(api.documents.getCurrentUser)
 
     // const [isMounted, setIsMounted] = useState(false)
 
@@ -52,6 +45,15 @@ const SettingsCommand = () => {
         return () => document.removeEventListener("keydown", down);
     }, [onToggle]);
 
+    if (user === undefined) {
+        return (
+            <div className='w-full h-full flex items-center justify-center'>
+                <Loader2 className='w-4 h-4 animate-spin' />
+            </div>
+        )
+    }
+
+    console.log(user)
 
     return (
         <Dialog open={isOpen} onOpenChange={() => dispatch(onClose())}>
@@ -84,7 +86,7 @@ const SettingsCommand = () => {
                             You will receive all reports from other people.
                         </p>
                     </div>
-                    <Switch checked={true} />
+                    <Switch checked={!!user.notifications?.reports!} />
                 </div>
                 <div className=" flex items-center space-x-4 rounded-md border p-4">
                     <Bell />
@@ -96,7 +98,7 @@ const SettingsCommand = () => {
                             If new comment comes up you will immediately know.
                         </p>
                     </div>
-                    <Switch />
+                    <Switch checked={!!user.notifications?.comments!} />
                 </div>
             </DialogContent>
         </Dialog>

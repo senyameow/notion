@@ -93,11 +93,11 @@ const Navbar = () => {
         )
     }
 
-    console.log(allDocs)
+    // console.log(allDocs)
 
     const allowedDocs = allDocs.filter(doc => doc.people?.some(human => (human.id === user?.id) && (human.role === 'MOD' || human.role === 'EDITOR')))
 
-    console.log(allowedDocs)
+    // console.log(allowedDocs)
 
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -141,7 +141,7 @@ const Navbar = () => {
                     <UserAction />
                 </div>
                 <div className='w-full'>
-                    <UserActions />
+                    <UserActions userId={user?.id!} />
                 </div>
                 <div className='pt-2'>
                     <DocList userId={user?.id!} />

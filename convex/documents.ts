@@ -271,6 +271,7 @@ export const getUser = query({
         id: v.string()
     },
     handler: async (ctx, args) => {
+
         const user = await ctx.db.query('users').withIndex('by_userId').filter(q =>
             q.eq(q.field('userId'), args.id)
         ).first()
@@ -725,3 +726,36 @@ export const deleteComment = mutation({
     }
 })
 
+export const getCurrentUser = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        return await ctx.db.query('users').withIndex('by_userId', q =>
+            q.eq('userId', userId)
+        ).first()
+    }
+})
+
+export const toggleNotifications = mutation({
+    args: {
+        reports: v.optional(v.boolean()),
+        comments: v.optional(v.boolean())
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+
+        const user = await ctx.db.query('users').withIndex('by_userId', q =>
+            q.eq('userId', userId)
+        ).first()
+        if (user === null) throw new Error('Unauthorized')
+        return await ctx.db.patch(user._id, {
+            notifications: {
+                comments: args.comments || user.notifications?.comments!,
+                reports: args.reports || user.notifications?.reports!
+            }
+        })
+    }
+})

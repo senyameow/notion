@@ -99,18 +99,18 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                 Send notifications to device.
                             </p>
                         </div>
-                        <Switch />
+                        <Switch onCheckedChange={() => { }} />
                     </div>
-                    {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
+                    {user.notifications?.reports && <ScrollArea className="w-full h-full max-h-[300px]">
                         {notDeleted.map(notification => (
                             <ReportCard notification={notification} key={notification._id} />
                         ))}
                     </ScrollArea>}
-                    {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
+                    {/* {user.notifications.reports && <ScrollArea className="w-full h-full max-h-[300px]">
                         {notDeleted.map(notification => (
                             <CommentCard comment={comment} key={notification._id} />
                         ))}
-                    </ScrollArea>}
+                    </ScrollArea>} */}
                 </CardContent>
                 <CardFooter>
                     <Button className="w-full" onClick={onReadAll}>
