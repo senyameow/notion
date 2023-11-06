@@ -759,3 +759,14 @@ export const toggleNotifications = mutation({
         })
     }
 })
+
+export const getCurrentUserNotifications = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const user = await ctx.db.query('users').withIndex('by_userId', q => q.eq('userId', userId)).first()
+        if (user === null) throw new Error('Not found')
+        return user.notifications
+    }
+})

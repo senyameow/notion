@@ -31,7 +31,17 @@ const SettingsCommand = () => {
 
     const user = useQuery(api.documents.getCurrentUser)
 
-    const updateNotifications = useMutation(api.documents.toggleNotifications)
+    const updateNotifications = useMutation(api.documents.toggleNotifications).withOptimisticUpdate(
+        (localStorage, args) => {
+            const currentUser = localStorage.getQuery(api.documents.getCurrentUser)
+            if (currentUser !== undefined) {
+                const currentValue = user?.notifications
+                if (currentValue !== undefined) {
+                    localStorage.setQuery(api.documents.getCurrentUser, {}, currentUser?.notifications)
+                }
+            }
+        }
+    )
 
     // const [isMounted, setIsMounted] = useState(false)
 
