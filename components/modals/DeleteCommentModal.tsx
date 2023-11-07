@@ -38,6 +38,7 @@ const DeleteCommentModal = () => {
             toast.error('something went wrong')
         } finally {
             setIsDeleting(false)
+            dispatch(onClose())
         }
     }
 
