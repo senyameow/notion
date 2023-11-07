@@ -12,14 +12,24 @@ interface TitleProps {
 
 const Title = ({ initialDoc }: TitleProps) => {
 
-    const changeTitle = useMutation(api.documents.updateDoc)
     const inputRef = useRef<HTMLInputElement>(null)
 
     const [title, setTitle] = useState(initialDoc.title || 'Untitled')
 
+    const changeTitle = useMutation(api.documents.updateDoc).withOptimisticUpdate(
+        (localStorage, args) => {
+            const { id, ...rest } = args
+            const currentValue = localStorage.getQuery(api.documents.getNote, { id: initialDoc._id })
+            if (currentValue !== undefined && currentValue !== null) {
+                localStorage.setQuery(api.documents.getNote, { id: currentValue._id }, { ...currentValue, ...rest })
+            }
+        }
+    )
+
     const [editing, setEditing] = useState(false)
 
     const onChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value.length > 32) return
         changeTitle({
             title: e.target.value || 'Untitled',
             id: initialDoc._id

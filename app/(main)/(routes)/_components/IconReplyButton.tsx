@@ -32,7 +32,6 @@ const IconReplyButton = ({ icon, replyId, commentId, icons, userId }: IconReplyB
                 commentId,
                 icon: icon.icon!
             })
-            toast.success('qwe')
         } catch (error) {
             toast.error('something went wrong')
         }

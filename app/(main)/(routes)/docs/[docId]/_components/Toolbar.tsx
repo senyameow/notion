@@ -40,12 +40,12 @@ const Toolbar = ({
 
     const onChangeTitle = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (preview) return
+        if (e.target.value.length > 32) return
         setTitle(e.target.value)
         await update({
             title: e.target.value || 'Untitled',
             id: initialDoc._id
         })
-        toast.success('qwe')
     }
 
     const onSave = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -128,9 +128,9 @@ const Toolbar = ({
 
             <>
                 {editing ? (
-                    <TextArea onBlur={() => setEditing(false)} value={title || 'Untitled'} onKeyDown={onSave} onChange={onChangeTitle} ref={inputRef} className='resize-none text-6xl font-bold bg-transparent py-0 border-none focus-visible:border-none h-fit w-fit focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                    <TextArea onBlur={() => setEditing(false)} value={title || 'Untitled'} onKeyDown={onSave} onChange={onChangeTitle} ref={inputRef} className='resize-none text-6xl font-bold bg-transparent py-0 border-none focus-visible:border-none h-fit w-full focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0 pl-4' />
                 ) : (
-                    <div className='text-6xl font-bold pl-12' onClick={enableInput}>
+                    <div className='text-6xl font-bold pl-12 w-full break-words' onClick={enableInput}>
                         {initialDoc.title || title || 'Untitled'}
                     </div>
                 )}
