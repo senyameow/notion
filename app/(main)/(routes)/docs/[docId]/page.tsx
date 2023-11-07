@@ -15,6 +15,7 @@ import dynamic from "next/dynamic";
 import { Loader2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { toast } from 'sonner'
+import { cn } from '@/lib/utils'
 
 const Editor = dynamic(() => import('./_components/Editor'), { ssr: false });
 
@@ -24,8 +25,9 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     const doc = useQuery(api.documents.getNote, { id: params.docId })
 
     const update = useMutation(api.documents.updateDoc)
+    const size = useQuery(api.documents.getCurrentUserSize)
 
-    if (doc === undefined) {
+    if (doc === undefined || size === undefined) {
         return (
             <div className=''>
                 <Loader2 className='w-12 h-12 animate-spin' />
@@ -59,7 +61,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
         <div className='pt-20 overflow-y-auto h-full'>
             {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
             <Cover doc={doc!} />
-            <div className='max-w-3xl md:max-w-4xl mx-auto h-full'>
+            <div className={cn(` mx-auto h-full`, size ? 'max-w-full px-2' : 'max-w-3xl md:max-w-4xl')}>
                 <Toolbar initialDoc={doc!} />
                 <Editor docId={doc._id} onChange={onUpdateContent} initialContent={doc.content} />
             </div>
