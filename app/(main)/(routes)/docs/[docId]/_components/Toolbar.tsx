@@ -23,20 +23,29 @@ const Toolbar = ({
     preview
 }: ToolbarProps) => {
 
-    const update = useMutation(api.documents.updateDoc)
+    const update = useMutation(api.documents.updateDoc).withOptimisticUpdate(
+        (localStorage, args) => {
+            const { id, ...rest } = args
+            const currentValue = localStorage.getQuery(api.documents.getNote, { id: initialDoc._id })
+            if (currentValue !== undefined && currentValue !== null) {
+                localStorage.setQuery(api.documents.getNote, { id: currentValue._id }, { ...currentValue, ...rest })
+            }
+        }
+    )
 
     const inputRef = useRef<HTMLTextAreaElement>(null)
-    const [title, setTitle] = useState(initialDoc?.title || 'Untitled')
+    const [title, setTitle] = useState(initialDoc.title || 'Untitled')
     const [editing, setEditing] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
 
-    const onChangeTitle = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const onChangeTitle = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (preview) return
-        update({
+        setTitle(e.target.value)
+        await update({
             title: e.target.value || 'Untitled',
             id: initialDoc._id
         })
-        setTitle(e.target.value)
+        toast.success('qwe')
     }
 
     const onSave = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -122,7 +131,7 @@ const Toolbar = ({
                     <TextArea onBlur={() => setEditing(false)} value={title || 'Untitled'} onKeyDown={onSave} onChange={onChangeTitle} ref={inputRef} className='resize-none text-6xl font-bold bg-transparent py-0 border-none focus-visible:border-none h-fit w-fit focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
                 ) : (
                     <div className='text-6xl font-bold pl-12' onClick={enableInput}>
-                        {title || 'Untitled'}
+                        {initialDoc.title || title || 'Untitled'}
                     </div>
                 )}
             </>

@@ -204,14 +204,10 @@ export const updateDoc = mutation({
         if (!user) throw new Error('Not found')
         if (user?.role !== 'ADMIN' && user.role !== 'EDITOR' && user.role !== 'MOD') throw new Error('Unauthorized')
 
-
         let { id, newVisiter, ...rest } = args
-
-
 
         const newDoc = await ctx.db.patch(args.id, {
             ...rest,
-
         })
 
         return newDoc
