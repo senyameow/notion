@@ -799,3 +799,26 @@ export const updateCommentNotification = mutation({
         })
     }
 })
+
+export const getCurrentUserSize = query({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+        const user = await ctx.db.query('users').withIndex('by_userId', q => q.eq('userId', userId)).first()
+        if (user === null) throw new Error('Not found')
+        return user.isDocBig
+    }
+})
+
+export const toggleSize = mutation({
+    handler: async (ctx) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const user = await ctx.db.query('users').withIndex('by_userId').first()
+        if (user === null) throw new Error('Not found')
+        return await ctx.db.patch(user._id, {
+            isDocBig: !user.isDocBig
+        })
+    }
+})

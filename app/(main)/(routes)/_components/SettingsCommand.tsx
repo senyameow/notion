@@ -8,7 +8,7 @@ import { searchSlice } from '@/store/reducers/SearchSlice'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { useUser } from '@clerk/clerk-react'
 import { redirect, useRouter } from 'next/navigation'
-import { Bell, File, Loader2 } from 'lucide-react'
+import { Bell, File, GanttChartSquare, Loader2 } from 'lucide-react'
 import { settingsSlice } from '@/store/reducers/SettingsSlice'
 import { Dialog, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
@@ -32,13 +32,22 @@ const SettingsCommand = () => {
     const user = useQuery(api.documents.getCurrentUser)
 
     const notifications = useQuery(api.documents.getCurrentUserNotifications)
+    const size = useQuery(api.documents.getCurrentUserSize)
 
     const updateNotifications = useMutation(api.documents.toggleNotifications).withOptimisticUpdate(
         (localStorage, args) => {
             const currentValue = localStorage.getQuery(api.documents.getCurrentUserNotifications)
-            console.log(currentValue)
             if (currentValue !== undefined || currentValue !== null) {
                 localStorage.setQuery(api.documents.getCurrentUserNotifications, {}, args)
+            }
+        }
+    )
+
+    const toggleSize = useMutation(api.documents.toggleSize).withOptimisticUpdate(
+        (localStorage) => {
+            const currentValue = localStorage.getQuery(api.documents.getCurrentUserSize)
+            if (currentValue !== undefined) {
+                localStorage.setQuery(api.documents.getCurrentUserSize, {}, !currentValue)
             }
         }
     )
@@ -55,7 +64,7 @@ const SettingsCommand = () => {
         return () => document.removeEventListener("keydown", down);
     }, [onToggle]);
 
-    if (user === undefined || notifications === undefined) {
+    if (user === undefined || notifications === undefined || size === undefined) {
         return (
             <div className='w-full h-full flex items-center justify-center'>
                 <Loader2 className='w-4 h-4 animate-spin' />
@@ -79,12 +88,27 @@ const SettingsCommand = () => {
                 </DialogHeader>
                 <Separator />
 
-                <div className='flex flex-row items-center w-full justify-between '>
-                    <div className='flex flex-col gap-2'>
-                        <h2 className='font-semibold'>Appearance</h2>
-                        <p className='text-neutral-500'>Customize how Notion looks on your device</p>
+                <div className='flex flex-col items-start gap-2'>
+                    <div className='flex flex-row items-center w-full justify-between '>
+                        <div className='flex flex-col gap-2'>
+                            <h2 className='font-semibold'>Appearance</h2>
+                            <p className='text-neutral-500'>Customize how Notion looks on your device</p>
+                        </div>
+                        <ModeToggle />
+
                     </div>
-                    <ModeToggle />
+                    <div className=" flex items-center space-x-4 rounded-md border p-4">
+                        <GanttChartSquare />
+                        <div className="flex-1 space-y-1">
+                            <p className="text-sm font-medium leading-none">
+                                Doc size
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                if checked doc will take whole free space
+                            </p>
+                        </div>
+                        <Switch checked={size!} onCheckedChange={() => { toggleSize() }} />
+                    </div>
                 </div>
                 <div className='text-lg font-medium'>
                     Notifications
@@ -113,6 +137,7 @@ const SettingsCommand = () => {
                     </div>
                     <Switch onCheckedChange={() => onSwitchNotifications({ reports: (notifications?.reports!), comments: !(notifications?.comments) })} checked={notifications?.comments} />
                 </div>
+
             </DialogContent>
         </Dialog>
     )

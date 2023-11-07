@@ -43,7 +43,8 @@ export default defineSchema({
         notifications: v.optional(v.object({
             reports: v.boolean(),
             comments: v.boolean()
-        }))
+        })),
+        isDocBig: v.optional(v.boolean())
     }).index('by_token', ['tokenIdentifier']).index('by_userId', ['userId']),
 
     reports: defineTable({

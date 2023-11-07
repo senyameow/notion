@@ -50,7 +50,8 @@ export const store = mutation({
             notifications: {
                 reports: true,
                 comments: false
-            }
+            },
+            isDocBig: false
         });
     },
 });
