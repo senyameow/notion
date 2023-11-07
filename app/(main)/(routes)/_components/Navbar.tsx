@@ -95,7 +95,7 @@ const Navbar = () => {
 
     // console.log(allDocs)
 
-    const allowedDocs = allDocs.filter(doc => doc.people?.some(human => (human.id === user?.id) && (human.role === 'MOD' || human.role === 'EDITOR')))
+    const allowedDocs = allDocs.filter(doc => doc.people?.some(human => (human.id === user?.id) && (human.role === 'MOD' || human.role === 'EDITOR')) && !doc.banList?.includes(user?.id!))
 
     // console.log(allowedDocs)
 
