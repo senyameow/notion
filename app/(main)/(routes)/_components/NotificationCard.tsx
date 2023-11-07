@@ -127,7 +127,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                 <Tab key={notification} className={({ selected }) =>
                                     cn(
                                         'w-full rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
-                                        'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none',
+                                        ' focus:outline-none',
                                         selected
                                             ? 'bg-white shadow'
                                             : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
@@ -136,9 +136,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                             ))}
                         </Tab.List>
                         <Tab.Panels className={'mt-2'}>
-                            <Tab.Panel className={cn(
+                            {notDeletedComments.length > 0 && < Tab.Panel className={cn(
                                 'rounded-xl',
-                                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                                ' focus:outline-none'
                             )}>
 
                                 {user.notifications?.comments && <ScrollArea className="w-full h-full max-h-[300px]">
@@ -150,10 +150,10 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                     <Check className="mr-2 h-4 w-4" /> Mark all as read
                                 </Button>
 
-                            </Tab.Panel>
-                            <Tab.Panel className={cn(
+                            </Tab.Panel>}
+                            {notDeletedReports.length > 0 && < Tab.Panel className={cn(
                                 'rounded-xl',
-                                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+                                ' focus:outline-none'
                             )}>
                                 {user.notifications?.reports && <ScrollArea className="w-full h-full max-h-[300px]">
                                     {notDeletedReports.map(notification => (
@@ -164,7 +164,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                     <Check className="mr-2 h-4 w-4" /> Mark all as read
                                 </Button>
 
-                            </Tab.Panel>
+                            </Tab.Panel>}
                         </Tab.Panels>
 
 
@@ -177,7 +177,8 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                 <div className="w-full h-[300px] flex items-center justify-center">
                     <Loader2 className="w-12 h-12 animate-spin" />
                 </div>
-            )}
-        </Card>
+            )
+            }
+        </Card >
     )
 }
