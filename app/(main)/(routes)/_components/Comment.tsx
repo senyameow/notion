@@ -192,9 +192,9 @@ const Comment = ({ comment, preview }: CommentProps) => {
                             </DropdownMenu>
                         </div>
                     </CardTitle >
-                    {comment.commentLine && <CardDescription className=''>
-                        <div className='flex w-full h-full items-center gap-2 break-words '>
-                            <div className='max-w-[300px] leading-5 border-l-4 border-l-yellow-400 pl-2'>
+                    {comment.commentLine && <CardDescription className='break-words max-h-[60px]'>
+                        <div className='flex w-full items-center gap-2 break-words '>
+                            <div className='max-w-[350px] leading-5 border-l-4 border-l-yellow-400 pl-2 max-h-[60px] text-ellipsis overflow-hidden'>
                                 {comment.commentLine}
                             </div>
                         </div>
