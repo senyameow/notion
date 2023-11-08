@@ -37,6 +37,8 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
 
     const pathname = usePathname()
 
+    const { user, isLoaded } = useUser()
+
     const preview = pathname.includes('preview')
 
     console.log(preview)
@@ -50,9 +52,9 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
             <SheetContent className="z-[99999] min-w-[500px] h-full flex-1 px-4">
                 <SheetHeader>
                     <SheetTitle>{doc.title}</SheetTitle>
-                    <SheetDescription>
+                    {!isLoaded || (isLoaded && doc.userId !== user?.id) ? null : <SheetDescription>
                         You can change behavior in settings
-                    </SheetDescription>
+                    </SheetDescription>}
                 </SheetHeader>
                 <div className="flex items-start gap-5 flex-col py-8 h-full w-full">
                     <Label>Comments: </Label>
@@ -82,7 +84,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                     </SheetClose>
                 </SheetFooter>
             </SheetContent>
-        </Sheet>
+        </Sheet >
     )
 }
 
