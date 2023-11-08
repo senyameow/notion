@@ -29,6 +29,7 @@ import { Notifications } from './NotificationCard'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux'
 import { docStatusSlice } from '@/store/reducers/DocStatusSlice'
 import CommentSheet from './CommentSheet'
+import { cn } from '@/lib/utils'
 interface DocNavbarProps {
     isCollapsed: boolean;
     onResetWidth: () => void;
@@ -83,7 +84,9 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     }
 
-
+    console.log(doc.reportList?.length)
+    console.log(doc.commentList?.length)
+    console.log(doc)
 
     return (
         <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>
@@ -97,7 +100,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                     <div className='flex items-center gap-2'>
                         <PublishButton doc={doc} />
                         <Popover>
-                            <PopoverTrigger><Bell className='w-5 h-5 mx-2' /></PopoverTrigger>
+                            <PopoverTrigger><Bell className={cn(`w-5 h-5 mx-2`, doc.commentList?.length! > 0 || doc.reportList?.length! > 0 && `text-red-500 bg-red-500`)} /></PopoverTrigger>
                             <PopoverContent side='left' className='p-0 border-none' align='start' alignOffset={30}>
                                 <Notifications doc={doc} />
                             </PopoverContent>

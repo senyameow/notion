@@ -95,16 +95,11 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
     const updateCommentReply = useMutation(api.documents.addIconCommentReply)
 
     const onIconChange = async (icon: string) => {
-        try {
-            await updateCommentReply({
-                commentId,
-                replyId,
-                icon
-            })
-            toast.success('!!')
-        } catch (error) {
-            toast.error('something went wrong')
-        }
+        await updateCommentReply({
+            commentId,
+            replyId,
+            icon
+        })
     }
 
 

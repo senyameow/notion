@@ -34,7 +34,7 @@ const Toolbar = ({
     )
 
     const inputRef = useRef<HTMLTextAreaElement>(null)
-    const [title, setTitle] = useState(initialDoc.title || 'Untitled')
+    const [title, setTitle] = useState(initialDoc?.title || 'Untitled')
     const [editing, setEditing] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
 

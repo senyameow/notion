@@ -151,14 +151,6 @@ const Comment = ({ comment, preview }: CommentProps) => {
         })
     }
 
-    const editReply = useMutation(api.documents.updateCommentReply)
-
-    const onEditCommentReply = async () => {
-        // await editReply({
-        //     content
-        // })
-    }
-
     return (
         <>
             {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px] mb-2">
