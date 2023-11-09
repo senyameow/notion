@@ -104,7 +104,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
             {reports ? <>
                 <CardHeader>
                     <CardTitle>Notifications</CardTitle>
-                    <CardDescription>You have {newComments.length} unresolved comments and {newReports.length} unread reports </CardDescription>
+                    <CardDescription>You have {newComments.length} unread comments and {newReports.length} unread reports </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                     {/* <div className=" flex items-center space-x-4 rounded-md border p-4">

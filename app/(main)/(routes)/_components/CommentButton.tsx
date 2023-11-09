@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Popover, PopoverContent } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { api } from '@/convex/_generated/api';
@@ -72,7 +73,8 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
                 commentLine: selectedText,
             })
         } catch (error) {
-            toast.error('something went wrong. Check you Internet connection')
+            toast.error('something went wrong. Check your Internet connection')
+            console.log(error)
         } finally {
             setIsSubmitting(false)
             setSelectedText('')
@@ -85,7 +87,7 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
             <div ref={textRef} onMouseUp={handleSelection} style={{ userSelect: 'text' }}>
                 {children}
             </div>
-            {selectedText && (
+            {selectedText && !isMobile && (
                 <div
                     style={{
                         position: 'absolute',
@@ -114,6 +116,31 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
                 </div>
             )
             }
+            {selectedText && isMobile && (
+                <Dialog open >
+                    <DialogContent className='w-[400px] max-h-[80%]'>
+                        <DialogHeader>
+                            <DialogTitle>Add comment</DialogTitle>
+                            <DialogDescription>You can discuss whatever you want</DialogDescription>
+                        </DialogHeader>
+                        <div className='flex flex-col gap-2'>
+                            <div className='w-full'>
+                                <ScrollArea className='h-[150px]'>
+                                    <Textarea value={content} onChange={e => setContent(e.target.value)} placeholder='type here..' className='overflow-y-hidden w-full p-3 min-h-[150px] py-2 h-[300px] placeholder:text-sm placeholder:text-gray-300 text-gray-200 border resize-none text-sm font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                                </ScrollArea>
+                            </div>
+                            <div className='flex w-full items-center justify-between'>
+                                <Button variant={'outline'} onClick={() => setSelectedText('')}>
+                                    Cancel
+                                </Button>
+                                <Button disabled={isSubmitting} onClick={onSubmit} className='text-sm w-fit ml-auto h-fit'>
+                                    {isSubmitting ? <Loader2 className='w-4 h-4 animate-spin' /> : 'Submit'}
+                                </Button>
+                            </div>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            )}
         </div >
     );
 };

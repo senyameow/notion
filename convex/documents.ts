@@ -422,10 +422,10 @@ export const createComment = mutation({
             isRead: false,
         }
 
-        const newCommentId = await ctx.db.insert('comments', newComment)
-        await ctx.db.patch(doc._id, {
-            commentList: [...doc.commentList!, newCommentId]
-        })
+        return await ctx.db.insert('comments', newComment)
+        // await ctx.db.patch(doc._id, {
+        //     commentList: [...doc.commentList!, newCommentId]
+        // })
     }
 })
 
