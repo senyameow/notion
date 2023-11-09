@@ -8,6 +8,8 @@ import { Loader2 } from 'lucide-react';
 import React, { useState, useRef } from 'react';
 import Textarea from 'react-textarea-autosize'
 import { toast } from 'sonner';
+import { useMediaQuery } from 'usehooks-ts';
+import { useWindowSize } from 'usehooks-ts'
 
 interface CommentButtonProps {
     children: React.ReactNode;
@@ -16,6 +18,10 @@ interface CommentButtonProps {
 }
 
 const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
+
+    const isMobile = useMediaQuery('(max-width: 768px)')
+    let windowSize = useWindowSize()
+
     const [selectedText, setSelectedText] = useState('');
     const [buttonPosition, setButtonPosition] = useState({ top: 0, left: 0 });
     const textRef = useRef(null);
@@ -36,6 +42,10 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
 
                 const range = selection.getRangeAt(0);
                 const rect = range.getBoundingClientRect();
+
+                console.log(range)
+                console.log(rect)
+                console.log(windowSize.width, 'width now')
 
                 // Calculate the position of the button relative to the selected text
                 const position = {
