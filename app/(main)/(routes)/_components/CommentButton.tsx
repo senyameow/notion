@@ -47,10 +47,12 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
                 console.log(rect)
                 console.log(windowSize.width, 'width now')
 
+                let xAxis = rect.left + 384 < windowSize.width ? rect.left + rect.width / 2 : rect.left - 384
+
                 // Calculate the position of the button relative to the selected text
                 const position = {
                     top: rect.top - 30, // Adjust the top position as needed
-                    left: rect.left + rect.width / 2,
+                    left: xAxis,
                 };
 
                 setButtonPosition(position);
