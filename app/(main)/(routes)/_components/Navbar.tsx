@@ -88,7 +88,7 @@ const Navbar = () => {
     if (allDocs === undefined || !isLoaded) {
         return (
             <div className='w-full h-full flex items-center justify-center'>
-                <Loader2 />
+                <Loader2 className='w-12 h-12 animate-spin' />
             </div>
         )
     }

@@ -81,12 +81,12 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
                         left: buttonPosition.left + 'px',
                     }}
                 >
-                    <div className='border border-white z-[99999] w-72 rounded-md bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-h-[50px] h-full'>
+                    <div className='border border-white z-[99999] w-96 rounded-md bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 min-h-[50px] h-full'>
                         <div className='flex flex-col gap-2'>
                             <h2 className='text-sm text-neutral-400'>Add a comment</h2>
                             <div className='w-full'>
-                                <ScrollArea className='h-[100px]'>
-                                    <Textarea value={content} onChange={e => setContent(e.target.value)} placeholder='type here..' className='w-full p-3 min-h-[100px] py-2 h-[300px] placeholder:text-sm placeholder:text-gray-600 text-gray-400 border resize-none text-sm font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
+                                <ScrollArea className='h-[150px]'>
+                                    <Textarea value={content} onChange={e => setContent(e.target.value)} placeholder='type here..' className='w-full p-3 min-h-[150px] py-2 h-[300px] placeholder:text-sm placeholder:text-gray-600 text-gray-400 border resize-none text-sm font-semibold bg-transparent focus-within:ring-0 focus-within:ring-offset-0 outline-none focus-visible:right-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' />
                                 </ScrollArea>
                             </div>
                             <div className='flex w-full items-center justify-between'>
