@@ -102,7 +102,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
                     <div className='flex items-center gap-2'>
                         <PublishButton doc={doc} />
                         <Popover>
-                            <PopoverTrigger><Bell className={cn(`w-5 h-5 mx-2`, (doc.commentList?.length! > 0 || doc.reportList?.length! > 0) && `text-red-300`)} /></PopoverTrigger>
+                            <PopoverTrigger><Bell className={cn(`w-5 h-5 mx-2`)} /></PopoverTrigger>
                             <PopoverContent side='left' className='p-0 border-none' align='start' alignOffset={30}>
                                 <Notifications doc={doc} />
                             </PopoverContent>

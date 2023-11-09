@@ -70,7 +70,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
     const newReports = reports?.filter(rep => !rep.isRead)
     const notDeletedReports = reports?.filter(rep => !rep.isDeleted)
-    const newComments = comments?.filter(rep => !rep.isRead)
+    const newComments = comments?.filter(com => !com.isRead && !com.isResolved)
     const notDeletedComments = comments?.filter(comment => !comment.isDeleted)
 
     const onReadAllReports = async () => {
@@ -99,14 +99,12 @@ export function Notifications({ doc, className, ...props }: CardProps) {
         }
     }
 
-    console.log(newComments.filter(c => c.isRead || !c.isDeleted))
-
     return (
         <Card className={cn("w-[400px]", className)} {...props}>
             {reports ? <>
                 <CardHeader>
                     <CardTitle>Notifications</CardTitle>
-                    <CardDescription>You have {newComments.length} unread comments and {newReports.length} unread reports </CardDescription>
+                    <CardDescription>You have {newComments.length} unresolved comments and {newReports.length} unread reports </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                     {/* <div className=" flex items-center space-x-4 rounded-md border p-4">
