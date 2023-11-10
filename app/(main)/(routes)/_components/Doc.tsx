@@ -58,12 +58,12 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
         e.stopPropagation()
         e.preventDefault()
         if (!id) return
-        await createChild({ parentDoc: id, title: 'Untitled' })
+        const childId = await createChild({ parentDoc: id, title: 'Untitled' })
         if (!isExpanded) {
             onExpand?.()
         }
         toast.success(`you've created new note!`)
-        router.push(`/docs/${doc}`)
+        router.push(`/docs/${childId}`)
 
     }
 

@@ -43,6 +43,8 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
     const { deleteStatus, restoreStatus } = docStatusSlice.actions
     const { isDeleting, isRestoring } = useAppSelector(state => state.docStatus)
 
+    console.log(params.docId)
+
     const doc = useQuery(api.documents.getNote, { id: params.docId as Id<"documents"> })
 
     const archieve = useMutation(api.documents.archiveDoc)
