@@ -6,7 +6,7 @@ import { Id } from '@/convex/_generated/dataModel'
 import { cn } from '@/lib/utils';
 import { useUser } from '@clerk/clerk-react';
 import { useMutation, useQuery } from 'convex/react';
-import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from 'lucide-react';
+import { ChevronDown, ChevronRight, FileIcon, LucideIcon, MoreHorizontal, Plus, Trash } from 'lucide-react';
 import { redirect, useParams, useRouter } from 'next/navigation';
 import React, { use } from 'react'
 import { toast } from 'sonner';
@@ -17,7 +17,7 @@ import { UserRoles } from './UserRole';
 
 interface DocProps {
     id: Id<'documents'>;
-    icon?: LucideIcon;
+    icon?: string
     onExpand?: () => void;
     isExpanded?: boolean;
     level?: number;
@@ -31,8 +31,6 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
     const Icon = isExpanded ? ChevronDown : ChevronRight
 
     console.log(access)
-
-    const DocIcon = icon!
 
     const router = useRouter()
 
@@ -87,9 +85,14 @@ const Doc = ({ id, icon, onExpand, isExpanded, level, title, access }: DocProps)
                 <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`, (access && access !== UserRoles.ADMIN) && 'hidden')} onClick={handleExpand}>
                     <Icon className='w-4 h-4' />
                 </button>
+                {!icon && (
+                    <div className=' text-[16px] flex items-center gap-2'>
+                        <FileIcon className='w-5 h-5' />
+                    </div>
+                )}
                 {icon && (
                     <div className=' text-[16px] flex items-center gap-2'>
-                        <DocIcon className='w-5 h-5' />
+                        {icon!}
                     </div>
                 )}
                 <span className='text-sm truncate w-full mr-auto text-left'>{title}</span>

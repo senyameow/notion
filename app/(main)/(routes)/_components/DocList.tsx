@@ -71,7 +71,7 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
             </p>
             {docs.map(doc => (
                 <div key={doc._id}>
-                    <Doc access={UserRoles[doc.people?.find(_ => _.id === userId)?.role!]} title={doc.title} level={level} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={FileIcon} isExpanded={isExpanded[doc._id]} />
+                    <Doc access={UserRoles[doc.people?.find(_ => _.id === userId)?.role!]} title={doc.title} level={level} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={doc.icon} isExpanded={isExpanded[doc._id]} />
                     {isExpanded[doc._id] && (
                         <DocList userId={userId} parentId={doc._id} level={level + 1} />
                     )}
