@@ -5,22 +5,20 @@ import { cn } from '@/lib/utils';
 import { useMutation } from 'convex/react';
 import React from 'react'
 import { toast } from 'sonner';
-import { string } from 'zod'
 
-interface IconReplyButtonProps {
+interface IconCommentButtonProps {
     icon: {
         icon?: string | undefined
         amount?: number | undefined
     };
-    replyId?: string;
     commentId: Id<'comments'>;
     icons: { icon?: string | undefined; amount?: number | undefined, userId: string[] }[];
     userId: string
 }
 
-const IconReplyButton = ({ icon, replyId, commentId, icons, userId }: IconReplyButtonProps) => {
+const IconCommentButton = ({ icon, commentId, icons, userId }: IconCommentButtonProps) => {
 
-    const updateIcon = useMutation(api.documents.addIconCommentReply)
+    const updateIcon = useMutation(api.documents.addCommentEmoji)
 
     const isAdded = !!icons.find(obj => obj.userId.includes(userId))
 
@@ -28,7 +26,6 @@ const IconReplyButton = ({ icon, replyId, commentId, icons, userId }: IconReplyB
         try {
             console.log(icon.icon)
             await updateIcon({
-                replyId: replyId!,
                 commentId,
                 icon: icon.icon!
             })
@@ -45,4 +42,4 @@ const IconReplyButton = ({ icon, replyId, commentId, icons, userId }: IconReplyB
     )
 }
 
-export default IconReplyButton
+export default IconCommentButton

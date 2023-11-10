@@ -31,6 +31,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import { deleteCommentModalSlice } from '@/store/reducers/DeleteCommentModalSlice';
 import DeleteCommentModal from '@/components/modals/DeleteCommentModal';
 import { EmojiPicker } from '@/components/EmojiPicker';
+import IconReplyButton from './IconReplyButton';
+import IconCommentButton from './IconCommentButton copy';
 
 interface CommentProps {
     comment: Doc<'comments'>;
@@ -211,6 +213,11 @@ const Comment = ({ comment, preview }: CommentProps) => {
                     <div>
                         {comment.content}
                     </div>
+                    {comment.icons!.length > 0 && <div className='flex items-center gap-2 flex-wrap'>
+                        {comment.icons!.map(icon => (
+                            <IconCommentButton userId={user?.id!} icons={comment.icons!} key={icon.icon} icon={icon!} commentId={comment._id} />
+                        ))}
+                    </div>}
                 </CardContent>
 
                 {comment.replies?.map(reply => (

@@ -420,6 +420,7 @@ export const createComment = mutation({
             replies: [],
             isDeleted: false,
             isRead: false,
+            icons: []
         }
 
         return await ctx.db.insert('comments', newComment)
