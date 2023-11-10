@@ -29,6 +29,7 @@ const IconCommentButton = ({ icon, commentId, icons, userId }: IconCommentButton
                 commentId,
                 icon: icon.icon!
             })
+            toast.success('ADDED')
         } catch (error) {
             toast.error('something went wrong')
         }

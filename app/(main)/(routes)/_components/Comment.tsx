@@ -32,7 +32,7 @@ import { deleteCommentModalSlice } from '@/store/reducers/DeleteCommentModalSlic
 import DeleteCommentModal from '@/components/modals/DeleteCommentModal';
 import { EmojiPicker } from '@/components/EmojiPicker';
 import IconReplyButton from './IconReplyButton';
-import IconCommentButton from './IconCommentButton copy';
+import IconCommentButton from './IconCommentButton';
 
 interface CommentProps {
     comment: Doc<'comments'>;
