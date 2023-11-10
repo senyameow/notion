@@ -51,7 +51,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')
 
-    console.log(message)
+    // console.log(message)
 
 
     const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
@@ -103,7 +103,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
         }
     )
 
-    // const addCommentIcon = 
+    const addCommentIcon = useMutation(api.documents.addCommentEmoji)
 
     const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (isLoaded) {
@@ -154,8 +154,16 @@ const Comment = ({ comment, preview }: CommentProps) => {
         })
     }
 
-    const onIconChange = () => {
-
+    const onIconChange = async (icon: string) => {
+        try {
+            await addCommentIcon({
+                icon,
+                commentId: comment._id
+            })
+            toast.success('added')
+        } catch (error) {
+            toast.error('something went wrong')
+        }
     }
 
     return (

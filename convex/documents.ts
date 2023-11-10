@@ -822,3 +822,94 @@ export const toggleSize = mutation({
         })
     }
 })
+
+export const addCommentEmoji = mutation({
+    args: {
+        commentId: v.id('comments'),
+        icon: v.string()
+    },
+    handler: async (ctx, { commentId, icon }) => {
+        const identity = await ctx.auth.getUserIdentity()
+        if (!identity) throw new Error('Unauthorized')
+        const userId = identity.subject
+
+        const comment = await ctx.db.get(commentId);
+        if (comment === null) throw new Error('Not found')
+        const existingIcons = comment.icons
+        if (existingIcons !== undefined) {
+            if (existingIcons.length > 0) {
+                const existingIcon = existingIcons.find(el => el.icon === icon)
+                if (existingIcon !== undefined) {
+                    const users = existingIcon.userId
+                    if (users.length !== 0) { // если юзеры есть, то
+                        if (existingIcon.userId.includes(userId)) {
+                            if (existingIcon.amount! - 1 === 0) {
+                                const updatedComment = {
+                                    ...comment,
+                                    icons: [...existingIcons.filter(el => el.icon !== icon)]
+                                }
+                                return await ctx.db.patch(commentId, updatedComment)
+                                // если количество после добавления станет 0, то просто удалим смайлик
+                            } else { // в противном случае удалим юзера из списка с помощью фильтра и декрементнем количество
+                                const updatedComment = {
+                                    ...comment,
+                                    icons: [...existingIcons.map(el => {
+                                        if (el.icon === icon) {
+                                            return {
+                                                icon: el.icon,
+                                                userId: [...users.filter(id => id !== userId)],
+                                                amount: el.amount! - 1
+                                            }
+                                        }
+                                        return el
+                                    })]
+                                }
+                                return await ctx.db.patch(commentId, updatedComment)
+                            }
+
+                        } else {
+                            const updatedComment = {
+                                ...comment,
+                                icons: [...existingIcons.map(el => {
+                                    if (el.icon === icon) {
+                                        return {
+                                            icon: el.icon,
+                                            userId: [...users, userId],
+                                            amount: el.amount! + 1
+                                        }
+                                    }
+                                })]
+                            }
+                        }
+                    }
+
+
+                } else {
+                    const newIcon = {
+                        icon,
+                        userId: [userId],
+                        amount: 1
+                    }
+                    const updatedComment = {
+                        ...comment,
+                        icons: [...existingIcons, newIcon]
+                    }
+                    return await ctx.db.patch(commentId, updatedComment)
+                }
+
+            } else {
+                const newIcon = {
+                    icon,
+                    userId: [userId],
+                    amount: 1
+                }
+                const updatedComment = {
+                    ...comment,
+                    icons: [newIcon]
+                }
+                return await ctx.db.patch(commentId, updatedComment)
+            }
+
+        }
+    }
+})
