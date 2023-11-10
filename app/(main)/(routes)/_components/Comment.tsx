@@ -30,6 +30,7 @@ import { editReplySlice } from '@/store/reducers/EditReplySlice';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { deleteCommentModalSlice } from '@/store/reducers/DeleteCommentModalSlice';
 import DeleteCommentModal from '@/components/modals/DeleteCommentModal';
+import { EmojiPicker } from '@/components/EmojiPicker';
 
 interface CommentProps {
     comment: Doc<'comments'>;
@@ -102,6 +103,8 @@ const Comment = ({ comment, preview }: CommentProps) => {
         }
     )
 
+    // const addCommentIcon = 
+
     const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (isLoaded) {
             if (e.key === 'Enter') {
@@ -151,6 +154,10 @@ const Comment = ({ comment, preview }: CommentProps) => {
         })
     }
 
+    const onIconChange = () => {
+
+    }
+
     return (
         <>
             {commentCreater === undefined ? <Comment.Skeleton /> : <Card className="w-full group min-h-[150px] mb-2">
@@ -163,7 +170,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
                             <span className='text-xs text-gray-300'>{format(comment._creationTime, 'Ppaaa')}</span>
                         </div >
                         <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
-                            <ActionTooltip label='add reaction' side='top' align='center'><button className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip>
+                            <EmojiPicker onChange={onIconChange}><ActionTooltip label='add reaction' side='top' align='center'><button onClick={() => { }} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip></EmojiPicker>
                             <ActionTooltip label='resolve' side='top' align='center'>
                                 <button onClick={onResolve} className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><Check className='w-4 h-4' /></button>
                             </ActionTooltip>
