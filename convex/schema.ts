@@ -75,7 +75,12 @@ export default defineSchema({
             id: v.string()
         }))),
         isRead: v.optional(v.boolean()),
-        isDeleted: v.optional(v.boolean())
+        isDeleted: v.optional(v.boolean()),
+        icons: v.optional(v.array(v.object({
+            icon: v.optional(v.string()),
+            amount: v.optional(v.number()),
+            userId: v.array(v.string()),
+        }))),
     }).index('by_document', ['docId'])
 
 })
