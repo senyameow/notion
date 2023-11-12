@@ -879,8 +879,10 @@ export const addCommentEmoji = mutation({
                                             amount: el.amount! + 1
                                         }
                                     }
+                                    return el
                                 })]
                             }
+                            return await ctx.db.patch(commentId, updatedComment)
                         }
                     }
 
