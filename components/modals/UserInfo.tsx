@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { format } from 'date-fns'
 import { usePaginatedQuery, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Loader2 } from 'lucide-react'
+import { Ghost, Loader2 } from 'lucide-react'
 import DocCard from '@/app/(main)/(routes)/_components/DocCard'
 import { Skeleton } from '../ui/skeleton'
 import { ScrollArea } from '../ui/scroll-area'
@@ -65,7 +65,7 @@ const UserInfoModal = () => {
     return (
         <Dialog open={isOpen} onOpenChange={onCloseModal}>
             <DialogContent className='min-w-[600px]'>
-                <DialogHeader>
+                <DialogHeader className='h-full'>
                     <DialogTitle className='py-4'>
                         <div className='flex items-center justify-between w-full'>
                             <div className='flex items-center gap-4'>
@@ -79,9 +79,9 @@ const UserInfoModal = () => {
                         </div>
                     </DialogTitle>
                     <h2 className='text-sm'>{user?.name}'s <span className='underline'>notes</span>: </h2>
-                    <ScrollArea className='h-[250px] w-full py-4'>
+                    {docs.filter(doc => doc.isPublished).length > 0 && <ScrollArea className='h-[250px] w-full py-4'>
                         <div onClick={() => dispatch(onClose())} className='w-full grid grid-cols-2 gap-4'>
-                            {docs.map((doc, ind) => {
+                            {docs.filter(doc => doc.isPublished).map((doc, ind) => {
                                 if (ind === results.length - 1 || ind === results.length - 2 || ind === results.length - 3 || ind === results.length - 4) {
                                     return (
                                         <div className='w-full h-full border min-h-[100px]' ref={ref} key={doc._id}>
@@ -96,7 +96,14 @@ const UserInfoModal = () => {
 
                             })}
                         </div>
-                    </ScrollArea>
+
+                    </ScrollArea>}
+                    {docs.filter(doc => doc.isPublished).length === 0 && (
+                        <div className='flex w-full h-[150px] text-gray-400 items-center justify-center flex-col'>
+                            <Ghost className='w-5 h-5 animate-bounce mb-2' />
+                            {user?.name} did not shared his notes yet
+                        </div>
+                    )}
                 </DialogHeader>
             </DialogContent>
         </Dialog >

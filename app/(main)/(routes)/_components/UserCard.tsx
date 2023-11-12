@@ -85,7 +85,7 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     }
 
     return (
-        <div className="w-full p-3 group border cursor-pointer relative flex items-center justify-between">
+        <div className="w-full p-3 group border cursor-pointer relative flex items-center justify-between rounded-lg">
             <AdminConfirmRole />
             <div className="flex items-center w-full justify-between">
                 <div className='flex items-center gap-2'>

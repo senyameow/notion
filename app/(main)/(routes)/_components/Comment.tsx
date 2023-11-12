@@ -55,9 +55,6 @@ const Comment = ({ comment, preview, doc }: CommentProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')
 
-    // console.log(message)
-
-
     const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
         (localStorage, { content, userId, commentId }) => {
             if (content === '') return
