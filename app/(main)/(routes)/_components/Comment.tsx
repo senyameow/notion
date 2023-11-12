@@ -36,19 +36,21 @@ import IconCommentButton from './IconCommentButton';
 
 interface CommentProps {
     comment: Doc<'comments'>;
-    preview?: boolean
+    preview?: boolean;
+    doc: Doc<'documents'>
 }
 
-const Comment = ({ comment, preview }: CommentProps) => {
+const Comment = ({ comment, preview, doc }: CommentProps) => {
 
     const commentCreater = useQuery(api.documents.getUser, { id: comment.userId })
 
     const dispatch = useAppDispatch()
 
     const { onOpen } = deleteCommentModalSlice.actions
-    const { isOpen } = useAppSelector(state => state.deleteComment)
 
     const { user, isLoaded } = useUser()
+    const userRole = doc.people?.find(human => human.id === user?.id)?.role!
+    preview = userRole !== 'ADMIN' && userRole !== 'MOD' && preview
 
     const [isEditing, setIsEditing] = useState(false)
     const [message, setMessage] = useState('')

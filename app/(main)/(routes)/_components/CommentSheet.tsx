@@ -74,8 +74,8 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                             <Comment.Skeleton />
                         </div>
                     ) : <ScrollArea className={cn(`h-full w-full`, comments.length === 0 && 'hidden')}>
-                        {comments.filter(comment => !comment.isResolved)?.map(comment => (
-                            <Comment preview={preview} key={comment._id} comment={comment} />
+                        {isLoaded && comments.filter(comment => !comment.isResolved)?.map(comment => (
+                            <Comment doc={doc} preview={preview} key={comment._id} comment={comment} />
                         ))}
                     </ScrollArea>}
                 </div>
