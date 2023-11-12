@@ -44,7 +44,6 @@ const DeleteCommentModal = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={() => dispatch(onClose())}>
-            <DialogTrigger>Open</DialogTrigger>
             <DialogContent className='w-full'>
                 <DialogHeader>
                     <DialogTitle>Are you sure absolutely sure?</DialogTitle>

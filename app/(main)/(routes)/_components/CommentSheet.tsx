@@ -79,10 +79,7 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
                         ))}
                     </ScrollArea>}
                 </div>
-                <SheetFooter>
-                    <SheetClose asChild>
-                    </SheetClose>
-                </SheetFooter>
+
             </SheetContent>
         </Sheet >
     )
