@@ -20,7 +20,9 @@ const IconCommentButton = ({ icon, commentId, icons, userId }: IconCommentButton
 
     const updateIcon = useMutation(api.documents.addCommentEmoji)
 
-    const isAdded = !!icons.find(obj => obj.userId.includes(userId))
+    const addedByUser = icons.filter(obj => obj.userId.includes(userId)).map(el => el.icon).includes(icon.icon)
+
+    console.log(addedByUser)
 
     const onUpdateIcon = async () => {
         try {
@@ -36,7 +38,7 @@ const IconCommentButton = ({ icon, commentId, icons, userId }: IconCommentButton
     }
 
     return (
-        <button onClick={onUpdateIcon} className={cn(`flex items-center gap-1 border-[0.5px] transition rounded-md px-1 py-[0.5px] bg-blue-700 bg-opacity-40 hover:bg-opacity-80 border-blue-7`, isAdded && 'bg-opacity-80 hover:bg-opacity-60')} >
+        <button onClick={onUpdateIcon} className={cn(`flex items-center gap-1 border-[0.5px] transition rounded-md px-1 py-[0.5px] bg-blue-700 bg-opacity-40 hover:bg-opacity-80 border-blue-7`, addedByUser && 'bg-opacity-80 hover:bg-opacity-60')} >
             <span>{icon.icon}</span>
             <span>{icon.amount}</span>
         </button>
