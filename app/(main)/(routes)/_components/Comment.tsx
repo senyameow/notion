@@ -209,7 +209,7 @@ const Comment = ({ comment, preview }: CommentProps) => {
                         </div>
                     </CardDescription>}
                 </CardHeader >
-                <CardContent className=''>
+                <CardContent className='py-0'>
                     <div>
                         {comment.content}
                     </div>

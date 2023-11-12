@@ -142,7 +142,7 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
 
             {isEditing ? (
                 <Input placeholder='reply...' ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[90%] mx-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
-            ) : <CardContent className=''>
+            ) : <CardContent className='py-0'>
                 <span>{content}</span>
                 {icons.length > 0 && <div className='flex items-center gap-2 flex-wrap'>
                     {icons.map(icon => (
