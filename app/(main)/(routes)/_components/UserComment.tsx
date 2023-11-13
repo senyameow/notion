@@ -29,7 +29,7 @@ const UserComment = ({ comment }: UserCommentProps) => {
                     <span className='text-lg font-semibold'>{user.name}</span>
                 </div>
             )}
-            <h2 className='text-xl font-bold border-yellow-500 border-l-2 pl-2'>{comment.commentLine}</h2>
+            <h2 className='text-xl font-bold border-yellow-500 border-l-2 pl-2 truncate max-w-full'>{comment.commentLine}</h2>
             <ScrollArea className='min-h-full h-full text-sm'>
                 {comment.content}
             </ScrollArea>

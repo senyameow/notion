@@ -56,7 +56,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
                     key={comment._id}
                     className="mb-4 w-full grid relative grid-cols-[25px_1fr] group items-start pb-4 last:mb-0 last:pb-2  p-3 group hover:bg-gray-900 transition rounded-lg cursor-pointer"
                 >
-                    <span className={cn(`flex h-2 w-2 translate-y-1 rounded-full opacity-100 transition duration-300`, comment.isRead && 'opacity-0')} />
+                    <span className={cn(`flex h-2 w-2 translate-y-1 rounded-full bg-sky-500 opacity-100 transition duration-300`, comment.isRead && 'opacity-0')} />
                     <div className="space-y-1">
                         <p className="text-sm font-medium leading-none max-w-[300px] truncate">
                             {comment.commentLine}
