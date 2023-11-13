@@ -9,6 +9,8 @@ import { useMutation } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { toast } from 'sonner';
 import { Loader2, Trash } from 'lucide-react';
+import UserReport from './UserReport';
+import UserComment from './UserComment';
 
 interface CommentCardProps {
     comment: Doc<'comments'>
@@ -67,8 +69,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
                 </div>
             </PopoverTrigger>
             <PopoverContent align='start' side='left'>
-                {/* <UserReport report={notification} /> */}
-                zxc
+                <UserComment comment={comment} />
             </PopoverContent>
         </Popover>
     )
