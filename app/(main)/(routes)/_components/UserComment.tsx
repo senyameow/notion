@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/convex/_generated/api';
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useMutation, useQuery } from 'convex/react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Send } from 'lucide-react';
 import Image from 'next/image'
 import React, { useRef, useState } from 'react'
 import { toast } from 'sonner';
@@ -19,29 +19,62 @@ const UserComment = ({ comment }: UserCommentProps) => {
     const user = useQuery(api.documents.getUser, { id: comment.userId })
 
     const inputRef = useRef<HTMLInputElement>(null)
-    const createReply = useMutation(api.documents.createCommentReply)
+    const createReply = useMutation(api.documents.createCommentReply).withOptimisticUpdate(
+        (localStorage, { content, userId, commentId }) => {
+            if (content === '') return
+            const existingComments = localStorage.getQuery(api.documents.getComments, { docId: comment.docId })
+            if (existingComments !== undefined) {
+                const currentComment = existingComments.find(comment => comment._id === commentId)
+                if (currentComment !== undefined) {
+                    const existingReplies = currentComment.replies
+                    if (existingReplies !== undefined) {
+                        const newReply = {
+                            userId,
+                            content,
+                            created_at: Date.now(),
+                            id: crypto.randomUUID(),
+                            icons: []
+                        }
+                        localStorage.setQuery(api.documents.getComments, { docId: comment.docId }, [
+                            ...existingComments.map(com => {
+                                if (com._id === currentComment._id) return {
+                                    ...com, replies: [...com.replies!, newReply]
+                                }
+                                return com
+                            })
+                        ]
+                        )
+                    }
+                }
+            }
+        }
+    )
     const [message, setMessage] = useState('')
-    const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log(message, 'MESSAGE')
+    const onCreate = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (user !== undefined)
             if (e.key === 'Enter') {
                 console.log('clicked')
                 if (message === '') return
-                try {
-                    await createReply({
-                        content: message,
-                        commentId: comment._id,
-                        userId: user.userId
-                    })
-                    toast.success('editted')
-                } catch (error) {
-                    toast.error('something went wrong')
-                } finally {
-                    setMessage('')
-                }
-
+                createReply({
+                    content: message,
+                    commentId: comment._id,
+                    userId: user.userId
+                })
+                setMessage('')
 
             }
+    }
+
+    const onSend = async () => {
+        if (user !== undefined) {
+            if (message === '') return
+            createReply({
+                content: message,
+                commentId: comment._id,
+                userId: user.userId
+            })
+            setMessage('')
+        }
     }
 
     return (
@@ -61,7 +94,10 @@ const UserComment = ({ comment }: UserCommentProps) => {
             <ScrollArea className='min-h-full h-full text-sm'>
                 {comment.content}
             </ScrollArea>
-            <Input placeholder='reply...' ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[90%] mx-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
+            <div className='w-full relative'>
+                <Input placeholder='reply...' ref={inputRef} onKeyDown={onCreate} className='h-8 relative w-[90%] mr-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
+                <Send role='button' onClick={onSend} className='absolute top-2 w-5 h-5 text-sky-500 right-0 ' />
+            </div>
         </div>
     )
 }
