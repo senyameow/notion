@@ -33,15 +33,17 @@ import { cn } from '@/lib/utils'
 interface DocNavbarProps {
     isCollapsed: boolean;
     onResetWidth: () => void;
+    isMobile: boolean;
 }
 
-const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
+const DocNavbar = ({ isCollapsed, onResetWidth, isMobile }: DocNavbarProps) => {
 
     const params = useParams()
 
     const dispatch = useAppDispatch()
     const { deleteStatus, restoreStatus } = docStatusSlice.actions
     const { isDeleting, isRestoring } = useAppSelector(state => state.docStatus)
+    const [open, setOpen] = useState(false)
 
     console.log(params.docId)
 
@@ -53,7 +55,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
 
     if (doc === undefined) {
         return (
-            <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>
+            <div className='p-3 py-5  w-full bg-background dark:bg-dark'>
                 <Skeleton className='w-[140px] h-[15px] mt-5 ' />
             </div>
         )
@@ -94,11 +96,55 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
     console.log(isCollapsed)
 
     return (
-        <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>
+        <div className='p-3 py-5 w-full bg-background dark:bg-dark'>
             {isCollapsed ? (
-                <Menu className='w-6 h-6 text-neutral-500' role='button' onClick={onResetWidth} />
+                <div className='w-[90vw] flex justify-between items-center'>
+                    <Menu className='w-6 h-6 text-neutral-500' role='button' onClick={() => {
+                        onResetWidth()
+                        setOpen(true)
+                    }} />
+                    <div className='w-full flex items-center justify-between'>
+                        <div>
+                            <Title initialDoc={doc} />
+                        </div>
+                        <div className='flex items-center gap-2'>
+                            <PublishButton doc={doc} />
+                            <Popover>
+                                <PopoverTrigger><Bell className={cn(`w-5 h-5 mx-2`)} /></PopoverTrigger>
+                                <PopoverContent side='left' className='p-0 border-none' align='start' alignOffset={30}>
+                                    <Notifications doc={doc} />
+                                </PopoverContent>
+                            </Popover>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <MoreHorizontal role='button' className='w-8 h-8 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-700/80 rounded-lg' />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48">
+                                    <DropdownMenuLabel>{String(doc.title)}</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuGroup className="flex items-center p-1 flex-col">
+                                        <InfoSheet doc={doc} />
+                                        {doc.isAcrchieved ? (
+                                            <DropdownMenuItem disabled={isRestoring} className="cursor-pointer hover:opacity-90 w-full" onSelect={onRestore}>
+                                                {isRestoring ? <Loader2 className='w-4 h-4 animate-spin' /> : <ArchiveRestore className='w-4 h-4 mr-2' />}
+                                                Restore
+                                            </DropdownMenuItem>
+                                        ) : <DropdownMenuItem disabled={isDeleting} onSelect={onArchieve} className="cursor-pointer hover:opacity-90 w-full">
+                                            {isDeleting ? <Loader2 className='w-4 h-4 mr-2 animate-spin' /> : (
+                                                <Trash className='w-4 h-4 mr-2' />
+                                            )}
+                                            Delete
+                                        </DropdownMenuItem>}
+                                        <CommentSheet doc={doc} />
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+
+                            </DropdownMenu>
+                        </div>
+                    </div>
+                </div>
             ) : (
-                <div className='w-full flex items-center justify-between'>
+                <div className={cn(`w-full flex items-center justify-between`, isMobile && 'hidden')}>
                     <div>
                         <Title initialDoc={doc} />
                     </div>

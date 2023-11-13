@@ -167,7 +167,7 @@ const Navbar = () => {
             </aside>
             <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999]`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
                 {!!params.docId ? (
-                    <DocNavbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+                    <DocNavbar isMobile={isMobile} isCollapsed={isCollapsed} onResetWidth={resetWidth} />
                 ) : <nav className=' px-3 py-4 w-full bg-transparent'>
                     <button disabled={!isCollapsed} onClick={resetWidth} className={cn(`w-fit h-fit p-2 hover:bg-transparent cursor-default`, isCollapsed && 'cursor-pointer')}>
                         <Menu className={cn(`w-6 h-6 dark:text-neutral-500 text-black opacity-0`, isCollapsed && 'opacity-100')} />
