@@ -151,7 +151,7 @@ const Navbar = () => {
                     {allowedDocs.length > 0 && <span>You have access to:</span>}
                     <div className='flex flex-col '>
                         {allowedDocs.map(doc => (
-                            <Doc icon={File} access={UserRoles[doc.people?.find(human => human.id === user?.id)?.role!]} id={doc._id} title={doc.title} />
+                            <Doc access={UserRoles[doc.people?.find(human => human.id === user?.id)?.role!]} id={doc._id} title={doc.title} />
                         ))}
                     </div>
                 </div>

@@ -91,6 +91,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth }: DocNavbarProps) => {
     // console.log(doc.reportList?.length)
     // console.log(doc.commentList?.length)
     // console.log(doc)
+    console.log(isCollapsed)
 
     return (
         <div className='p-3 py-5 pr-5 w-full bg-background dark:bg-dark'>
