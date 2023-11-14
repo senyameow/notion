@@ -38,12 +38,17 @@ const UserActions = ({ userId }: UserActionsProps) => {
     const { onOpen: onOpenSearch } = searchSlice.actions
     const { onOpen: onOpenSettings } = settingsSlice.actions
 
-    const { onToggle: onToggleSettings, onClose, onOpen } = searchSlice.actions
+    const { onToggle: onToggleSearch } = searchSlice.actions
+    const { onToggle: onToggleSettings } = settingsSlice.actions
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
             if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                dispatch(onToggleSearch());
+            }
+            if (e.key === "q" && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault();
                 dispatch(onToggleSettings());
             }
