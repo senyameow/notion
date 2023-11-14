@@ -60,7 +60,9 @@ const UserActions = ({ userId }: UserActionsProps) => {
         }
 
         window.document.addEventListener("keydown", down);
-        return () => window.document.removeEventListener("keydown", down);
+        return () => {
+            window.document.removeEventListener("keydown", down);
+        }
     }, []);
 
 

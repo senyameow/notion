@@ -28,12 +28,12 @@ import { UserRoles } from './UserRole'
 import SettingsCommand from './SettingsCommand'
 
 const Navbar = () => {
-
     const isMobile = useMediaQuery('(max-width: 768px)')
 
     const isResizingRef = useRef(false)
     const sidebarRef = useRef<ElementRef<'aside'>>(null)
     const navbarRef = useRef<ElementRef<'div'>>(null)
+    const shtukaRef = useRef<ElementRef<'div'>>(null)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
 
@@ -51,6 +51,12 @@ const Navbar = () => {
         await create({ title: 'Untitled' })
         toast.success(`you've created new doc`)
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            shtukaRef.current?.style.setProperty('min-height', `${sidebarRef.current?.scrollHeight}px`)
+        }, 500);
+    }, [])
 
     const resetWidth = () => {
         setIsResetting(true)
@@ -105,7 +111,7 @@ const Navbar = () => {
         e.preventDefault()
         e.stopPropagation()
 
-        isResizingRef.current = true // пока хз зачем реф, а не стейт, посмотрим, что будет
+        isResizingRef.current = true
 
         const handleMouseMove = (e: MouseEvent) => {
             if (!isResizingRef.current) return
@@ -132,40 +138,43 @@ const Navbar = () => {
     }
 
 
+
     return (
         <>
             <SettingsCommand />
-            <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto flex flex-col z-[99999] group/sidebar relative h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
-                <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
-                    <ChevronsLeft className='w-5 h-5' />
-                </div>
-                <div className='pt-2 pl-2'>
-                    <UserAction />
-                </div>
-                <div className='w-full'>
-                    <UserActions userId={user?.id!} />
-                </div>
-                <div className='pt-2'>
-                    <DocList userId={user?.id!} />
-                    <Action label='add new doc' icon={Plus} onClick={onCreate} />
-                </div>
-                <div className='flex-1 text-sm font-medium text-neutral-500 px-2 py-4 flex flex-col gap-2'>
-                    {allowedDocs.length > 0 && <span>You have access to:</span>}
-                    <div className='flex flex-col '>
-                        {allowedDocs.map(doc => (
-                            <Doc access={UserRoles[doc.people?.find(human => human.id === user?.id)?.role!]} id={doc._id} title={doc.title} />
-                        ))}
+            <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto scrollbar scrollbar-thumb-black scrollbar-track-black scrollbar-none flex flex-col z-[99999] group/sidebar relative min-h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
+                <div className='min-h-full'>
+                    <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
+                        <ChevronsLeft className='w-5 h-5' />
                     </div>
+                    <div className='pt-2 pl-2'>
+                        <UserAction />
+                    </div>
+                    <div className='w-full'>
+                        <UserActions userId={user?.id!} />
+                    </div>
+                    <div className='pt-2'>
+                        <DocList userId={user?.id!} />
+                        <Action label='add new doc' icon={Plus} onClick={onCreate} />
+                    </div>
+                    <div className='flex-1 text-sm font-medium text-neutral-500 px-2 py-4 flex flex-col gap-2'>
+                        {allowedDocs.length > 0 && <span>You have access to:</span>}
+                        <div className='flex flex-col '>
+                            {allowedDocs.map(doc => (
+                                <Doc access={UserRoles[doc.people?.find(human => human.id === user?.id)?.role!]} id={doc._id} title={doc.title} />
+                            ))}
+                        </div>
+                    </div>
+                    <Popover>
+                        <PopoverTrigger className='w-full p-1 pt-4 pb-4'>
+                            <Action label='Помойка' icon={Trash} />
+                        </PopoverTrigger>
+                        <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
+                            <TrashBox docs={trash} />
+                        </PopoverContent>
+                    </Popover>
+                    <div onMouseDown={handleMouseDown} ref={shtukaRef} onClick={resetWidth} className={cn(`group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition absolute right-0 top-0`)} />
                 </div>
-                <Popover>
-                    <PopoverTrigger className='w-full p-1 pt-4 pb-4'>
-                        <Action label='Помойка' icon={Trash} />
-                    </PopoverTrigger>
-                    <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
-                        <TrashBox docs={trash} />
-                    </PopoverContent>
-                </Popover>
-                <div onMouseDown={handleMouseDown} onClick={resetWidth} className='group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition h-full absolute right-0 top-0' />
             </aside>
             <div className={cn(` w-[calc(100%-240px)] left-60 absolute top-0 z-[99999]`, isMobile && 'w-full left-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')} ref={navbarRef}>
                 {!!params.docId ? (

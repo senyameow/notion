@@ -22,7 +22,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
     if (!isAuthenticated) return redirect('/')
 
     return (
-        <div className='h-full dark:bg-dark flex'>
+        <div className='h-full scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-700 dark:bg-dark flex'>
             <Navbar />
             <main className='h-full flex-1 overflow-hidden'>
                 <ModalProvider />
