@@ -52,18 +52,6 @@ const SettingsCommand = () => {
         }
     )
 
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === "q" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                dispatch(onToggle());
-            }
-        }
-
-        document.addEventListener("keydown", down);
-        return () => document.removeEventListener("keydown", down);
-    }, [onToggle]);
-
     if (user === undefined || notifications === undefined || size === undefined) {
         return (
             <div className='w-full h-full flex items-center justify-center'>

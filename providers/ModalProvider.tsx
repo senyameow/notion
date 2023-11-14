@@ -18,7 +18,6 @@ const ModalProvider = () => {
     return (
         <>
             <SearchCommand />
-            <SettingsCommand />
             <ImageUploadModal />
             <UserInfoModal />
         </>
