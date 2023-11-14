@@ -52,6 +52,11 @@ const UserActions = ({ userId }: UserActionsProps) => {
                 e.preventDefault();
                 dispatch(onToggleSettings());
             }
+            if (e.key === "m" && (e.metaKey || e.ctrlKey)) {
+                console.log('clicked')
+                e.preventDefault();
+                onCreate()
+            }
         }
 
         window.document.addEventListener("keydown", down);
