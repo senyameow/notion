@@ -1,6 +1,6 @@
 'use client'
 import { PlusCircle, Search, Settings } from 'lucide-react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Action from './Action'
 import { toast } from 'sonner';
 import { useMutation } from 'convex/react';
@@ -37,7 +37,21 @@ const UserActions = ({ userId }: UserActionsProps) => {
 
     const { onOpen: onOpenSearch } = searchSlice.actions
     const { onOpen: onOpenSettings } = settingsSlice.actions
+
+    const { onToggle: onToggleSettings, onClose, onOpen } = searchSlice.actions
     const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const down = (e: KeyboardEvent) => {
+            if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                dispatch(onToggleSettings());
+            }
+        }
+
+        window.document.addEventListener("keydown", down);
+        return () => window.document.removeEventListener("keydown", down);
+    }, []);
 
 
     return (

@@ -24,9 +24,10 @@ const SearchCommand = () => {
 
     const docs = useQuery(api.documents.getAllUserDocs)
 
-    const { onToggle, onClose, onOpen } = searchSlice.actions
     const { isOpen } = useAppSelector(state => state.search)
+    const { onClose } = searchSlice.actions
     const dispatch = useAppDispatch()
+
 
     const { user } = useUser()
 
@@ -45,17 +46,7 @@ const SearchCommand = () => {
         dispatch(onClose())
     }
 
-    useEffect(() => {
-        const down = (e: KeyboardEvent) => {
-            if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-                e.preventDefault();
-                dispatch(onToggle());
-            }
-        }
 
-        document.addEventListener("keydown", down);
-        return () => document.removeEventListener("keydown", down);
-    }, [onToggle]);
 
 
     return (
