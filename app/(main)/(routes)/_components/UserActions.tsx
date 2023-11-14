@@ -43,7 +43,7 @@ const UserActions = ({ userId }: UserActionsProps) => {
     return (
         <div className='w-full flex flex-col items-start '>
             <Action isSearch label='Search' onClick={() => dispatch(onOpenSearch())} icon={Search} />
-            <Action label='Settings' onClick={() => dispatch(onOpenSettings(userId))} icon={Settings} />
+            <Action label='Settings' onClick={() => dispatch(onOpenSettings(userId))} icon={Settings} isSettings />
             <Action label='New page' onClick={onCreate} icon={PlusCircle} />
         </div>
     )

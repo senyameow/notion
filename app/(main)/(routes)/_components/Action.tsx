@@ -7,9 +7,10 @@ interface ActionProps {
     label: string;
     onClick?: () => void;
     isSearch?: boolean;
+    isSettings?: boolean;
 }
 
-const Action = ({ icon, label, onClick, isSearch = false, }: ActionProps) => {
+const Action = ({ icon, label, onClick, isSearch = false, isSettings = false }: ActionProps) => {
 
     const Icon = icon
 
@@ -24,6 +25,11 @@ const Action = ({ icon, label, onClick, isSearch = false, }: ActionProps) => {
             {isSearch && (
                 <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
                     <span className='text-xs'>ctrl+k</span>
+                </kbd>
+            )}
+            {isSettings && (
+                <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                    <span className='text-xs'>ctrl+q</span>
                 </kbd>
             )}
         </button>
