@@ -9,6 +9,7 @@ import Doc from './Doc';
 import { cn } from '@/lib/utils';
 import { FileIcon } from 'lucide-react';
 import { UserRoles } from './UserRole';
+import { useMediaQuery } from 'usehooks-ts';
 
 interface DocListProps {
     data?: DocType<'documents'>[];
@@ -18,6 +19,8 @@ interface DocListProps {
 }
 
 const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
+
+    const isMobile = useMediaQuery('(max-width: 768px)')
 
     const params = useParams()
     const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({})
@@ -66,12 +69,12 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
 
     return (
         <>
-            <p className={cn(`hidden text-sm font-medium text-neutral-500`, level === 0 && 'hidden', isExpanded && 'last:block')} style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}>
+            <p className={cn(`hidden text-sm font-medium text-neutral-500`, level === 0 && 'hidden', isExpanded && 'last:block', isMobile && 'py-3 text-md')} style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}>
                 No pages inside
             </p>
             {docs.map(doc => (
                 <div key={doc._id}>
-                    <Doc access={UserRoles[doc.people?.find(_ => _.id === userId)?.role!]} title={doc.title} level={level} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={doc.icon} isExpanded={isExpanded[doc._id]} />
+                    <Doc isMobile={isMobile} access={UserRoles[doc.people?.find(_ => _.id === userId)?.role!]} title={doc.title} level={level} active={params.documentId === doc._id} id={doc._id} onExpand={() => onExpand(doc._id)} icon={doc.icon} isExpanded={isExpanded[doc._id]} />
                     {isExpanded[doc._id] && (
                         <DocList userId={userId} parentId={doc._id} level={level + 1} />
                     )}

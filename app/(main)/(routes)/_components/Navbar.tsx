@@ -145,20 +145,20 @@ const Navbar = () => {
     return (
         <>
             <SettingsCommand />
-            <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto scrollbar scrollbar-thumb-black scrollbar-track-black scrollbar-none flex flex-col z-[99999] group/sidebar relative min-h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
+            <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto scrollbar scrollbar-thumb-black scrollbar-track-black scrollbar-none flex flex-col z-[99999] group/sidebar relative min-h-full`, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
                 <div ref={maxSizeRef} className='min-h-full'>
-                    <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
-                        <ChevronsLeft className='w-5 h-5' />
+                    <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100 w-8 h-8')}>
+                        <ChevronsLeft className={cn(`w-5 h-5`, isMobile && 'h-8 w-8')} />
                     </div>
                     <div className='pt-2 pl-2'>
                         <UserAction />
                     </div>
-                    <div className='w-full'>
+                    <div className='w-full py-2'>
                         <UserActions onCollapse={collapse} userId={user?.id!} />
                     </div>
                     <div className='pt-2'>
                         <DocList userId={user?.id!} />
-                        <Action label='add new doc' icon={Plus} onClick={onCreate} />
+                        {/* <Action label='add new doc' icon={Plus} onClick={onCreate} /> */}
                     </div>
                     <div className='flex-1 text-sm font-medium text-neutral-500 px-2 py-4 flex flex-col gap-2'>
                         {allowedDocs.length > 0 && <span>You have access to:</span>}

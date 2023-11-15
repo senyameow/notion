@@ -22,7 +22,7 @@ const Action = ({ icon, label, onClick, isSearch = false, isSettings = false, is
     return (
         <button onClick={onClick} className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 px-2 py-1 w-full flex flex-row items-center gap-2 text-neutral-400 transition justify-between `, isMobile && 'p-2 py-4 flex items-center justify-center')}>
             <div className='flex items-center gap-2'>
-                <Icon className={cn(`w-4 h-4`, isMobile && !isPomoyka && 'hidden', isPomoyka && 'w-6 h-6')} />
+                <Icon className={cn(`w-4 h-4`, isMobile && !isPomoyka && 'hidden', isPomoyka && isMobile && 'w-6 h-6')} />
                 {!isPomoyka && <span className={cn(`text-sm`, isMobile && 'text-lg')}>{label}</span>}
             </div>
             {isSearch && !isMobile && (

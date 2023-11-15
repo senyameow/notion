@@ -58,7 +58,7 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     }
 
     return (
-        <div className='pt-20 overflow-y-auto h-full'>
+        <div className='pt-20 overflow-y-auto h-full overflow-x-hidden'>
             {doc?.isAcrchieved && <Banner text='this note has been archived' docId={params.docId} />}
             <Cover doc={doc!} />
             <div className={cn(` mx-auto h-full`, size ? 'max-w-full px-2' : 'max-w-3xl md:max-w-4xl')}>
