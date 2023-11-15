@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { searchSlice } from '@/store/reducers/SearchSlice';
 import { settingsSlice } from '@/store/reducers/SettingsSlice';
 import { useRouter } from 'next/navigation';
+import { useMediaQuery } from 'usehooks-ts';
 
 interface UserActionsProps {
     userId: string;

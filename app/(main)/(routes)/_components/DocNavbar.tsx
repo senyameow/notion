@@ -98,7 +98,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth, isMobile }: DocNavbarProps) => {
     return (
         <div className='p-3 py-5 w-full bg-none'>
             {isCollapsed ? (
-                <div className='w-[90vw] flex justify-between items-center'>
+                <div className='w-[94vw] flex justify-between items-center'>
                     <Menu className='w-6 h-6 text-neutral-500' role='button' onClick={() => {
                         onResetWidth()
                         setOpen(true)
@@ -144,7 +144,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth, isMobile }: DocNavbarProps) => {
                     </div>
                 </div>
             ) : (
-                <div className={cn(`w-full flex items-center justify-between`, isMobile && 'hidden')}>
+                <div className={cn(`w-[98%] flex items-center justify-between`, isMobile && 'hidden')}>
                     <div>
                         <Title initialDoc={doc} />
                     </div>
