@@ -96,7 +96,7 @@ const DocNavbar = ({ isCollapsed, onResetWidth, isMobile }: DocNavbarProps) => {
     console.log(isCollapsed)
 
     return (
-        <div className='p-3 py-5 w-full bg-background dark:bg-dark'>
+        <div className='p-3 py-5 w-full bg-none'>
             {isCollapsed ? (
                 <div className='w-[90vw] flex justify-between items-center'>
                     <Menu className='w-6 h-6 text-neutral-500' role='button' onClick={() => {

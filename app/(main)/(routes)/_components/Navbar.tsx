@@ -34,6 +34,7 @@ const Navbar = () => {
     const sidebarRef = useRef<ElementRef<'aside'>>(null)
     const navbarRef = useRef<ElementRef<'div'>>(null)
     const shtukaRef = useRef<ElementRef<'div'>>(null)
+    const maxSizeRef = useRef<ElementRef<'div'>>(null)
     const [isCollapsed, setIsCollapsed] = useState(false)
     const [isResetting, setIsResetting] = useState(false)
 
@@ -54,9 +55,9 @@ const Navbar = () => {
 
     useEffect(() => {
         setTimeout(() => {
-            shtukaRef.current?.style.setProperty('min-height', `${sidebarRef.current?.scrollHeight}px`)
+            shtukaRef.current?.style.setProperty('height', `${sidebarRef.current?.scrollHeight}px`)
         }, 500);
-    }, [])
+    }, [shtukaRef])
 
     const resetWidth = () => {
         setIsResetting(true)
@@ -99,6 +100,8 @@ const Navbar = () => {
             </div>
         )
     }
+
+    shtukaRef.current?.style.setProperty('height', `${maxSizeRef.current?.scrollHeight}px`)
 
     // console.log(allDocs)
 
@@ -143,7 +146,7 @@ const Navbar = () => {
         <>
             <SettingsCommand />
             <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto scrollbar scrollbar-thumb-black scrollbar-track-black scrollbar-none flex flex-col z-[99999] group/sidebar relative min-h-full `, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
-                <div className='min-h-full'>
+                <div ref={maxSizeRef} className='min-h-full'>
                     <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100')}>
                         <ChevronsLeft className='w-5 h-5' />
                     </div>
