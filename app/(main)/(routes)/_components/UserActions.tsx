@@ -13,13 +13,17 @@ import { useMediaQuery } from 'usehooks-ts';
 
 interface UserActionsProps {
     userId: string;
-    onCollapse?: () => void;
+    onCollapse: () => void;
+    onResetWidth: () => void
 }
 
 
-const UserActions = ({ userId, onCollapse }: UserActionsProps) => {
+const UserActions = ({ userId, onCollapse, onResetWidth }: UserActionsProps) => {
 
     const createNote = useMutation(api.documents.create)
+    let isMobile = useMediaQuery('(max-width: 768px)')
+
+    onCollapse = !isMobile ? () => { } : onCollapse
 
     const router = useRouter()
 
@@ -34,8 +38,13 @@ const UserActions = ({ userId, onCollapse }: UserActionsProps) => {
         })
         promise.then(doc => {
             router.push(`/docs/${doc}`)
-            onCollapse?.()
+            if (isMobile) {
+                console.log('COLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSE')
+                onCollapse()
+            }
+
         })
+
     }
 
     const { onOpen: onOpenSearch } = searchSlice.actions
@@ -56,7 +65,6 @@ const UserActions = ({ userId, onCollapse }: UserActionsProps) => {
                 dispatch(onToggleSettings());
             }
             if (e.key === "m" && (e.metaKey || e.ctrlKey)) {
-                console.log('clicked')
                 e.preventDefault();
                 onCreate()
             }

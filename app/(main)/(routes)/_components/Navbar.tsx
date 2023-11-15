@@ -154,7 +154,7 @@ const Navbar = () => {
                         <UserAction />
                     </div>
                     <div className='w-full py-2'>
-                        <UserActions onCollapse={collapse} userId={user?.id!} />
+                        <UserActions onResetWidth={resetWidth} onCollapse={collapse} userId={user?.id!} />
                     </div>
                     <div className='pt-2'>
                         <DocList userId={user?.id!} />
