@@ -154,7 +154,7 @@ const Navbar = () => {
                         <UserAction />
                     </div>
                     <div className='w-full'>
-                        <UserActions userId={user?.id!} />
+                        <UserActions onCollapse={collapse} userId={user?.id!} />
                     </div>
                     <div className='pt-2'>
                         <DocList userId={user?.id!} />
@@ -170,7 +170,7 @@ const Navbar = () => {
                     </div>
                     <Popover>
                         <PopoverTrigger className='w-full p-1 pt-4 pb-4'>
-                            <Action label='Помойка' icon={Trash} />
+                            <Action isPomoyka label='Помойка' icon={Trash} />
                         </PopoverTrigger>
                         <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
                             <TrashBox docs={trash} />

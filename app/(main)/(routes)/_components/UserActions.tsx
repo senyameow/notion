@@ -13,10 +13,11 @@ import { useMediaQuery } from 'usehooks-ts';
 
 interface UserActionsProps {
     userId: string;
+    onCollapse?: () => void;
 }
 
 
-const UserActions = ({ userId }: UserActionsProps) => {
+const UserActions = ({ userId, onCollapse }: UserActionsProps) => {
 
     const createNote = useMutation(api.documents.create)
 
@@ -33,6 +34,7 @@ const UserActions = ({ userId }: UserActionsProps) => {
         })
         promise.then(doc => {
             router.push(`/docs/${doc}`)
+            onCollapse?.()
         })
     }
 
