@@ -47,6 +47,8 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
 
     const updateReply = useMutation(api.documents.updateCommentReply)
 
+    const currentUser = useQuery(api.documents.getCurrentUser)
+
 
     const onDeleteReply = async () => {
         try {
@@ -118,38 +120,44 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
                     </div >}
                     <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[2.5px] group-hover/reply:opacity-100 transition bg-gray-800 rounded-md p-1'>
                         <EmojiPicker onChange={onIconChange}><ActionTooltip label='add reaction' side='top' align='center'><button onClick={() => { }} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip></EmojiPicker>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger>
-                                <MoreHorizontal role='button' className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')} />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
-                                <DropdownMenuGroup className="flex items-center p-1 flex-col">
-                                    <DropdownMenuItem onSelect={onEdit} className='cursor-pointer w-full flex items-center gap-2'>
-                                        <Edit className='w-4 h-4' />
-                                        Edit reply
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onSelect={onDeleteReply} className='cursor-pointer w-full flex items-center gap-2'>
-                                        <Trash className='w-4 h-4' />
-                                        Delete reply
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
+                        {currentUser === undefined ? null : (
+                            <>
+                                {currentUser?.userId === userId && < DropdownMenu >
+                                    <DropdownMenuTrigger>
+                                        <MoreHorizontal role='button' className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')} />
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
+                                        <DropdownMenuGroup className="flex items-center p-1 flex-col">
+                                            <DropdownMenuItem onSelect={onEdit} className='cursor-pointer w-full flex items-center gap-2'>
+                                                <Edit className='w-4 h-4' />
+                                                Edit reply
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onSelect={onDeleteReply} className='cursor-pointer w-full flex items-center gap-2'>
+                                                <Trash className='w-4 h-4' />
+                                                Delete reply
+                                            </DropdownMenuItem>
+                                        </DropdownMenuGroup>
+                                    </DropdownMenuContent>
 
-                        </DropdownMenu>
+                                </DropdownMenu>}
+                            </>
+                        )}
                     </div>
                 </CardTitle >
             </CardHeader >
 
-            {isEditing ? (
-                <Input placeholder='reply...' ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[90%] mx-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
-            ) : <CardContent className='py-0 pb-3'>
-                <span>{content}</span>
-                {icons.length > 0 && <div className='flex items-center gap-2 flex-wrap'>
-                    {icons.map(icon => (
-                        <IconReplyButton userId={userId} icons={icons!} key={icon.icon} icon={icon!} replyId={replyId} commentId={commentId} />
-                    ))}
-                </div>}
-            </CardContent>}
+            {
+                isEditing ? (
+                    <Input placeholder='reply...' ref={inputRef} onKeyDown={onSave} className='h-8 relative w-[90%] mx-auto px-2 mb-2 py-3 bg-transparent border-none focus-visible:border-none focus-visible:border-0 focus-visible:ring-0 ring-0 focus-visible:ring-offset-0 ring-offset-0' onChange={e => setMessage(e.target.value)} value={message} />
+                ) : <CardContent className='py-0 pb-3'>
+                    <span>{content}</span>
+                    {icons.length > 0 && <div className='flex items-center gap-2 flex-wrap'>
+                        {icons.map(icon => (
+                            <IconReplyButton userId={userId} icons={icons!} key={icon.icon} icon={icon!} replyId={replyId} commentId={commentId} />
+                        ))}
+                    </div>}
+                </CardContent>
+            }
 
 
         </div >
