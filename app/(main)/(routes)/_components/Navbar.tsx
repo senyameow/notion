@@ -145,7 +145,7 @@ const Navbar = () => {
     return (
         <>
             <SettingsCommand />
-            <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto scrollbar scrollbar-thumb-black scrollbar-track-black scrollbar-none flex flex-col z-[99999] group/sidebar relative min-h-full`, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
+            <aside ref={sidebarRef} className={cn(`w-60 bg-secondary overflow-y-auto scrollbar scrollbar-thumb-black overflow-x-hidden scrollbar-track-black scrollbar-none flex flex-col z-[99999] group/sidebar relative min-h-full`, isMobile && 'w-0', isResetting && 'transition-all duration-300 ease-[cubic-bezier(0.95,0.05,0.795,0.035)]')}>
                 <div ref={maxSizeRef} className='min-h-full'>
                     <div onClick={collapse} className={cn(`absolute hover:bg-neutral-400 dark:hover:text-dark flex items-center justify-center w-6 h-6 rounded-lg top-3 right-4 hover cursor-pointer text-neutral-400 opacity-0 group-hover/sidebar:opacity-100 transition hover:bg-opacity-40`, isMobile && 'opacity-100 w-8 h-8')}>
                         <ChevronsLeft className={cn(`w-5 h-5`, isMobile && 'h-8 w-8')} />
@@ -168,14 +168,16 @@ const Navbar = () => {
                             ))}
                         </div>
                     </div>
-                    <Popover>
-                        <PopoverTrigger className='w-full p-1 pt-4 pb-4'>
-                            <Action isPomoyka label='Помойка' icon={Trash} />
-                        </PopoverTrigger>
-                        <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
-                            <TrashBox docs={trash} />
-                        </PopoverContent>
-                    </Popover>
+                    <div className='h-full mt-auto flex'>
+                        <Popover>
+                            <PopoverTrigger className='w-full p-1 pt-4 pb-4 mt-auto'>
+                                <Action isPomoyka label='Помойка' icon={Trash} />
+                            </PopoverTrigger>
+                            <PopoverContent className="w-56" side={isMobile ? 'bottom' : 'right'}>
+                                <TrashBox docs={trash} />
+                            </PopoverContent>
+                        </Popover>
+                    </div>
                     <div onMouseDown={handleMouseDown} ref={shtukaRef} onClick={resetWidth} className={cn(`group-hover/sidebar:opacity-100 opacity-0 cursor-ew-resize w-1 bg-primary/10 transition absolute right-0 top-0`)} />
                 </div>
             </aside>

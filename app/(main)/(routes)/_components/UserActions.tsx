@@ -77,7 +77,7 @@ const UserActions = ({ userId, onCollapse, onResetWidth }: UserActionsProps) => 
 
 
     return (
-        <div className='w-full flex flex-col items-start '>
+        <div className='w-full flex flex-col items-start'>
             <Action isSearch label='Search' onClick={() => dispatch(onOpenSearch())} icon={Search} />
             <Action label='Settings' onClick={() => dispatch(onOpenSettings(userId))} icon={Settings} isSettings />
             <Action label='New page' onClick={onCreate} icon={PlusCircle} isNew />
