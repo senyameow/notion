@@ -21,7 +21,15 @@ const Banner = ({
 }: BannerProps) => {
 
     const restore = useMutation(api.documents.restore)
-    const remove = useMutation(api.documents.removeDoc)
+
+    const remove = useMutation(api.documents.removeDoc).withOptimisticUpdate(
+        (localStorage, args) => {
+            const currentDoc = localStorage.getQuery(api.documents.getNote, { id: args.id })
+            if (currentDoc !== undefined) {
+                localStorage.setQuery(api.documents.getNote, { id: args.id }, null)
+            }
+        }
+    )
     const router = useRouter()
 
     const dispatch = useAppDispatch()
@@ -31,12 +39,13 @@ const Banner = ({
 
     const onRemove = () => {
         dispatch(deleteStatus(true))
-        const promise = remove({ id: docId })
-        toast.promise(promise, {
-            loading: 'Deleting note..',
-            success: 'Note deleted',
-            error: 'Something went wrong'
-        })
+        // const promise = remove({ id: docId })
+        // toast.promise(promise, {
+        //     loading: 'Deleting note..',
+        //     success: 'Note deleted',
+        //     error: 'Something went wrong'
+        // })
+        remove({ id: docId })
         dispatch(deleteStatus(false))
         router.push(`/docs`)
     }

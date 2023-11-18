@@ -51,7 +51,7 @@ const TrashItem = ({ doc }: TrashItemProps) => {
 
     return (
 
-        <button className='w-full group dark:hover:bg-dark/70 p-2 rounded-lg cursor-pointer'>
+        <button onClick={onRedirect} className='w-full group dark:hover:bg-dark/70 p-2 rounded-lg cursor-pointer'>
             <div className='w-full flex items-center justify-between'>
                 <span className='text-sm'>{doc.title}</span>
                 <div className='flex items-center gap-2 opacity-0 group-hover:opacity-100 transition'>
