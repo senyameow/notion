@@ -39,7 +39,6 @@ const UserActions = ({ userId, onCollapse, onResetWidth }: UserActionsProps) => 
         promise.then(doc => {
             router.push(`/docs/${doc}`)
             if (isMobile) {
-                console.log('COLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSECOLLAPSE')
                 onCollapse()
             }
 

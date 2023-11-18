@@ -23,24 +23,30 @@ const Action = ({ icon, label, onClick, isSearch = false, isSettings = false, is
         <button onClick={onClick} className={cn(`dark:hover:bg-dark/70 hover:bg-gray-100 px-2 py-1 w-full flex flex-row items-center gap-2 text-neutral-400 transition justify-between `, isMobile && 'p-2 py-4 flex items-center justify-center')}>
             <div className='flex items-center gap-2'>
                 <Icon className={cn(`w-4 h-4`, isMobile && !isPomoyka && 'hidden', isPomoyka && isMobile && 'w-6 h-6')} />
-                {!isPomoyka && <span className={cn(`text-sm`, isMobile && 'text-lg')}>{label}</span>}
+                {(!isPomoyka || !isMobile) && < span className={cn(`text-sm`, isMobile && 'text-lg')}>{label}</span>}
             </div>
-            {isSearch && !isMobile && (
-                <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
-                    <span className='text-xs'>ctrl + k</span>
-                </kbd>
-            )}
-            {isSettings && !isMobile && (
-                <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
-                    <span className='text-xs'>ctrl + q</span>
-                </kbd>
-            )}
-            {isNew && !isMobile && (
-                <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
-                    <span className='text-xs'>ctrl + m</span>
-                </kbd>
-            )}
-        </button>
+            {
+                isSearch && !isMobile && (
+                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                        <span className='text-xs'>ctrl + k</span>
+                    </kbd>
+                )
+            }
+            {
+                isSettings && !isMobile && (
+                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                        <span className='text-xs'>ctrl + q</span>
+                    </kbd>
+                )
+            }
+            {
+                isNew && !isMobile && (
+                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                        <span className='text-xs'>ctrl + m</span>
+                    </kbd>
+                )
+            }
+        </button >
     )
 }
 
