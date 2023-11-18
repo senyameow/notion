@@ -69,7 +69,6 @@ const DocNavbar = ({ isCollapsed, onResetWidth, isMobile }: DocNavbarProps) => {
             e.stopPropagation()
             e.preventDefault()
             await archieve({ docId: doc._id })
-            toast.success(`you've deleted ${doc.title}`)
         } catch (error) {
             toast.error('something went wrong')
         } finally {

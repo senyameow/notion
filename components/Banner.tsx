@@ -35,10 +35,10 @@ const Banner = ({
     const restore = useMutation(api.documents.restore)
 
     const remove = useMutation(api.documents.removeDoc).withOptimisticUpdate(
-        (localStorage, args) => {
-            const currentDoc = localStorage.getQuery(api.documents.getNote, { id: args.id })
+        (localStorage) => {
+            const currentDoc = localStorage.getQuery(api.documents.getNote, { id: docId })
             if (currentDoc !== undefined) {
-                localStorage.setQuery(api.documents.getNote, { id: args.id }, null)
+                localStorage.setQuery(api.documents.getNote, { id: docId }, null)
             }
         }
     )
@@ -49,16 +49,16 @@ const Banner = ({
 
     const { isDeleting, isRestoring } = useAppSelector(state => state.docStatus)
 
-    const onRemove = () => {
+    const onRemove = async () => {
         // const promise = remove({ id: docId })
         // toast.promise(promise, {
         //     loading: 'Deleting note..',
         //     success: 'Note deleted',
         //     error: 'Something went wrong'
         // })
-        remove({ id: docId })
-        toast.success('deleted')
+        await remove({ id: docId })
         router.push(`/docs`)
+        toast.success('deleted')
     }
     const onRestore = () => {
         dispatch(restoreStatus(true))
@@ -85,7 +85,7 @@ const Banner = ({
                                 Delete Note
                             </Button>
                         </AlertDialogTrigger>
-                        <AlertDialogContent>
+                        <AlertDialogContent className='z-[99999]'>
                             <AlertDialogHeader>
                                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                 <AlertDialogDescription>
@@ -95,7 +95,7 @@ const Banner = ({
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={onRemove}>Delete</AlertDialogAction>
+                                <Button onClick={onRemove}>Delete</Button>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
