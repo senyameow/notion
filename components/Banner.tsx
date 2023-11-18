@@ -9,6 +9,18 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { docStatusSlice } from '@/store/reducers/DocStatusSlice';
 import { Loader2 } from 'lucide-react';
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 interface BannerProps {
     docId: Id<'documents'>
@@ -38,7 +50,6 @@ const Banner = ({
     const { isDeleting, isRestoring } = useAppSelector(state => state.docStatus)
 
     const onRemove = () => {
-        dispatch(deleteStatus(true))
         // const promise = remove({ id: docId })
         // toast.promise(promise, {
         //     loading: 'Deleting note..',
@@ -46,7 +57,7 @@ const Banner = ({
         //     error: 'Something went wrong'
         // })
         remove({ id: docId })
-        dispatch(deleteStatus(false))
+        toast.success('deleted')
         router.push(`/docs`)
     }
     const onRestore = () => {
@@ -68,9 +79,28 @@ const Banner = ({
                     <Button onClick={onRestore} className='bg-transparent border border-white' variant={'ghost'}>
                         {isRestoring ? <Loader2 className='w-4 h-4 animate-spin' /> : 'Restore note'}
                     </Button>
-                    <Button onClick={onRemove} className='bg-transparent border border-white' variant={'ghost'}>
-                        {isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : 'Delete note'}
-                    </Button>
+                    <AlertDialog>
+                        <AlertDialogTrigger>
+                            <Button className='bg-transparent border border-white' variant={'ghost'}>
+                                Delete Note
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete your document
+                                    and remove your data from our servers.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={onRemove}>Delete</AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+
+
                 </div>
             </div>
         </div>
