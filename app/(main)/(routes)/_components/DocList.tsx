@@ -67,9 +67,11 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
     }
     // console.log(UserRoles[doc.people?.find(_ => _.id === userId)?.role!])
 
+    console.log(level, 'LEVEL')
+
     return (
         <>
-            <p className={cn(`hidden text-sm font-medium text-neutral-500 `, level === 0 && 'hidden', isExpanded && 'last:block', isMobile && 'py-3 text-md')} style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}>
+            <p className={cn(`hidden text-sm font-medium text-neutral-500 `, isExpanded && level !== 0 && 'last:block', level === 0 && 'hidden', isMobile && 'py-3 text-md')} style={{ paddingLeft: level ? `${(level * 12) + 25}px` : undefined }}>
                 No pages inside
             </p>
             {docs.map(doc => (
