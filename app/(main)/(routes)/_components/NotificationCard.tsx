@@ -106,14 +106,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                 <CardHeader>
                     <CardTitle className="flex items-center justify-between w-full gap-2 mb-1">
                         <span>Notifications</span>
-                        <Popover>
-                            <PopoverTrigger>
-                                <Trash2 className="w-5 h-5 hover:opacity-90" />
-                            </PopoverTrigger>
-                            <PopoverContent align='start' alignOffset={30} side='left'>
 
-                            </PopoverContent>
-                        </Popover>
                     </CardTitle>
                     <CardDescription>You have {newComments.length} unread comments and {newReports.length} unread reports </CardDescription>
                 </CardHeader>
@@ -145,10 +138,21 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                             ))}
                         </Tab.List>
                         <Tab.Panels className={'mt-2'}>
+                            <Tab.Panel>
+                                <Popover>
+                                    <PopoverTrigger className="absolute top-6 -right-16">
+                                        <Trash2 className="w-5 h-5 hover:opacity-90" />
+                                    </PopoverTrigger>
+                                    <PopoverContent align='start' alignOffset={30} side='left'>
+
+                                    </PopoverContent>
+                                </Popover>
+                            </Tab.Panel>
                             {notDeletedComments.length > 0 && < Tab.Panel className={cn(
                                 'rounded-xl',
                                 ' focus:outline-none'
                             )}>
+
 
                                 {user.notifications?.comments && <ScrollArea className="w-full h-full max-h-[300px]">
                                     {notDeletedComments.map(comment => (
@@ -160,6 +164,16 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                 </Button>
 
                             </Tab.Panel>}
+                            <Tab.Panel>
+                                <Popover>
+                                    <PopoverTrigger className="absolute top-6 -right-16">
+                                        <Trash2 className="w-5 h-5 hover:opacity-90" />
+                                    </PopoverTrigger>
+                                    <PopoverContent align='start' alignOffset={30} side='left'>
+
+                                    </PopoverContent>
+                                </Popover>
+                            </Tab.Panel>
                             {notDeletedReports.length > 0 && < Tab.Panel className={cn(
                                 'rounded-xl',
                                 ' focus:outline-none'
