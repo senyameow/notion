@@ -74,6 +74,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     const newComments = comments?.filter(com => !com.isRead && !com.isResolved)
     const notDeletedComments = comments?.filter(comment => !comment.isDeleted)
 
+    const deletedComment = comments.filter(comment => comment.isDeleted)
+    const deletedReports = comments.filter(report => report.isDeleted)
+
     const onReadAllReports = async () => {
         try {
             reports.forEach(async (rep) => {
@@ -126,28 +129,37 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                     <Tab.Group>
                         <Tab.List className={'flex space-x-1 rounded-xl bg-blue-900/20 p-1'}>
                             {Object.keys(user.notifications!).map(notification => (
-                                <Tab key={notification} className={({ selected }) =>
-                                    cn(
-                                        'w-full rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
-                                        ' focus:outline-none',
-                                        selected
-                                            ? 'bg-white shadow'
-                                            : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
-                                    )
-                                }>{notification}</Tab>
+                                <>
+                                    <Tab key={notification} className={({ selected }) =>
+                                        cn(
+                                            'w-full rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
+                                            ' focus:outline-none',
+                                            selected
+                                                ? 'bg-white shadow'
+                                                : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                                        )
+                                    }>
+                                        <span>{notification}</span>
+                                    </Tab>
+                                    <Popover>
+                                        <PopoverTrigger className="absolute top-6 -right-16">
+                                            <Trash2 className="w-5 h-5 hover:opacity-90" />
+                                        </PopoverTrigger>
+                                        <PopoverContent align='start' alignOffset={30} side='left'>
+                                            {deletedComment.length > 0 && (
+                                                <ScrollArea className="w-full h-full max-h-[300px]">
+                                                    {deletedComment.map(comment => (
+                                                        <CommentCard comment={comment} key={comment._id} />
+                                                    ))}
+                                                </ScrollArea>
+                                            )}
+                                        </PopoverContent>
+                                    </Popover>
+                                </>
                             ))}
                         </Tab.List>
                         <Tab.Panels className={'mt-2'}>
-                            <Tab.Panel>
-                                <Popover>
-                                    <PopoverTrigger className="absolute top-6 -right-16">
-                                        <Trash2 className="w-5 h-5 hover:opacity-90" />
-                                    </PopoverTrigger>
-                                    <PopoverContent align='start' alignOffset={30} side='left'>
 
-                                    </PopoverContent>
-                                </Popover>
-                            </Tab.Panel>
                             {notDeletedComments.length > 0 && < Tab.Panel className={cn(
                                 'rounded-xl',
                                 ' focus:outline-none'
@@ -164,16 +176,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                 </Button>
 
                             </Tab.Panel>}
-                            <Tab.Panel>
-                                <Popover>
-                                    <PopoverTrigger className="absolute top-6 -right-16">
-                                        <Trash2 className="w-5 h-5 hover:opacity-90" />
-                                    </PopoverTrigger>
-                                    <PopoverContent align='start' alignOffset={30} side='left'>
 
-                                    </PopoverContent>
-                                </Popover>
-                            </Tab.Panel>
                             {notDeletedReports.length > 0 && < Tab.Panel className={cn(
                                 'rounded-xl',
                                 ' focus:outline-none'
