@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Bell, Check, Loader2, Trash2 } from "lucide-react"
+import { Bell, Check, Loader2, LucideTrash2, Trash, Trash2 } from "lucide-react"
 import { Doc } from "@/convex/_generated/dataModel"
 import { format } from "date-fns"
 import { useMutation, useQuery } from "convex/react"
@@ -19,7 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import ReportCard from "./ReportCard"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
-import { deleteReport, report, updateCommentNotification } from "@/convex/documents"
+import { deleteComment, deleteReport, report, updateCommentNotification } from "@/convex/documents"
 import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
@@ -150,27 +150,37 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                     </Tab>
                                     {/* {notification} */}
 
-                                    {<Popover>
-                                        <PopoverTrigger className={cn('absolute top-6 -right-16')}>
-                                            <Trash2 className="w-5 h-5 hover:opacity-90" />
-                                        </PopoverTrigger>
-                                        <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px]">
-                                            {selectedIndex === 0 && deletedComments.length > 0 && (
+
+
+                                    {selectedIndex === 0 && (
+                                        <Popover>
+                                            <PopoverTrigger disabled={deleteComment.length === 0} className="absolute top-6 -right-16">
+                                                <Trash />
+                                            </PopoverTrigger>
+                                            {deletedComments.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
                                                 <ScrollArea className="w-full max-h-[300px] h-[300px]">
                                                     {deletedComments.map(comment => (
                                                         <CommentCard comment={comment} key={comment._id} />
                                                     ))}
                                                 </ScrollArea>
-                                            )}
-                                            {selectedIndex === 1 && deletedReports.length > 0 && (
+                                            </PopoverContent>}
+                                        </Popover>
+                                    )}
+                                    {selectedIndex === 1 && (
+                                        <Popover>
+                                            <PopoverTrigger disabled={deleteReport.length === 0} className="absolute top-6 -right-16">
+                                                <Trash />
+                                            </PopoverTrigger>
+                                            {deletedReports.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
                                                 <ScrollArea className="w-full max-h-[300px] h-[300px]">
                                                     {deletedReports.map(report => (
                                                         <ReportCard notification={report} key={report._id} />
                                                     ))}
                                                 </ScrollArea>
-                                            )}
-                                        </PopoverContent>
-                                    </Popover>}
+                                            </PopoverContent>}
+                                        </Popover>
+
+                                    )}
                                     {/* {notification === 'reports' && <Popover>
                                         <PopoverTrigger className="absolute top-6 -right-16">
                                             <Trash2 className="w-5 h-5 hover:opacity-90" />
