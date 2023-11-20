@@ -10,7 +10,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { Switch } from "@/components/ui/switch"
-import { Bell, Check, Loader2 } from "lucide-react"
+import { Bell, Check, Loader2, Trash2 } from "lucide-react"
 import { Doc } from "@/convex/_generated/dataModel"
 import { format } from "date-fns"
 import { useMutation, useQuery } from "convex/react"
@@ -24,6 +24,7 @@ import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
 import { Tab } from '@headlessui/react'
+import { Popover, PopoverTrigger } from "@/components/ui/popover"
 
 // const notifications = [
 //     {
@@ -103,7 +104,14 @@ export function Notifications({ doc, className, ...props }: CardProps) {
         <Card className={cn("w-[400px]", className)} {...props}>
             {reports ? <>
                 <CardHeader>
-                    <CardTitle>Notifications</CardTitle>
+                    <CardTitle className="flex items-center justify-between w-full gap-2 mb-1">
+                        <span>Notifications</span>
+                        <Popover>
+                            <PopoverTrigger>
+                                <Trash2 className="w-5 h-5 hover:opacity-90" />
+                            </PopoverTrigger>
+                        </Popover>
+                    </CardTitle>
                     <CardDescription>You have {newComments.length} unread comments and {newReports.length} unread reports </CardDescription>
                 </CardHeader>
                 <CardContent className="grid gap-4">
