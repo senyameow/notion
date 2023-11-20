@@ -24,7 +24,7 @@ import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
 import { Tab } from '@headlessui/react'
-import { Popover, PopoverTrigger } from "@/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
 // const notifications = [
 //     {
@@ -110,6 +110,9 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                             <PopoverTrigger>
                                 <Trash2 className="w-5 h-5 hover:opacity-90" />
                             </PopoverTrigger>
+                            <PopoverContent align='start' alignOffset={30} side='left'>
+
+                            </PopoverContent>
                         </Popover>
                     </CardTitle>
                     <CardDescription>You have {newComments.length} unread comments and {newReports.length} unread reports </CardDescription>

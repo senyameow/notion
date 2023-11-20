@@ -4,13 +4,29 @@ import Empty from './_components/Empty'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { redirect } from 'next/navigation'
+import { Loader2 } from 'lucide-react'
 
 const EmptyPage = () => {
 
     const docs = useQuery(api.documents.getAllDocs)
+    const currentUser = useQuery(api.documents.getCurrentUser)
 
 
-    if (docs === undefined || docs.length === 0) {
+    if (currentUser === undefined || docs === undefined) {
+        return (
+            <div className='w-full h-full flex items-center justify-center'>
+                <Loader2 className='w-12 h-12 animate-spin' />
+            </div>
+        )
+    }
+
+    console.log(currentUser)
+
+    const usersNotArchievedDoc = docs.filter(doc => !doc.isAcrchieved && doc.userId === currentUser?.userId)
+
+    console.log(usersNotArchievedDoc)
+
+    if (usersNotArchievedDoc.length === 0) {
         return (
             <div className='h-full w-full flex items-center justify-center overflow-x-hidden'>
                 <Empty />
@@ -18,7 +34,7 @@ const EmptyPage = () => {
         )
     }
 
-    else return redirect(`docs/${docs.filter(doc => !doc.isAcrchieved)[docs.filter(doc => !doc.isAcrchieved).length - 1]._id}`)
+    return redirect(`docs/${usersNotArchievedDoc[usersNotArchievedDoc.length - 1]._id}`)
 
 }
 
