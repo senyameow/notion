@@ -19,12 +19,13 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import ReportCard from "./ReportCard"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
-import { report, updateCommentNotification } from "@/convex/documents"
+import { deleteReport, report, updateCommentNotification } from "@/convex/documents"
 import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
 import { Tab } from '@headlessui/react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useState } from "react"
 
 // const notifications = [
 //     {
@@ -46,6 +47,8 @@ type CardProps = React.ComponentProps<typeof Card> & {
 }
 
 export function Notifications({ doc, className, ...props }: CardProps) {
+
+    const [selectedIndex, setSelectedIndex] = useState(0)
 
     const reports = useQuery(api.documents.reports, { docId: doc._id })
     const comments = useQuery(api.documents.comments, { docId: doc._id })
@@ -74,8 +77,10 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     const newComments = comments?.filter(com => !com.isRead && !com.isResolved)
     const notDeletedComments = comments?.filter(comment => !comment.isDeleted)
 
-    const deletedComment = comments.filter(comment => comment.isDeleted)
-    const deletedReports = comments.filter(report => report.isDeleted)
+    const deletedComments = comments.filter(comment => comment.isDeleted)
+    const deletedReports = reports.filter(report => report.isDeleted)
+
+    console.log(deletedComments)
 
     const onReadAllReports = async () => {
         try {
@@ -103,6 +108,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
         }
     }
 
+
     return (
         <Card className={cn("w-[400px]", className)} {...props}>
             {reports ? <>
@@ -126,10 +132,11 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                         </div>
                         <Switch onCheckedChange={() => { }} />
                     </div> */}
-                    <Tab.Group>
+                    <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
                         <Tab.List className={'flex space-x-1 rounded-xl bg-blue-900/20 p-1'}>
                             {Object.keys(user.notifications!).map(notification => (
                                 <>
+
                                     <Tab key={notification} className={({ selected }) =>
                                         cn(
                                             'w-full rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
@@ -141,20 +148,43 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                     }>
                                         <span>{notification}</span>
                                     </Tab>
-                                    <Popover>
-                                        <PopoverTrigger className="absolute top-6 -right-16">
+                                    {/* {notification} */}
+
+                                    {<Popover>
+                                        <PopoverTrigger className={cn('absolute top-6 -right-16')}>
                                             <Trash2 className="w-5 h-5 hover:opacity-90" />
                                         </PopoverTrigger>
-                                        <PopoverContent align='start' alignOffset={30} side='left'>
-                                            {deletedComment.length > 0 && (
-                                                <ScrollArea className="w-full h-full max-h-[300px]">
-                                                    {deletedComment.map(comment => (
+                                        <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px]">
+                                            {selectedIndex === 0 && deletedComments.length > 0 && (
+                                                <ScrollArea className="w-full max-h-[300px] h-[300px]">
+                                                    {deletedComments.map(comment => (
                                                         <CommentCard comment={comment} key={comment._id} />
                                                     ))}
                                                 </ScrollArea>
                                             )}
+                                            {selectedIndex === 1 && deletedReports.length > 0 && (
+                                                <ScrollArea className="w-full max-h-[300px] h-[300px]">
+                                                    {deletedReports.map(report => (
+                                                        <ReportCard notification={report} key={report._id} />
+                                                    ))}
+                                                </ScrollArea>
+                                            )}
                                         </PopoverContent>
-                                    </Popover>
+                                    </Popover>}
+                                    {/* {notification === 'reports' && <Popover>
+                                        <PopoverTrigger className="absolute top-6 -right-16">
+                                            <Trash2 className="w-5 h-5 hover:opacity-90" />
+                                        </PopoverTrigger>
+                                        <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px]">
+                                            {deletedReports.length > 0 && (
+                                                <ScrollArea className="w-full h-full max-h-[300px]">
+                                                    {deletedReports.map(report => (
+                                                        <ReportCard notification={report} key={report._id} />
+                                                    ))}
+                                                </ScrollArea>
+                                            )}
+                                        </PopoverContent>
+                                    </Popover>} */}
                                 </>
                             ))}
                         </Tab.List>
