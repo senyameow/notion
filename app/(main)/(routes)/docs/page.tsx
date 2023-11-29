@@ -20,11 +20,7 @@ const EmptyPage = () => {
         )
     }
 
-    console.log(currentUser)
-
     const usersNotArchievedDoc = docs.filter(doc => !doc.isAcrchieved && doc.userId === currentUser?.userId)
-
-    console.log(usersNotArchievedDoc)
 
     if (usersNotArchievedDoc.length === 0) {
         return (
