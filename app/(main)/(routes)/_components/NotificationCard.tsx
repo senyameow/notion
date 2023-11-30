@@ -19,7 +19,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import ReportCard from "./ReportCard"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
-import { deleteComment, deleteReport, report, updateCommentNotification } from "@/convex/documents"
 import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
@@ -79,8 +78,6 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
     const deletedComments = comments.filter(comment => comment.isDeleted)
     const deletedReports = reports.filter(report => report.isDeleted)
-
-    console.log(deletedComments)
 
     const onReadAllReports = async () => {
         try {
@@ -154,7 +151,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
                                     {selectedIndex === 0 && (
                                         <Popover>
-                                            <PopoverTrigger disabled={deleteComment.length === 0} className="absolute top-6 -right-16">
+                                            <PopoverTrigger disabled={deletedComments.length === 0} className="absolute top-6 -right-16">
                                                 <Trash />
                                             </PopoverTrigger>
                                             {deletedComments.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
@@ -168,7 +165,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                     )}
                                     {selectedIndex === 1 && (
                                         <Popover>
-                                            <PopoverTrigger disabled={deleteReport.length === 0} className="absolute top-6 -right-16">
+                                            <PopoverTrigger disabled={deletedReports.length === 0} className="absolute top-6 -right-16">
                                                 <Trash />
                                             </PopoverTrigger>
                                             {deletedReports.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
