@@ -71,7 +71,7 @@ const ReportCard = ({ notification }: ReportCardProps) => {
 
     return (
         <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild className='w-[430px]'>
                 <div
                     onClick={onRead}
                     ref={ref}
@@ -87,7 +87,7 @@ const ReportCard = ({ notification }: ReportCardProps) => {
                             {format(notification._creationTime, 'PPPpp')}
                         </p>
                     </div>
-                    <Button disabled={isDeleting} onClick={onDelete} size={'icon'} variant={'outline'} className='absolute group-hover:opacity-100 top-2 right-2 opacity-0 transition'>{isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash className='w-4 h-4' />}</Button>
+                    <Button disabled={isDeleting} onClick={onDelete} size={'icon'} variant={'outline'} className='absolute group-hover:opacity-100 top-2 right-2 hover:opacity-60 opacity-0 transition'>{isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash className='w-4 h-4' />}</Button>
                 </div>
             </PopoverTrigger>
             <PopoverContent align='start' side='left'>

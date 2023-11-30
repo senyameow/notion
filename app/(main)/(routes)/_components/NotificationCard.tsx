@@ -25,6 +25,9 @@ import CommentCard from "./CommentCard"
 import { Tab } from '@headlessui/react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useState } from "react"
+import { Tooltip } from "@/components/ui/tooltip"
+import { ActionTooltip } from "@/components/ui/ActionTooltip"
+import { Separator } from "@/components/ui/separator"
 
 // const notifications = [
 //     {
@@ -151,10 +154,16 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
                                     {selectedIndex === 0 && (
                                         <Popover>
-                                            <PopoverTrigger disabled={deletedComments.length === 0} className="absolute top-6 -right-16">
-                                                <Trash />
-                                            </PopoverTrigger>
+                                            <ActionTooltip label={deletedComments.length + ''}>
+                                                <PopoverTrigger disabled={deletedComments.length === 0} className="absolute top-6 -right-16 hover:opacity-80">
+                                                    <Trash className="hover:opacity-80" />
+                                                </PopoverTrigger>
+                                            </ActionTooltip>
                                             {deletedComments.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
+                                                <div className="w-full flex items-center justify-center text-center mx-auto">
+                                                    <h3 className="text-lg font-semibold">Deleted comments</h3>
+                                                </div>
+                                                <Separator className="mt-4 mb-2" />
                                                 <ScrollArea className="w-full max-h-[300px] h-[300px]">
                                                     {deletedComments.map(comment => (
                                                         <CommentCard comment={comment} key={comment._id} />
@@ -165,9 +174,11 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                     )}
                                     {selectedIndex === 1 && (
                                         <Popover>
-                                            <PopoverTrigger disabled={deletedReports.length === 0} className="absolute top-6 -right-16">
-                                                <Trash />
-                                            </PopoverTrigger>
+                                            <ActionTooltip label={deletedReports.length + ''}>
+                                                <PopoverTrigger disabled={deletedReports.length === 0} className="absolute top-6 -right-16 hover:opacity-80">
+                                                    <Trash className="hover:opacity-80" />
+                                                </PopoverTrigger>
+                                            </ActionTooltip>
                                             {deletedReports.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
                                                 <ScrollArea className="w-full max-h-[300px] h-[300px]">
                                                     {deletedReports.map(report => (
