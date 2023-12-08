@@ -27,8 +27,6 @@ const SettingsCommand = () => {
     const { isOpen, userId } = useAppSelector(state => state.settings)
     const dispatch = useAppDispatch()
 
-    console.log(userId)
-
     const user = useQuery(api.documents.getCurrentUser)
 
     const notifications = useQuery(api.documents.getCurrentUserNotifications)

@@ -284,7 +284,6 @@ export const UsersDoc = query({
     handler: async (ctx, args) => {
         // if (args.userId === undefined) return
         // const user = await ctx.db.query('users').withIndex('by_userId').filter(q => q.eq(q.field('userId'), args.userId)).first()
-        // console.log(user)
         return await ctx.db.query('documents').withIndex('by_user').filter(q => q.eq(q.field('userId'), args.userId)).paginate(args.paginationOpts)
     }
 })
@@ -447,10 +446,8 @@ export const createCommentReply = mutation({
 
         const comment = await ctx.db.get(commentId)
 
-        console.log(comment)
         if (comment === null) throw new Error('Not found')
         const replies = comment.replies
-        console.log(replies)
         if (replies === undefined) throw new Error('Not found')
 
 
@@ -506,7 +503,6 @@ export const deleteCommentReply = mutation({
         if (doc !== null) {
             const userRole = doc.people?.find(human => human.id === userId)?.role!
             const reply = comment.replies?.find(r => r.id === replyId)
-            console.log(userRole)
             if (reply !== undefined) {
                 if ((reply.userId !== userId && (userRole !== 'ADMIN' && userRole !== 'MOD'))) throw new Error('Unauthorized')
             }
@@ -543,8 +539,6 @@ export const updateCommentReply = mutation({
             // const userRole = doc.people?.find(human => human.id === userId)?.role!
             const reply = comment.replies?.find(r => r.id === replyId)
             if (reply !== undefined) {
-                // console.log(reply.icons)
-                // if ((reply.userId !== userId)) throw new Error('Unauthorized')
 
                 const updatedReply = {
                     ...reply,
@@ -590,10 +584,8 @@ export const addIconCommentReply = mutation({
         if (existingReplies) {
             if (reply !== undefined) {
                 const existingIcons = reply.icons
-                console.log(existingIcons, 'existing icons within reply')
                 if (existingIcons !== undefined) {
                     const replyIcon = existingIcons.find(i => i.icon === icon)
-                    console.log(replyIcon, ' replyIcon')
 
                     if (replyIcon && replyIcon.userId.includes(userId)) {
                         if (replyIcon.amount! - 1 === 0) {

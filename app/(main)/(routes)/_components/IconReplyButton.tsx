@@ -26,7 +26,6 @@ const IconReplyButton = ({ icon, replyId, commentId, icons, userId }: IconReplyB
 
     const onUpdateIcon = async () => {
         try {
-            console.log(icon.icon)
             await updateIcon({
                 replyId: replyId!,
                 commentId,

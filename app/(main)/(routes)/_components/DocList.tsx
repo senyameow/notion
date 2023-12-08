@@ -44,13 +44,6 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
     // тут будем юзать нашу квери, правда пока хз откуда мы получаем parentDoc
 
     const docs = useQuery(api.documents.getDocs, { parentDoc: parentId })
-    // console.log(parentId)
-    // console.log(docs)
-
-    // в конвексе, для лоадинга используется undefined стейт
-    // т.е. если мы грузим доки, то они undefined, иначе они null(если какая=то ошибка, или не найдены)
-
-    // для лоадинга мы приготовили динамический скелетон в doc
 
     if (docs === undefined) {
         return (
@@ -65,9 +58,6 @@ const DocList = ({ data, parentId, level = 0, userId }: DocListProps) => {
             </div>
         )
     }
-    // console.log(UserRoles[doc.people?.find(_ => _.id === userId)?.role!])
-
-    console.log(level, 'LEVEL')
 
     return (
         <>

@@ -40,7 +40,6 @@ const ImageUploadModal = () => {
         dispatch(onClose())
     }
 
-    console.log(image_url)
 
     const onCover = async (file: File, type: 'change' | 'add') => {
         try {
@@ -72,7 +71,6 @@ const ImageUploadModal = () => {
             }
         } catch (error) {
             toast.error('something went wrong')
-            console.log(error)
         } finally {
             dispatch(onClose())
             setIsSubmitting(false)

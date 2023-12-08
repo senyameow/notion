@@ -67,7 +67,6 @@ const ReportModal = () => {
             toast.success('you created a report, now wait...')
         } catch (error) {
             toast.error('something went wrong')
-            console.log(error)
         } finally {
             setIsLoading(false)
         }

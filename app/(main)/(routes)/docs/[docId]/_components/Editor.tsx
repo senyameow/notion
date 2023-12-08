@@ -69,7 +69,6 @@ const Editor = ({ editable, initialContent, onChange, docId }: EditorProps) => {
     });
 
     let selectedText = editor.getSelectedText()
-    console.log(selectedText)
 
     return <BlockNoteView theme={currentTheme} editor={editor} />;
 }

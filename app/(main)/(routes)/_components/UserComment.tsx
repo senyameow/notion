@@ -53,7 +53,6 @@ const UserComment = ({ comment }: UserCommentProps) => {
     const onCreate = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (user !== undefined)
             if (e.key === 'Enter') {
-                console.log('clicked')
                 if (message === '') return
                 createReply({
                     content: message,

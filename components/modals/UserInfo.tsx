@@ -29,8 +29,6 @@ const UserInfoModal = () => {
         setFetchId(user?.userId)
     }, [user])
 
-    console.log(fetchId)
-
     let { results, status, loadMore, isLoading } = usePaginatedQuery(
         api.documents.UsersDoc,
         { userId: fetchId },

@@ -44,9 +44,6 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
                 const range = selection.getRangeAt(0);
                 const rect = range.getBoundingClientRect();
 
-                console.log(range)
-                console.log(rect)
-                console.log(windowSize.width, 'width now')
 
                 let xAxis = rect.left + 384 < windowSize.width ? rect.left + rect.width / 2 : rect.left - 384
 
@@ -74,7 +71,6 @@ const CommentButton = ({ children, userId, docId }: CommentButtonProps) => {
             })
         } catch (error) {
             toast.error('something went wrong. Check your Internet connection')
-            console.log(error)
         } finally {
             setIsSubmitting(false)
             setSelectedText('')

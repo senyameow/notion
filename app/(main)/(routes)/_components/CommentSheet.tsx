@@ -41,8 +41,6 @@ const CommentSheet = ({ doc }: CommentSheetProps) => {
 
     const preview = pathname.includes('preview')
 
-    console.log(preview)
-
     return (
         <Sheet>
             <SheetTrigger className={cn(preview ? 'absolute top-6 right-6 z-[99999]' : `flex w-full relative hover:bg-accent hover:text-accent-foreground select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none cursor-pointer data-[disabled]:opacity-50`)}>

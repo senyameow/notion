@@ -31,7 +31,6 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
     //     )
     // }
     if (doc && !doc.isPublished) {
-        console.log(doc.isPublished)
         return redirect('/docs')
     }
     const pathname = usePathname()

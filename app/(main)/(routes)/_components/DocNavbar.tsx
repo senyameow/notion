@@ -89,11 +89,6 @@ const DocNavbar = ({ isCollapsed, onResetWidth, isMobile }: DocNavbarProps) => {
 
     }
 
-    // console.log(doc.reportList?.length)
-    // console.log(doc.commentList?.length)
-    // console.log(doc)
-    console.log(isCollapsed)
-
     return (
         <div className='p-3 py-5 w-full bg-none'>
             {isCollapsed ? (

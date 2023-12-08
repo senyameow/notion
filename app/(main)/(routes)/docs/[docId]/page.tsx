@@ -41,8 +41,6 @@ const DocPage = ({ params }: { params: { docId: Id<'documents'> } }) => {
 
     const userRole = doc.people?.find(human => human.id === user?.id)?.role
 
-    console.log(doc.banList?.includes(user?.id!))
-
     if (doc.banList?.includes(user?.id!)) {
         toast.error(`you've been banned on this doc`)
         return redirect('/docs')

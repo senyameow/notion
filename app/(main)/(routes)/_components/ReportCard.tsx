@@ -34,16 +34,6 @@ const ReportCard = ({ notification }: ReportCardProps) => {
 
     const deleteReport = useMutation(api.documents.deleteReport)
 
-    // useEffect(() => {
-    //     // if (entry?.time === undefined) setInteractingTime(0)
-    //     // console.log(entry?.time)
-    //     // setInteractingTime(entry?.time)
-    //     // console.log(interactingTime)
-    //     // if (entry.time > 5000 && entry.isIntersecting) 
-    //     // if (entry?.isIntersecting && entry?.time > 10000) change({ isRead: true, id: notification._id })
-
-    // }, [entry])
-
     const onRead = () => {
         setTimeout(() => {
             change({

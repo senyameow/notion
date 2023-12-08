@@ -22,11 +22,9 @@ const IconCommentButton = ({ icon, commentId, icons, userId }: IconCommentButton
 
     const addedByUser = icons.filter(obj => obj.userId.includes(userId)).map(el => el.icon).includes(icon.icon)
 
-    console.log(addedByUser)
 
     const onUpdateIcon = async () => {
         try {
-            console.log(icon.icon)
             await updateIcon({
                 commentId,
                 icon: icon.icon!

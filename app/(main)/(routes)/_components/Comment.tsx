@@ -121,11 +121,9 @@ const Comment = ({ comment, preview, doc }: CommentProps) => {
     }
 
     const onReply = async (e: any) => {
-        console.log(message, 'MESSAGE')
         if (e.keyCode === 13) {
             setIsEditing(false)
         }
-        console.log(message)
         if (isLoaded) {
             if (message === '') return
             if (message !== '') {
