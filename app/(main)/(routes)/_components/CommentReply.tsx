@@ -63,7 +63,6 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
     }
 
     const onSave = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-        console.log(message, 'MESSAGE')
         if (isEditing) {
             if (e.key === 'Enter') {
                 if (message === '') return
@@ -116,15 +115,15 @@ const CommentReply = ({ icons, userId, content, created_at, preview, replyId, co
                     ) : <div className='w-full flex items-center gap-3'>
                         <ActionTooltip label={user.email!} side='top' align='center'><Image src={user.image_url} alt='avatar' className='rounded-full' width={30} height={30} /></ActionTooltip>
                         <span className='text-lg font-semibold'>{user.name}</span>
-                        <span className='text-xs text-gray-300'>{format(created_at, 'Ppaaa')}</span>
+                        <span className='text-xs text-black dark:text-gray-300'>{format(created_at, 'Ppaaa')}</span>
                     </div >}
-                    <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[2.5px] group-hover/reply:opacity-100 transition bg-gray-800 rounded-md p-1'>
-                        <EmojiPicker onChange={onIconChange}><ActionTooltip label='add reaction' side='top' align='center'><button onClick={() => { }} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip></EmojiPicker>
+                    <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[2.5px] group-hover/reply:opacity-100 transition dark:bg-gray-800 rounded-md p-1'>
+                        <EmojiPicker onChange={onIconChange}><ActionTooltip label='add reaction' side='top' align='center'><button onClick={() => { }} className='hover:bg-gray-300 dark:hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip></EmojiPicker>
                         {currentUser === undefined ? null : (
                             <>
                                 {currentUser?.userId === userId && < DropdownMenu >
                                     <DropdownMenuTrigger>
-                                        <MoreHorizontal role='button' className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')} />
+                                        <MoreHorizontal role='button' className={cn(`hover:bg-gray-300 w-5 h-5 dark:hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')} />
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
                                         <DropdownMenuGroup className="flex items-center p-1 flex-col">

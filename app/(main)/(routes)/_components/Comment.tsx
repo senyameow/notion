@@ -174,16 +174,16 @@ const Comment = ({ comment, preview, doc }: CommentProps) => {
                         <div className='w-full flex items-center gap-3'>
                             <ActionTooltip label={commentCreater.email!} side='top' align='center'><Image src={commentCreater.image_url} alt='avatar' className='rounded-full' width={30} height={30} /></ActionTooltip>
                             <span className='text-lg font-semibold'>{commentCreater.name}</span>
-                            <span className='text-xs text-gray-300'>{format(comment._creationTime, 'Ppaaa')}</span>
+                            <span className='text-xs text-black dark:text-gray-300'>{format(comment._creationTime, 'Ppaaa')}</span>
                         </div >
-                        <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition bg-gray-800 rounded-md p-1'>
-                            <EmojiPicker onChange={onIconChange}><ActionTooltip label='add reaction' side='top' align='center'><button onClick={() => { }} className='hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip></EmojiPicker>
+                        <div className='flex opacity-0 items-center w-full h-full flex-1 gap-[1.5px] group-hover:opacity-100 transition dark:bg-gray-800 rounded-md p-1'>
+                            <EmojiPicker onChange={onIconChange}><ActionTooltip label='add reaction' side='top' align='center'><button onClick={() => { }} className='hover:bg-gray-300 dark:hover:bg-gray-500 p-[1.5px] transition rounded-md'><Smile className='w-4 h-4' /></button></ActionTooltip></EmojiPicker>
                             <ActionTooltip label='resolve' side='top' align='center'>
-                                <button onClick={onResolve} className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><Check className='w-4 h-4' /></button>
+                                <button onClick={onResolve} className={cn(`dark:hover:bg-gray-500 hover:bg-gray-300 p-[1.5px] transition rounded-md`, preview && 'hidden')}><Check className='w-4 h-4' /></button>
                             </ActionTooltip>
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <ActionTooltip label='more' side='top' align='center'><button onClick={() => { }} className={cn(`hover:bg-gray-500 p-[1.5px] transition rounded-md`, preview && 'hidden')}><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
+                                    <ActionTooltip label='more' side='top' align='center'><button onClick={() => { }} className={cn(`dark:hover:bg-gray-500 hover:bg-gray-300 p-[1.5px] transition rounded-md`, preview && 'hidden')}><MoreHorizontal className='w-4 h-4' /></button></ActionTooltip>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="start" alignOffset={30} forceMount className="w-48 z-[99999] relative">
                                     <DropdownMenuGroup className="flex items-center p-1 flex-col">
