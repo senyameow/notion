@@ -103,11 +103,9 @@ const Navbar = () => {
 
     shtukaRef.current?.style.setProperty('height', `${maxSizeRef.current?.scrollHeight}px`)
 
-    // console.log(allDocs)
 
     const allowedDocs = allDocs.filter(doc => doc.people?.some(human => (human.id === user?.id) && (human.role === 'MOD' || human.role === 'EDITOR')) && !doc.banList?.includes(user?.id!))
 
-    // console.log(allowedDocs)
 
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {

@@ -42,7 +42,7 @@ const UserAction = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-fit flex items-start justify-start bg-transparent hover:bg-dark focus-visible:ring-0 focus-visible:ring-offset-0 truncate">
+                <Button variant="outline" className="w-fit flex items-start justify-start bg-transparent hover:bg-neutral-300/80 dark:hover:bg-dark focus-visible:ring-0 focus-visible:ring-offset-0 truncate">
                     <div className="w-full flex items-center gap-4 justify-between">
                         <div className="truncate flex gap-2 items-center">
                             <Avatar className="h-6 w-6">
