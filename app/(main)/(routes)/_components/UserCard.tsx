@@ -31,6 +31,7 @@ import { useUser } from '@clerk/clerk-react'
 import ConfirmModal from './modals/ConfirmAdminModal'
 import AdminConfirmRole from './modals/ConfirmAdminModal'
 import { adminRoleModalSlice } from '@/store/reducers/ConfirmAdminRoleModalSlice'
+import { ActionTooltip } from '@/components/ui/ActionTooltip'
 
 interface UserCardProps {
     user: Doc<'users'>;
@@ -85,13 +86,15 @@ const UserCard = ({ user, preview, doc }: UserCardProps) => {
     }
 
     return (
-        <div className="w-full p-3 group border cursor-pointer relative flex items-center justify-between rounded-lg">
+        <div className="w-full p-3 group border relative flex items-center justify-between rounded-lg">
             <AdminConfirmRole />
             <div className="flex items-center w-full justify-between">
-                <div className='flex items-center gap-2'>
-                    <Image src={user?.image_url} alt='user image' width={30} height={30} className='rounded-full ' />
-                    <span>{user?.name}</span>
-                </div>
+                <ActionTooltip label={user.email} side={'top'} align={'center'}>
+                    <div className='flex items-center gap-2'>
+                        <Image src={user?.image_url} alt='user image' width={30} height={30} className='rounded-full ' />
+                        <span>{user?.name}</span>
+                    </div>
+                </ActionTooltip>
             </div>
             <div className={cn(`flex items-center gap-2 top-2 right-3`)}>
                 {loggedInUser === undefined ? <Loader2 className='w-4 h-4 animate-spin' /> : <>
