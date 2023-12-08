@@ -27,21 +27,21 @@ const Action = ({ icon, label, onClick, isSearch = false, isSettings = false, is
             </div>
             {
                 isSearch && !isMobile && (
-                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-neutral-300 text-muted-foreground rounded font-bold'>
                         <span className='text-xs'>ctrl + k</span>
                     </kbd>
                 )
             }
             {
                 isSettings && !isMobile && (
-                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-neutral-300 text-muted-foreground rounded font-bold'>
                         <span className='text-xs'>ctrl + q</span>
                     </kbd>
                 )
             }
             {
                 isNew && !isMobile && (
-                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-muted text-muted-foreground rounded font-bold'>
+                    <kbd className='flex items-center justify-center h-fit w-fit p-1 select-none dark:bg-dark/70 bg-neutral-300 text-muted-foreground rounded font-bold'>
                         <span className='text-xs'>ctrl + m</span>
                     </kbd>
                 )
