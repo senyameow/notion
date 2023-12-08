@@ -63,12 +63,12 @@ export function Notifications({ doc, className, ...props }: CardProps) {
     if (reports === undefined || comments === undefined || user === undefined) {
         return (
             <div className="w-[380px] h-[300px] flex flex-col items-start gap-4 p-6">
-                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
-                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
-                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
-                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
-                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
-                <Skeleton className="w-[230px] bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[300px] bg-gray-300 dark:bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[300px] bg-gray-300 dark:bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[300px] bg-gray-300 dark:bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[300px] bg-gray-300 dark:bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[300px] bg-gray-300 dark:bg-slate-900 h-[30px]" />
+                <Skeleton className="w-[300px] bg-gray-300 dark:bg-slate-900 h-[30px]" />
             </div>
         )
     }
@@ -139,11 +139,11 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
                                     <Tab key={notification} className={({ selected }) =>
                                         cn(
-                                            'w-full rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
+                                            'w-full transition-all rounded-lg py-2.5 text-sm font-medium leading-5 mr-2 text-blue-700',
                                             ' focus:outline-none',
                                             selected
                                                 ? 'bg-white shadow'
-                                                : 'text-blue-100 hover:bg-white/[0.12] hover:text-white'
+                                                : 'dark:text-blue-100 text-gray-700 hover:bg-blue/60 hover:text-white'
                                         )
                                     }>
                                         <span>{notification}</span>
@@ -159,7 +159,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                                     <Trash className="hover:opacity-80" />
                                                 </PopoverTrigger>
                                             </ActionTooltip>
-                                            {deletedComments.length > 0 && <PopoverContent align='start' alignOffset={30} side='left' className="h-[300px] w-full">
+                                            {deletedComments.length > 0 && <PopoverContent align='start' alignOffset={0} side='left' className="h-[300px] w-full">
                                                 <div className="w-full flex items-center justify-center text-center mx-auto">
                                                     <h3 className="text-lg font-semibold">Deleted comments</h3>
                                                 </div>

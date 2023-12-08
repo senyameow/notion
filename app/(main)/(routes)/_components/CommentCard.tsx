@@ -54,7 +54,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
                 <div
                     onClick={onRead}
                     key={comment._id}
-                    className="mb-4 w-full grid relative grid-cols-[25px_1fr] group items-start pb-4 last:mb-0 last:pb-2  p-3 group hover:bg-gray-900 transition rounded-lg cursor-pointer"
+                    className="mb-4 w-full grid relative grid-cols-[25px_1fr] group items-start pb-4 last:mb-0 last:pb-2  p-3 group hover:bg-gray-300 dark:hover:bg-gray-900 transition rounded-lg cursor-pointer"
                 >
                     <span className={cn(`flex h-2 w-2 translate-y-1 rounded-full bg-sky-500 opacity-100 transition duration-300`, comment.isRead && 'opacity-0')} />
                     <div className="space-y-1">
@@ -65,7 +65,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
                             {format(comment._creationTime, 'PPPpp')}
                         </p>
                     </div>
-                    <Button disabled={isDeleting} onClick={onDelete} size={'icon'} variant={'outline'} className='absolute group-hover:opacity-100 top-2 right-2 hover:opacity-60 opacity-0 transition'>{isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash className='w-4 h-4' />}</Button>
+                    <Button disabled={isDeleting} onClick={onDelete} size={'icon'} variant={'outline'} className=' absolute group-hover:opacity-100 top-2 right-2 hover:opacity-60 opacity-0 transition'>{isDeleting ? <Loader2 className='w-4 h-4 animate-spin' /> : <Trash className='w-4 h-4' />}</Button>
                 </div>
             </PopoverTrigger>
             <PopoverContent align='start' side='left'>
