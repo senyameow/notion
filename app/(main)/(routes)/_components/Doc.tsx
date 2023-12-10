@@ -81,7 +81,7 @@ const Doc = ({ isMobile, id, icon, onExpand, isExpanded, level, title, access }:
 
     return (
         <>
-            <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-200 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`, params.docId === id && 'dark:bg-black/60 bg-neutral-100', isMobile && 'p-4')}>
+            <button className={cn(`dark:hover:bg-dark/70 hover:bg-gray-200 py-1 w-full items-center gap-2 text-neutral-400 transition justify-between group/note`, level && `pl-[12px] pl-[${(level * 12) + 12}px]`, params.docId === id && 'dark:bg-black/60 bg-neutral-200', isMobile && 'p-4')}>
                 <div onClick={onRedirect} className='flex items-center gap-1' style={{ paddingLeft: level ? `${(level * 12) + 12}px` : '12px' }}>
                     <button className={cn(`p-[1px] dark:hover:bg-neutral-600 dark:hover:text-neutral-900 transition rounded-md`, (access && access !== UserRoles.ADMIN) && 'hidden')} onClick={handleExpand}>
                         <Icon className={cn(`w-4 h-4`, isMobile && 'w-5 h-5')} />
