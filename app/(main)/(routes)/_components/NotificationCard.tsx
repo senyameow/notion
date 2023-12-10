@@ -9,23 +9,19 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { Switch } from "@/components/ui/switch"
 import { Bell, Check, Loader2, LucideTrash2, Trash, Trash2 } from "lucide-react"
 import { Doc } from "@/convex/_generated/dataModel"
-import { format } from "date-fns"
 import { useMutation, useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import ReportCard from "./ReportCard"
 import { toast } from "sonner"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useUser } from "@clerk/clerk-react"
 import CommentCard from "./CommentCard"
 
 import { Tab } from '@headlessui/react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useState } from "react"
-import { Tooltip } from "@/components/ui/tooltip"
 import { ActionTooltip } from "@/components/ui/ActionTooltip"
 import { Separator } from "@/components/ui/separator"
 
