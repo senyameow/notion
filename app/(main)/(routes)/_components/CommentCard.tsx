@@ -13,10 +13,11 @@ import UserReport from './UserReport';
 import UserComment from './UserComment';
 
 interface CommentCardProps {
-    comment: Doc<'comments'>
+    comment: Doc<'comments'>,
+    currentUserId: string;
 }
 
-const CommentCard = ({ comment }: CommentCardProps) => {
+const CommentCard = ({ comment, currentUserId }: CommentCardProps) => {
 
     const change = useMutation(api.documents.updateCommentNotification)
 
@@ -69,7 +70,7 @@ const CommentCard = ({ comment }: CommentCardProps) => {
                 </div>
             </PopoverTrigger>
             <PopoverContent align='start' side='left'>
-                <UserComment comment={comment} />
+                <UserComment currentUserId={currentUserId} comment={comment} />
             </PopoverContent>
         </Popover>
     )

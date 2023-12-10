@@ -166,7 +166,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
                                                 <Separator className="mt-4 mb-2" />
                                                 <ScrollArea className="w-full max-h-[300px] h-[300px]">
                                                     {deletedComments.map(comment => (
-                                                        <CommentCard comment={comment} key={comment._id} />
+                                                        <CommentCard currentUserId={user.userId} comment={comment} key={comment._id} />
                                                     ))}
                                                 </ScrollArea>
                                             </PopoverContent>}
@@ -216,7 +216,7 @@ export function Notifications({ doc, className, ...props }: CardProps) {
 
                                 {user.notifications?.comments && <ScrollArea className="w-full h-full max-h-[300px]">
                                     {notDeletedComments.map(comment => (
-                                        <CommentCard comment={comment} key={comment._id} />
+                                        <CommentCard currentUserId={user.userId} comment={comment} key={comment._id} />
                                     ))}
                                 </ScrollArea>}
                                 <Button disabled={newComments.filter(c => c.isRead || !c.isDeleted).length === 0} className="w-full mt-6" onClick={onReadAllComments}>

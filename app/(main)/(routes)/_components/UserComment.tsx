@@ -11,10 +11,11 @@ import React, { useRef, useState } from 'react'
 import { toast } from 'sonner';
 
 interface UserCommentProps {
-    comment: Doc<'comments'>
+    comment: Doc<'comments'>;
+    currentUserId: string;
 }
 
-const UserComment = ({ comment }: UserCommentProps) => {
+const UserComment = ({ comment, currentUserId }: UserCommentProps) => {
 
     const user = useQuery(api.documents.getUser, { id: comment.userId })
 
@@ -57,7 +58,7 @@ const UserComment = ({ comment }: UserCommentProps) => {
                 createReply({
                     content: message,
                     commentId: comment._id,
-                    userId: user.userId
+                    userId: currentUserId
                 })
                 setMessage('')
 
@@ -70,7 +71,7 @@ const UserComment = ({ comment }: UserCommentProps) => {
             createReply({
                 content: message,
                 commentId: comment._id,
-                userId: user.userId
+                userId: currentUserId
             })
             setMessage('')
         }
